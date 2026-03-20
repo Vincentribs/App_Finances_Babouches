@@ -160,7 +160,6 @@
     top: 0;
     z-index: 100;
     box-shadow: 0 2px 20px rgba(0,0,0,0.2);
-    flex-wrap: wrap;
   }
 
   .header-left h1 {
@@ -172,11 +171,7 @@
 
   .header-left h1 span { color: var(--terracotta); }
 
-  .header-center {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+  .header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 
   .month-nav {
     display: flex;
@@ -209,12 +204,6 @@
   }
 
   .month-nav button:hover { background: var(--terracotta); }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
 
   .user-chip {
     display: flex;
@@ -777,7 +766,7 @@
     .form-row { grid-template-columns: 1fr; }
     .contrib-grid { grid-template-columns: 1fr; }
     .summary-grid { grid-template-columns: 1fr 1fr; }
-    .header-right { flex-wrap: wrap; }
+    .header-actions { justify-content: flex-end; }
     .login-card, .denied-card { padding: 36px 24px; }
   }
 </style>
@@ -825,15 +814,13 @@
   <div class="header-left">
     <h1>Finances <span>Communes</span></h1>
   </div>
-  <div class="header-center">
-    <div class="month-nav">
-      <button onclick="changeMonth(-1)">‹</button>
-      <span id="monthDisplay"></span>
-      <button onclick="changeMonth(1)">›</button>
-    </div>
+  <div class="month-nav">
+    <button onclick="changeMonth(-1)">‹</button>
+    <span id="monthDisplay"></span>
+    <button onclick="changeMonth(1)">›</button>
   </div>
-  <div class="header-right">
-    <span title="Synchronisation" style="display:flex;align-items:center;font-size:0.72rem;color:rgba(245,240,232,0.6)">
+  <div class="header-actions">
+    <span title="Synchronisation" style="display:flex;align-items:center;font-size:0.72rem;color:rgba(245,240,232,0.6);gap:4px">
       <span class="sync-dot" id="syncDot"></span>
       <span id="syncLabel">En ligne</span>
     </span>
@@ -842,8 +829,8 @@
       <span id="userName" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
     </div>
     <button class="btn-icon" onclick="exportCSV()">⬇ CSV</button>
-    <button class="btn-icon" onclick="duplicatePrevMonth()">⊕ Préc.</button>
-    <button class="btn-icon danger" onclick="confirmReset()">✕</button>
+    <button class="btn-icon" onclick="duplicatePrevMonth()">⊕ Mois préc.</button>
+    <button class="btn-icon danger" onclick="confirmReset()">✕ Reset</button>
     <button class="btn-icon" onclick="signOut()" title="Déconnexion">⏻</button>
   </div>
 </header>
