@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finances Communes — Vincent & Margaux</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --sand: #f5f0e8;
+    --sand-dark: #ede6d6;
+    --ink: #1a1612;
+    --ink-light: #5a4e42;
+    --ink-faint: #9a8e82;
+    --terracotta: #c96c3a;
+    --terracotta-light: #f0d5c4;
+    --sage: #4a7c6e;
+    --sage-light: #c4dcd7;
+    --gold: #d4a843;
+    --gold-light: #f5e8c4;
+    --white: #fdfaf5;
+    --red: #c9423a;
+    --red-light: #f5d0ce;
+    --border: rgba(26,22,18,0.12);
+    --shadow: 0 2px 16px rgba(26,22,18,0.08);
+    --shadow-lg: 0 8px 40px rgba(26,22,18,0.14);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  #loginScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    padding: 24px;
+  }
+
+  .login-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .login-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.1;
+  }
+
+  .login-logo span { color: var(--terracotta); }
+
+  .login-sub {
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    margin-bottom: 36px;
+  }
+
+  .btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 20px;
+    background: var(--ink);
+    color: var(--sand);
+    border: none;
+    border-radius: 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-google:hover {
+    background: var(--terracotta);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(201,108,58,0.35);
+  }
+
+  .btn-google svg { flex-shrink: 0; }
+
+  .login-note {
+    margin-top: 20px;
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    line-height: 1.6;
+  }
+
+  /* ── ACCESS DENIED ── */
+  #accessDenied {
+    min-height: 100vh;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    padding: 24px;
+  }
+
+  .denied-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 48px 40px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .denied-emoji { font-size: 3rem; margin-bottom: 16px; }
+
+  .denied-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+
+  .denied-card p {
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  /* ── APP ── */
+  #app { display: none; }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--sand);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    flex-wrap: wrap;
+  }
+
+  .header-left h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .header-left h1 span { color: var(--terracotta); }
+
+  .header-center {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .month-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 40px;
+    padding: 5px 5px 5px 14px;
+  }
+
+  .month-nav span {
+    min-width: 110px;
+    text-align: center;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .month-nav button {
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: var(--sand);
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .month-nav button:hover { background: var(--terracotta); }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .user-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 40px;
+    padding: 5px 12px 5px 6px;
+    font-size: 0.78rem;
+  }
+
+  .user-avatar {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--terracotta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .btn-icon {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: var(--sand);
+    padding: 7px 12px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.03em;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 5px;
+    white-space: nowrap;
+  }
+
+  .btn-icon:hover { background: var(--terracotta); }
+  .btn-icon.danger:hover { background: var(--red); }
+
+  /* SYNC INDICATOR */
+  .sync-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--sage);
+    display: inline-block;
+    margin-right: 4px;
+    animation: pulse 2s infinite;
+  }
+
+  .sync-dot.syncing {
+    background: var(--gold);
+    animation: spin 1s linear infinite;
+  }
+
+  .sync-dot.offline { background: var(--red); animation: none; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* TABS */
+  .tabs {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: sticky;
+    top: 65px;
+    z-index: 90;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 13px 18px;
+    font-size: 0.73rem;
+    font-weight: 500;
+    color: var(--ink-faint);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--terracotta); border-bottom-color: var(--terracotta); }
+
+  /* MAIN */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+  }
+
+  .card-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  /* SUMMARY GRID */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 18px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .stat-card .label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
+  }
+
+  .stat-card .value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .stat-card .sub { font-size: 0.73rem; color: var(--ink-light); }
+  .stat-card.positive .value { color: var(--sage); }
+  .stat-card.negative .value { color: var(--red); }
+  .stat-card.accent { background: var(--ink); }
+  .stat-card.accent .label { color: rgba(245,240,232,0.5); }
+  .stat-card.accent .value { color: var(--sand); }
+  .stat-card.accent .sub { color: rgba(245,240,232,0.6); }
+
+  /* REIMBURSEMENTS */
+  .reimbursement-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .reimb-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+  }
+
+  .reimb-item.owed { background: var(--terracotta-light); }
+  .reimb-item.balanced { background: var(--sage-light); }
+
+  .reimb-amount {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    margin-left: auto;
+    color: var(--terracotta);
+  }
+
+  .reimb-item.balanced .reimb-amount { color: var(--sage); }
+
+  /* FORM ELEMENTS */
+  .form-group { margin-bottom: 14px; }
+
+  label {
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-light);
+    margin-bottom: 5px;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--sand);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input:focus, select:focus { border-color: var(--terracotta); box-shadow: 0 0 0 3px var(--terracotta-light); }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a4e42' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border: none;
+    border-radius: 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary { background: var(--terracotta); color: white; }
+  .btn-primary:hover { background: #b55c2e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(201,108,58,0.3); }
+  .btn-secondary { background: var(--sand-dark); color: var(--ink); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--sand); }
+
+  /* CONTRIBUTIONS */
+  .contrib-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .contrib-person {
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+  }
+
+  .contrib-person.vincent { border-color: var(--sage); background: var(--sage-light); }
+  .contrib-person.margaux { border-color: var(--terracotta); background: var(--terracotta-light); }
+
+  .contrib-name { font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
+  .contrib-person.vincent .contrib-name { color: var(--sage); }
+  .contrib-person.margaux .contrib-name { color: var(--terracotta); }
+
+  .contrib-amount-display {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    line-height: 1.1;
+    margin: 6px 0 4px;
+  }
+
+  .contrib-person.vincent .contrib-amount-display { color: var(--sage); }
+  .contrib-person.margaux .contrib-amount-display { color: var(--terracotta); }
+
+  .contrib-detail { font-size: 0.74rem; color: var(--ink-light); line-height: 1.6; }
+
+  /* EXPENSES LIST */
+  .expense-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .expense-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--sand);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+
+  .expense-item:hover { border-color: var(--terracotta); }
+
+  .expense-cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .expense-main { flex: 1; min-width: 0; }
+
+  .expense-desc {
+    font-weight: 500;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .expense-meta {
+    font-size: 0.73rem;
+    color: var(--ink-faint);
+    margin-top: 2px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .expense-amount {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    white-space: nowrap;
+  }
+
+  .expense-payer-badge {
+    font-size: 0.66rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .payer-vincent { background: var(--sage-light); color: var(--sage); }
+  .payer-margaux { background: var(--terracotta-light); color: var(--terracotta); }
+  .payer-commun { background: var(--gold-light); color: #a07c20; }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: var(--ink-faint);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    opacity: 0;
+    flex-shrink: 0;
+  }
+
+  .expense-item:hover .delete-btn { opacity: 1; }
+  .delete-btn:hover { background: var(--red-light); color: var(--red); }
+
+  /* BUDGET PROGRESS */
+  .budget-item { margin-bottom: 14px; }
+
+  .budget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .budget-name { font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+  .budget-amounts { font-size: 0.78rem; color: var(--ink-light); }
+  .budget-amounts strong { color: var(--ink); font-weight: 600; }
+
+  .progress-bar { height: 6px; background: var(--sand-dark); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+  .progress-ok { background: var(--sage); }
+  .progress-warn { background: var(--gold); }
+  .progress-over { background: var(--red); }
+
+  .paid-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.03em;
+  }
+
+  .paid-badge.paid { background: var(--sage-light); color: var(--sage); }
+  .paid-badge.unpaid { background: var(--red-light); color: var(--red); }
+
+  .empty { text-align: center; padding: 40px 20px; color: var(--ink-faint); }
+  .empty .emoji { font-size: 2.5rem; margin-bottom: 12px; }
+  .empty p { font-size: 0.88rem; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,22,18,0.5);
+    z-index: 200;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 24px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.2rem; }
+
+  .modal-close {
+    background: var(--sand-dark);
+    border: none;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-light);
+    transition: all 0.2s;
+  }
+
+  .modal-close:hover { background: var(--red-light); color: var(--red); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--ink);
+    color: var(--sand);
+    padding: 12px 20px;
+    border-radius: 40px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 300;
+    transition: transform 0.3s ease;
+    box-shadow: var(--shadow-lg);
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* SETTINGS */
+  .settings-section { margin-bottom: 24px; }
+  .budget-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .budget-row input { flex: 1; }
+
+  .btn-remove {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink-faint);
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .btn-remove:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+  /* FILTER BAR */
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+
+  .filter-chip {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.73rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--ink-light);
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+
+  .filter-chip.active { background: var(--ink); color: var(--sand); border-color: var(--ink); }
+
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .text-sm { font-size: 0.82rem; color: var(--ink-light); }
+  .text-center { text-align: center; }
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+
+  /* LOADING */
+  #loadingScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ink);
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .loading-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--sand);
+  }
+
+  .loading-logo span { color: var(--terracotta); }
+
+  .spinner {
+    width: 28px; height: 28px;
+    border: 2px solid rgba(245,240,232,0.2);
+    border-top-color: var(--terracotta);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* CONFIG NOTICE */
+  .config-notice {
+    background: var(--gold-light);
+    border: 1.5px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: #6b5010;
+    line-height: 1.6;
+  }
+
+  .config-notice strong { display: block; margin-bottom: 4px; font-size: 0.9rem; }
+  .config-notice code {
+    background: rgba(0,0,0,0.08);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 500px) {
+    .form-row { grid-template-columns: 1fr; }
+    .contrib-grid { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    .header-right { flex-wrap: wrap; }
+    .login-card, .denied-card { padding: 36px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loadingScreen">
+  <div class="loading-logo">Finances <span>Communes</span></div>
+  <div class="spinner"></div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen" style="display:none">
+  <div class="login-card">
+    <div class="login-logo">Finances <span>Communes</span></div>
+    <p class="login-sub">Vincent & Margaux · Compte partagé</p>
+    <button class="btn-google" onclick="signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18">
+        <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/>
+        <path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/>
+        <path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/>
+        <path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/>
+      </svg>
+      Connexion avec Google
+    </button>
+    <p class="login-note">Accès réservé aux comptes autorisés.<br>Vos données sont synchronisées en temps réel.</p>
+  </div>
+</div>
+
+<!-- ACCESS DENIED -->
+<div id="accessDenied" style="display:none;min-height:100vh;align-items:center;justify-content:center;background:var(--ink);padding:24px">
+  <div class="denied-card">
+    <div class="denied-emoji">🔒</div>
+    <h2>Accès refusé</h2>
+    <p id="deniedEmail"></p>
+    <button class="btn btn-primary" onclick="signOut()">Se déconnecter</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+<header>
+  <div class="header-left">
+    <h1>Finances <span>Communes</span></h1>
+  </div>
+  <div class="header-center">
+    <div class="month-nav">
+      <button onclick="changeMonth(-1)">‹</button>
+      <span id="monthDisplay"></span>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
+  </div>
+  <div class="header-right">
+    <span title="Synchronisation" style="display:flex;align-items:center;font-size:0.72rem;color:rgba(245,240,232,0.6)">
+      <span class="sync-dot" id="syncDot"></span>
+      <span id="syncLabel">En ligne</span>
+    </span>
+    <div class="user-chip">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <span id="userName" style="max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+    </div>
+    <button class="btn-icon" onclick="exportCSV()">⬇ CSV</button>
+    <button class="btn-icon" onclick="duplicatePrevMonth()">⊕ Préc.</button>
+    <button class="btn-icon danger" onclick="confirmReset()">✕</button>
+    <button class="btn-icon" onclick="signOut()" title="Déconnexion">⏻</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('summary', this)">Résumé</div>
+  <div class="tab" onclick="showTab('expenses', this)">Dépenses</div>
+  <div class="tab" onclick="showTab('budgets', this)">Budgets</div>
+  <div class="tab" onclick="showTab('settings', this)">Paramètres</div>
+</div>
+
+<main>
+  <div id="configNotice" style="display:none" class="config-notice">
+    <strong>⚙ Configuration Firebase requise</strong>
+    Remplacez les valeurs <code>VOTRE_*</code> dans le script par votre config Firebase.
+    Consultez le guide en bas de page.
+  </div>
+
+  <!-- RÉSUMÉ -->
+  <div class="section active" id="section-summary">
+    <div class="summary-grid" id="summaryCards"></div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--gold-light)">↔</div>Remboursements</div>
+      <div id="reimbursements"></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--sage-light)">📊</div>Budgets par catégorie</div>
+      <div id="summaryBudgets"></div>
+    </div>
+  </div>
+
+  <!-- DÉPENSES -->
+  <div class="section" id="section-expenses">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">+</div>Ajouter une dépense</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Montant (€)</label>
+          <input type="number" id="expAmount" step="0.01" min="0" placeholder="0,00">
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="expDate">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Catégorie</label>
+          <select id="expCat"></select>
+        </div>
+        <div class="form-group">
+          <label>Payé par</label>
+          <select id="expPayer">
+            <option value="vincent">Vincent</option>
+            <option value="margaux">Margaux</option>
+            <option value="commun">Compte commun</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Commentaire</label>
+        <input type="text" id="expComment" placeholder="Description optionnelle…">
+      </div>
+      <button class="btn btn-primary" onclick="addExpense()">Ajouter la dépense</button>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <div class="icon" style="background:var(--sand-dark)">≡</div>
+        <span>Liste des dépenses</span>
+        <span id="expCount" style="margin-left:auto;font-family:'DM Sans';font-size:0.78rem;color:var(--ink-faint);font-weight:400"></span>
+      </div>
+      <div class="filter-bar">
+        <div class="filter-chip active" onclick="setFilter('all', this)">Toutes</div>
+        <div class="filter-chip" onclick="setFilter('vincent', this)">Vincent</div>
+        <div class="filter-chip" onclick="setFilter('margaux', this)">Margaux</div>
+        <div class="filter-chip" onclick="setFilter('commun', this)">Compte commun</div>
+      </div>
+      <div class="expense-list" id="expenseList"></div>
+    </div>
+  </div>
+
+  <!-- BUDGETS -->
+  <div class="section" id="section-budgets">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--gold-light)">📈</div>Suivi des budgets</div>
+      <div id="budgetTracking"></div>
+    </div>
+  </div>
+
+  <!-- PARAMÈTRES -->
+  <div class="section" id="section-settings">
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">🏠</div>Loyer mensuel</div>
+      <p class="text-sm" style="margin-bottom:16px">Montant fixe du loyer et répartition entre Vincent et Margaux.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Montant total (€)</label>
+          <input type="number" id="rentTotal" step="0.01" placeholder="0,00" oninput="autoCalcRent('total')">
+        </div>
+        <div class="form-group">
+          <label>Part Vincent (€)</label>
+          <input type="number" id="rentVincent" step="0.01" placeholder="0,00" oninput="autoCalcRent('v')">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Part Margaux (€)</label>
+          <input type="number" id="rentMargaux" step="0.01" placeholder="0,00" oninput="autoCalcRent('m')">
+        </div>
+      </div>
+      <p class="text-sm" id="rentNote"></p>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--sand-dark)">⚙</div>Budgets mensuels des charges</div>
+      <p class="text-sm" style="margin-bottom:16px">Ces charges sont divisées en deux parts égales et ajoutées à la contribution de chacun.</p>
+      <div id="budgetSettings"></div>
+      <button class="btn btn-secondary mt-16" onclick="addBudgetRow()">+ Ajouter une catégorie</button>
+      <div class="divider"></div>
+      <button class="btn btn-primary" onclick="saveBudgets()">Enregistrer les paramètres</button>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--sage-light)">💶</div>Contributions du mois</div>
+      <p class="text-sm" style="margin-bottom:16px">Montant calculé que chaque personne doit verser = part de loyer + moitié des charges budgétées.</p>
+      <div class="contrib-grid">
+        <div class="contrib-person vincent">
+          <div class="contrib-name">Vincent</div>
+          <div class="contrib-amount-display" id="contribAmountVincent">—</div>
+          <div class="contrib-detail" id="contribDetailVincent"></div>
+          <button id="contribPaidVincent" class="paid-badge unpaid" style="margin-top:12px;width:100%;text-align:center" onclick="toggleContribPaid('vincent')">Non versé</button>
+        </div>
+        <div class="contrib-person margaux">
+          <div class="contrib-name">Margaux</div>
+          <div class="contrib-amount-display" id="contribAmountMargaux">—</div>
+          <div class="contrib-detail" id="contribDetailMargaux"></div>
+          <button id="contribPaidMargaux" class="paid-badge unpaid" style="margin-top:12px;width:100%;text-align:center" onclick="toggleContribPaid('margaux')">Non versée</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div id="contribTotal" class="text-center text-sm"></div>
+    </div>
+  </div>
+</main>
+
+</div><!-- /app -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Confirmation</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalBody"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end">
+      <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" id="modalConfirmBtn">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ════════════════════════════════════════════════
+     FIREBASE SDK
+════════════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, onAuthStateChanged }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// ════════════════════════════════════════════════
+// 🔧 CONFIGURATION FIREBASE — À REMPLACER
+// Créez un projet sur https://console.firebase.google.com
+// Puis copiez votre config ici
+// ════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey:            "AIzaSyBERQIsayOiZVcfppbBKjKnC7YN41yaT84",
+  authDomain:        "babouches-finances.firebaseapp.com",
+  projectId:         "babouches-finances",
+  storageBucket:     "babouches-finances.firebasestorage.app",
+  messagingSenderId: "662355866301",
+  appId:             "1:662355866301:web:97c494f143b8c00088bdd4",
+  measurementId:     "G-C4FBZCSQHE"
+};
+
+// ════════════════════════════════════════════════
+// 🔒 EMAILS AUTORISÉS — À REMPLACER
+// ════════════════════════════════════════════════
+const ALLOWED_EMAILS = [
+  "vincent@gmail.com",   // ← remplacer par l'email de Vincent
+  "margaux@gmail.com"    // ← remplacer par l'email de Margaux
+];
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let unsubscribeSnapshot = null;
+let currentYear, currentMonth;
+let activeFilter = 'all';
+let localData = null; // cache local pour les writes
+
+const CATEGORIES = {
+  loyer:      { label: 'Loyer',      color: '#7c5cad' },
+  nourriture: { label: 'Nourriture', color: '#4a7c6e' },
+  energie:    { label: 'Énergie',    color: '#d4a843' },
+  internet:   { label: 'Internet',   color: '#3a7cb5' },
+  autre:      { label: 'Autre',      color: '#9a8e82' }
+};
+
+// ════════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════════
+window.signInWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    await signInWithPopup(auth, provider);
+  } catch(e) {
+    showToast('⚠ Erreur de connexion : ' + e.message);
+  }
+};
+
+window.signOut = async () => {
+  if (unsubscribeSnapshot) unsubscribeSnapshot();
+  await fbSignOut(auth);
+};
+
+onAuthStateChanged(auth, user => {
+  hide('loadingScreen');
+  if (!user) {
+    show('loginScreen');
+    hide('app');
+    document.getElementById('accessDenied').style.display = 'none';
+    return;
+  }
+
+  // Vérif email autorisé
+  const isAllowed = ALLOWED_EMAILS.map(e => e.toLowerCase()).includes(user.email.toLowerCase());
+
+  if (!isAllowed) {
+    hide('loginScreen');
+    hide('app');
+    const d = document.getElementById('accessDenied');
+    d.style.display = 'flex';
+    document.getElementById('deniedEmail').textContent =
+      `Le compte ${user.email} n'est pas autorisé à accéder à cette application.`;
+    return;
+  }
+
+  // Accès OK
+  currentUser = user;
+  hide('loginScreen');
+  document.getElementById('accessDenied').style.display = 'none';
+  show('app');
+
+  // User chip
+  const avatar = document.getElementById('userAvatar');
+  if (user.photoURL) {
+    avatar.innerHTML = `<img src="${user.photoURL}" style="width:24px;height:24px;border-radius:50%;object-fit:cover">`;
+  } else {
+    avatar.textContent = user.displayName?.[0] || user.email[0].toUpperCase();
+  }
+  document.getElementById('userName').textContent = user.displayName?.split(' ')[0] || user.email;
+
+  // Check config
+  if (false && firebaseConfig.apiKey === 'VOTRE_API_KEY') {
+    document.getElementById('configNotice').style.display = 'block';
+  }
+
+  const now = new Date();
+  currentYear = now.getFullYear();
+  currentMonth = now.getMonth() + 1;
+  startListening();
+  setTodayDate();
+  updateMonthDisplay();
+  populateCategorySelect();
+});
+
+// ════════════════════════════════════════════════
+// FIRESTORE — REALTIME LISTENER
+// ════════════════════════════════════════════════
+function getDocRef() {
+  const key = `${currentYear}-${String(currentMonth).padStart(2,'0')}`;
+  return doc(db, 'finances', key);
+}
+
+function startListening() {
+  if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+  setSyncState('syncing');
+
+  unsubscribeSnapshot = onSnapshot(getDocRef(), snap => {
+    if (snap.exists()) {
+      localData = migrateData(snap.data());
+    } else {
+      localData = getDefaultData();
+    }
+    setSyncState('ok');
+    renderAll();
+  }, err => {
+    setSyncState('offline');
+    showToast('⚠ Erreur de synchronisation');
+  });
+}
+
+async function saveData(data) {
+  localData = data;
+  setSyncState('syncing');
+  try {
+    await setDoc(getDocRef(), data);
+    setSyncState('ok');
+  } catch(e) {
+    setSyncState('offline');
+    showToast('⚠ Erreur de sauvegarde');
+  }
+}
+
+function getDefaultData() {
+  return {
+    contributions: { vincentPaid: false, margauxPaid: false },
+    rent: { total: 0, vincent: 0, margaux: 0 },
+    budgets: { nourriture: 0, energie: 0, internet: 0 },
+    expenses: []
+  };
+}
+
+function migrateData(d) {
+  if (!d.contributions) d.contributions = { vincentPaid: false, margauxPaid: false };
+  if (!d.rent) d.rent = { total: 0, vincent: 0, margaux: 0 };
+  if (!d.budgets) d.budgets = {};
+  if (!d.expenses) d.expenses = [];
+  return d;
+}
+
+// ════════════════════════════════════════════════
+// SYNC INDICATOR
+// ════════════════════════════════════════════════
+function setSyncState(state) {
+  const dot = document.getElementById('syncDot');
+  const lbl = document.getElementById('syncLabel');
+  dot.className = 'sync-dot' + (state === 'syncing' ? ' syncing' : state === 'offline' ? ' offline' : '');
+  lbl.textContent = state === 'syncing' ? 'Sync…' : state === 'offline' ? 'Hors ligne' : 'En ligne';
+}
+
+// ════════════════════════════════════════════════
+// RENDER ALL
+// ════════════════════════════════════════════════
+function renderAll() {
+  if (!localData) return;
+  renderSummary(localData);
+  renderExpenses(localData);
+  renderSettings(localData);
+  renderBudgets(localData);
+  populateCategorySelect();
+}
+
+function setTodayDate() {
+  const d = new Date();
+  document.getElementById('expDate').value =
+    `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function updateMonthDisplay() {
+  const d = new Date(currentYear, currentMonth - 1, 1);
+  document.getElementById('monthDisplay').textContent =
+    d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+}
+
+window.changeMonth = dir => {
+  currentMonth += dir;
+  if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+  if (currentMonth < 1)  { currentMonth = 12; currentYear--; }
+  localData = null;
+  updateMonthDisplay();
+  setTodayDate();
+  startListening();
+};
+
+// ════════════════════════════════════════════════
+// CALCULATIONS
+// ════════════════════════════════════════════════
+function calcContributions(data) {
+  const totalCharges = Object.values(data.budgets || {}).reduce((s,v) => s + (parseFloat(v)||0), 0);
+  const halfCharges = totalCharges / 2;
+  const rentV = parseFloat(data.rent.vincent) || 0;
+  const rentM = parseFloat(data.rent.margaux) || 0;
+  return { vincent: rentV + halfCharges, margaux: rentM + halfCharges, totalCharges, halfCharges, rentV, rentM };
+}
+
+function calcSummary(data) {
+  const c = calcContributions(data);
+  const vincentPaid = data.contributions.vincentPaid ? c.vincent : 0;
+  const margauxPaid = data.contributions.margauxPaid ? c.margaux : 0;
+  const totalContribs = vincentPaid + margauxPaid;
+
+  let paidByCommun = 0, owedToVincent = 0, owedToMargaux = 0;
+  data.expenses.forEach(e => {
+    const amt = parseFloat(e.amount) || 0;
+    if (e.payer === 'commun') paidByCommun += amt;
+    else if (e.payer === 'vincent') owedToVincent += amt;
+    else if (e.payer === 'margaux') owedToMargaux += amt;
+  });
+
+  const totalExpenses = paidByCommun + owedToVincent + owedToMargaux;
+  const balance = totalContribs - paidByCommun - owedToVincent - owedToMargaux;
+  return { totalContribs, paidByCommun, owedToVincent, owedToMargaux, totalExpenses, balance, c };
+}
+
+// ════════════════════════════════════════════════
+// SUMMARY
+// ════════════════════════════════════════════════
+function renderSummary(data) {
+  const s = calcSummary(data);
+  const c = s.c;
+
+  const cards = [
+    { label: 'Solde du compte', value: fmt(s.balance), sub: s.balance >= 0 ? 'Disponible' : 'Déficit', cls: s.balance >= 0 ? 'positive accent' : 'negative accent' },
+    { label: 'Contributions versées', value: fmt(s.totalContribs), sub: `V: ${fmt(data.contributions.vincentPaid ? c.vincent : 0)} · M: ${fmt(data.contributions.margauxPaid ? c.margaux : 0)}`, cls: '' },
+    { label: 'Dépenses totales', value: fmt(s.totalExpenses), sub: `${data.expenses.length} opération(s)`, cls: '' },
+    { label: 'Payé sur compte', value: fmt(s.paidByCommun), sub: 'Débit direct', cls: '' },
+  ];
+
+  document.getElementById('summaryCards').innerHTML = cards.map(c => `
+    <div class="stat-card ${c.cls}">
+      <div class="label">${c.label}</div>
+      <div class="value">${c.value}</div>
+      <div class="sub">${c.sub}</div>
+    </div>`).join('');
+
+  let reimbs = '';
+  if (s.owedToVincent > 0) reimbs += `<div class="reimb-item owed">🏦 Le compte commun doit rembourser <strong>Vincent</strong><span class="reimb-amount">${fmt(s.owedToVincent)}</span></div>`;
+  if (s.owedToMargaux > 0) reimbs += `<div class="reimb-item owed">🏦 Le compte commun doit rembourser <strong>Margaux</strong><span class="reimb-amount">${fmt(s.owedToMargaux)}</span></div>`;
+  if (!reimbs) reimbs = `<div class="reimb-item balanced">✓ Aucun remboursement en attente</div>`;
+  document.getElementById('reimbursements').innerHTML = `<div class="reimbursement-list">${reimbs}</div>`;
+
+  renderBudgetProgress(data, 'summaryBudgets');
+}
+
+function renderBudgetProgress(data, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const catSpend = {};
+  data.expenses.forEach(e => { catSpend[e.cat] = (catSpend[e.cat] || 0) + (parseFloat(e.amount)||0); });
+  if (data.rent?.total) catSpend['loyer'] = (catSpend['loyer'] || 0) + (parseFloat(data.rent.total)||0);
+
+  const budgets = { loyer: data.rent.total || 0, ...data.budgets };
+  let html = '';
+
+  Object.entries(budgets).forEach(([cat, budget]) => {
+    const spent = catSpend[cat] || 0;
+    const bgt = parseFloat(budget) || 0;
+    if (bgt === 0 && spent === 0) return;
+    const catInfo = CATEGORIES[cat] || { label: cat.charAt(0).toUpperCase()+cat.slice(1), color: '#9a8e82' };
+    const pct = bgt > 0 ? Math.min((spent/bgt)*100, 100) : 0;
+    const cls = pct < 70 ? 'progress-ok' : pct < 90 ? 'progress-warn' : 'progress-over';
+    html += `<div class="budget-item">
+      <div class="budget-header">
+        <div class="budget-name"><span style="width:10px;height:10px;border-radius:50%;background:${catInfo.color};display:inline-block"></span> ${catInfo.label}</div>
+        <div class="budget-amounts"><strong>${fmt(spent)}</strong>${bgt > 0 ? ` / ${fmt(bgt)}` : ' dépensé'}
+          ${bgt > 0 ? `<span style="margin-left:8px;color:${spent>bgt?'var(--red)':'var(--ink-faint)'}">${spent>bgt?'⚠ dépassé':fmt(bgt-spent)+' restant'}</span>` : ''}</div>
+      </div>
+      ${bgt > 0 ? `<div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%"></div></div>` : ''}
+    </div>`;
+  });
+
+  const autreSpent = catSpend['autre'] || 0;
+  if (autreSpent > 0) {
+    html += `<div class="budget-item"><div class="budget-header">
+      <div class="budget-name"><span style="width:10px;height:10px;border-radius:50%;background:#9a8e82;display:inline-block"></span> Autre</div>
+      <div class="budget-amounts"><strong>${fmt(autreSpent)}</strong></div>
+    </div></div>`;
+  }
+
+  container.innerHTML = html || '<p class="text-sm" style="color:var(--ink-faint);text-align:center;padding:16px 0">Aucune donnée disponible</p>';
+}
+
+// ════════════════════════════════════════════════
+// EXPENSES
+// ════════════════════════════════════════════════
+function populateCategorySelect() {
+  const sel = document.getElementById('expCat');
+  const cats = { ...CATEGORIES };
+  if (localData?.budgets) Object.keys(localData.budgets).forEach(k => { if (!cats[k]) cats[k] = { label: k.charAt(0).toUpperCase()+k.slice(1), color: '#9a8e82' }; });
+  sel.innerHTML = Object.entries(cats).map(([k,v]) => `<option value="${k}">${v.label}</option>`).join('');
+}
+
+window.addExpense = async () => {
+  const amount = parseFloat(document.getElementById('expAmount').value);
+  const date = document.getElementById('expDate').value;
+  const cat = document.getElementById('expCat').value;
+  const payer = document.getElementById('expPayer').value;
+  const comment = document.getElementById('expComment').value.trim();
+
+  if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
+  if (!date) { showToast('⚠ Date requise'); return; }
+
+  const data = JSON.parse(JSON.stringify(localData || getDefaultData()));
+  data.expenses.push({ id: Date.now(), amount, date, cat, payer, comment,
+    addedBy: currentUser?.email || 'inconnu' });
+  data.expenses.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  document.getElementById('expAmount').value = '';
+  document.getElementById('expComment').value = '';
+
+  await saveData(data);
+  showToast('✓ Dépense ajoutée');
+};
+
+window.deleteExpense = async id => {
+  const data = JSON.parse(JSON.stringify(localData));
+  data.expenses = data.expenses.filter(e => e.id != id);
+  await saveData(data);
+  showToast('✓ Dépense supprimée');
+};
+
+window.setFilter = (f, el) => {
+  activeFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  if (localData) renderExpenses(localData);
+};
+
+function renderExpenses(data) {
+  const list = document.getElementById('expenseList');
+  let expenses = [...data.expenses];
+  if (activeFilter !== 'all') expenses = expenses.filter(e => e.payer === activeFilter);
+
+  document.getElementById('expCount').textContent = `${expenses.length} dépense(s)`;
+
+  if (expenses.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="emoji">💸</div><p>Aucune dépense${activeFilter !== 'all' ? ' pour ce filtre' : ' ce mois'}</p></div>`;
+    return;
+  }
+
+  list.innerHTML = expenses.map(e => {
+    const catInfo = CATEGORIES[e.cat] || { label: e.cat, color: '#9a8e82' };
+    const payerLabel = e.payer === 'vincent' ? 'Vincent' : e.payer === 'margaux' ? 'Margaux' : 'Compte commun';
+    const payerClass = `payer-${e.payer}`;
+    const dateStr = e.date ? new Date(e.date+'T12:00:00').toLocaleDateString('fr-FR', {day:'numeric',month:'short'}) : '';
+    const addedByLabel = e.addedBy ? `· ajouté par ${e.addedBy.split('@')[0]}` : '';
+    return `<div class="expense-item">
+      <span class="expense-cat-dot" style="background:${catInfo.color}"></span>
+      <div class="expense-main">
+        <div class="expense-desc">${e.comment || catInfo.label}</div>
+        <div class="expense-meta">
+          <span>${catInfo.label}</span><span>·</span>
+          <span>${dateStr}</span>
+          <span class="expense-payer-badge ${payerClass}">${payerLabel}</span>
+          <span style="color:var(--ink-faint);font-size:0.68rem">${addedByLabel}</span>
+        </div>
+      </div>
+      <div class="expense-amount">${fmt(e.amount)}</div>
+      <button class="delete-btn" onclick="deleteExpense(${e.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════
+// SETTINGS
+// ════════════════════════════════════════════════
+function renderSettings(data) {
+  document.getElementById('rentTotal').value = data.rent.total || '';
+  document.getElementById('rentVincent').value = data.rent.vincent || '';
+  document.getElementById('rentMargaux').value = data.rent.margaux || '';
+  updateRentNote(data);
+
+  const container = document.getElementById('budgetSettings');
+  container.innerHTML = Object.entries(data.budgets || {}).map(([cat, amount]) => `
+    <div class="budget-row" data-cat="${cat}">
+      <input type="text" value="${cat}" placeholder="Catégorie" class="cat-name-input" style="max-width:140px">
+      <input type="number" value="${amount || ''}" placeholder="Budget €" step="0.01" min="0" class="cat-budget-input">
+      <button class="btn-remove" onclick="removeBudgetRow(this)">✕</button>
+    </div>`).join('');
+
+  renderContribCards(data);
+}
+
+function renderContribCards(data) {
+  const c = calcContributions(data);
+
+  document.getElementById('contribAmountVincent').textContent = fmt(c.vincent);
+  document.getElementById('contribDetailVincent').innerHTML = `Loyer : ${fmt(c.rentV)}<br>Charges (½) : ${fmt(c.halfCharges)}`;
+  const btnV = document.getElementById('contribPaidVincent');
+  btnV.className = `paid-badge ${data.contributions.vincentPaid ? 'paid' : 'unpaid'}`;
+  btnV.textContent = data.contributions.vincentPaid ? '✓ Versé' : 'Non versé';
+
+  document.getElementById('contribAmountMargaux').textContent = fmt(c.margaux);
+  document.getElementById('contribDetailMargaux').innerHTML = `Loyer : ${fmt(c.rentM)}<br>Charges (½) : ${fmt(c.halfCharges)}`;
+  const btnM = document.getElementById('contribPaidMargaux');
+  btnM.className = `paid-badge ${data.contributions.margauxPaid ? 'paid' : 'unpaid'}`;
+  btnM.textContent = data.contributions.margauxPaid ? '✓ Versée' : 'Non versée';
+
+  const totalDue = c.vincent + c.margaux;
+  const totalPaid = (data.contributions.vincentPaid ? c.vincent : 0) + (data.contributions.margauxPaid ? c.margaux : 0);
+  document.getElementById('contribTotal').innerHTML = `Total à verser : <strong>${fmt(totalDue)}</strong> &nbsp;·&nbsp; Versé : <strong>${fmt(totalPaid)}</strong>`;
+}
+
+window.toggleContribPaid = async who => {
+  const data = JSON.parse(JSON.stringify(localData));
+  if (who === 'vincent') data.contributions.vincentPaid = !data.contributions.vincentPaid;
+  else data.contributions.margauxPaid = !data.contributions.margauxPaid;
+  await saveData(data);
+  const name = who === 'vincent' ? 'Vincent' : 'Margaux';
+  const paid = who === 'vincent' ? data.contributions.vincentPaid : data.contributions.margauxPaid;
+  showToast(paid ? `✓ Contribution de ${name} marquée versée` : `Contribution de ${name} : non versée`);
+};
+
+window.autoCalcRent = field => {
+  const total = parseFloat(document.getElementById('rentTotal').value) || 0;
+  if (field === 'v' && total) {
+    const v = parseFloat(document.getElementById('rentVincent').value) || 0;
+    document.getElementById('rentMargaux').value = Math.max(0, total - v).toFixed(2);
+  } else if (field === 'm' && total) {
+    const m = parseFloat(document.getElementById('rentMargaux').value) || 0;
+    document.getElementById('rentVincent').value = Math.max(0, total - m).toFixed(2);
+  }
+  // Live save rent
+  const data = JSON.parse(JSON.stringify(localData || getDefaultData()));
+  data.rent.total   = parseFloat(document.getElementById('rentTotal').value) || 0;
+  data.rent.vincent = parseFloat(document.getElementById('rentVincent').value) || 0;
+  data.rent.margaux = parseFloat(document.getElementById('rentMargaux').value) || 0;
+  localData = data;
+  saveData(data);
+  updateRentNote(data);
+  renderContribCards(data);
+};
+
+function updateRentNote(data) {
+  const note = document.getElementById('rentNote');
+  if (!note) return;
+  if (data.rent.total > 0) {
+    const diff = (data.rent.vincent||0) + (data.rent.margaux||0) - data.rent.total;
+    if (Math.abs(diff) > 0.01) {
+      note.textContent = `⚠ Écart de ${fmt(Math.abs(diff))} entre les parts et le total`;
+      note.style.color = 'var(--red)';
+    } else {
+      note.textContent = '✓ Répartition équilibrée';
+      note.style.color = 'var(--sage)';
+    }
+  } else { note.textContent = ''; }
+}
+
+window.addBudgetRow = () => {
+  const container = document.getElementById('budgetSettings');
+  const row = document.createElement('div');
+  row.className = 'budget-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Catégorie" class="cat-name-input" style="max-width:140px">
+    <input type="number" placeholder="Budget €" step="0.01" min="0" class="cat-budget-input">
+    <button class="btn-remove" onclick="removeBudgetRow(this)">✕</button>`;
+  container.appendChild(row);
+};
+
+window.removeBudgetRow = btn => btn.closest('.budget-row').remove();
+
+window.saveBudgets = async () => {
+  const data = JSON.parse(JSON.stringify(localData || getDefaultData()));
+  data.budgets = {};
+  document.querySelectorAll('.budget-row').forEach(row => {
+    const cat = row.querySelector('.cat-name-input').value.trim().toLowerCase();
+    const amount = parseFloat(row.querySelector('.cat-budget-input').value) || 0;
+    if (cat) data.budgets[cat] = amount;
+  });
+  await saveData(data);
+  showToast('✓ Paramètres enregistrés');
+};
+
+function renderBudgets(data) { renderBudgetProgress(data, 'budgetTracking'); }
+
+// ════════════════════════════════════════════════
+// EXPORT CSV
+// ════════════════════════════════════════════════
+window.exportCSV = () => {
+  if (!localData) return;
+  const data = localData;
+  const c = calcContributions(data);
+  const monthStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}`;
+  let csv = '\uFEFF';
+  csv += 'Type,Date,Catégorie,Description,Montant,Payé par,Statut\n';
+  csv += `Contribution,${monthStr},Contribution,Vincent,${c.vincent.toFixed(2)},Vincent,${data.contributions.vincentPaid?'Versée':'En attente'}\n`;
+  csv += `Contribution,${monthStr},Contribution,Margaux,${c.margaux.toFixed(2)},Margaux,${data.contributions.margauxPaid?'Versée':'En attente'}\n`;
+  data.expenses.forEach(e => {
+    const catInfo = CATEGORIES[e.cat] || { label: e.cat };
+    const payer = e.payer === 'commun' ? 'Compte commun' : e.payer === 'vincent' ? 'Vincent' : 'Margaux';
+    const comment = (e.comment || '').replace(/"/g, '""');
+    csv += `Dépense,${e.date},${catInfo.label},"${comment}",${e.amount},${payer},—\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `finances-${monthStr}.csv`; a.click();
+  URL.revokeObjectURL(url);
+  showToast('✓ Export CSV téléchargé');
+};
+
+// ════════════════════════════════════════════════
+// DUPLICATE PREVIOUS MONTH
+// ════════════════════════════════════════════════
+window.duplicatePrevMonth = async () => {
+  let prevMonth = currentMonth - 1, prevYear = currentYear;
+  if (prevMonth < 1) { prevMonth = 12; prevYear--; }
+  const prevKey = `${prevYear}-${String(prevMonth).padStart(2,'0')}`;
+  const prevRef = doc(db, 'finances', prevKey);
+
+  showModal('Dupliquer le mois précédent',
+    `<p>Copier les paramètres (loyer, budgets) du mois précédent vers le mois actuel ?<br><br><small style="color:var(--ink-faint)">Les dépenses et statuts de versement seront remis à zéro.</small></p>`,
+    async () => {
+      try {
+        const prevSnap = await getDoc(prevRef);
+        if (!prevSnap.exists()) { showToast('⚠ Aucune donnée pour le mois précédent'); return; }
+        const prev = prevSnap.data();
+        const curr = JSON.parse(JSON.stringify(localData || getDefaultData()));
+        curr.rent = { ...prev.rent };
+        curr.budgets = { ...prev.budgets };
+        curr.contributions = { vincentPaid: false, margauxPaid: false };
+        await saveData(curr);
+        showToast('✓ Paramètres dupliqués');
+      } catch(e) { showToast('⚠ Erreur lors de la duplication'); }
+    });
+};
+
+// ════════════════════════════════════════════════
+// RESET
+// ════════════════════════════════════════════════
+window.confirmReset = () => {
+  showModal('Réinitialiser le mois',
+    `<p>Supprimer toutes les données du mois en cours ? Cette action est irréversible.</p>`,
+    async () => {
+      await saveData(getDefaultData());
+      showToast('✓ Mois réinitialisé');
+    });
+};
+
+// ════════════════════════════════════════════════
+// MODAL
+// ════════════════════════════════════════════════
+window.showModal = (title, body, onConfirm) => {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = body;
+  document.getElementById('modalConfirmBtn').onclick = () => { onConfirm(); closeModal(); };
+  document.getElementById('modalOverlay').classList.add('open');
+};
+window.closeModal = () => document.getElementById('modalOverlay').classList.remove('open');
+document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+// ════════════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════════════
+window.showTab = (tab, el) => {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + tab).classList.add('active');
+  el.classList.add('active');
+};
+
+// ════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════
+function fmt(n) {
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 }).format(parseFloat(n)||0);
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function show(id) { document.getElementById(id).style.display = 'flex'; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+
+</script>
+</body>
+</html>
