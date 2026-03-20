@@ -793,8 +793,9 @@ const ALLOWED_EMAILS = [
   "margaux.huens@gmail.com"
 ];
 
-const auth = getAuth(initializeApp(firebaseConfig));
-const db   = getFirestore();
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
 
 let currentUser = null, unsubscribe = null, localData = null;
 let currentYear, currentMonth;
