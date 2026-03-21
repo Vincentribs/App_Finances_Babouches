@@ -2,8 +2,24 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Finances Communes — Vincent & Margaux</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Babouches</title>
+
+<!-- PWA / App meta -->
+<meta name="application-name" content="Babouches">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Babouches">
+<meta name="theme-color" content="#1a1612">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- Icône générée en SVG → PNG base64 inline -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231a1612'/%3E%3C!-- Babouche silhouette --%3E%3Cellipse cx='256' cy='340' rx='140' ry='38' fill='%23c96c3a' opacity='0.35'/%3E%3Cpath d='M140 310 Q150 240 200 210 Q230 195 256 195 Q310 195 355 240 Q380 265 375 310 Q370 330 350 338 Q300 355 256 355 Q200 355 165 338 Q140 328 140 310Z' fill='%23c96c3a'/%3E%3Cpath d='M200 210 Q220 170 256 165 Q290 170 310 210' fill='none' stroke='%23f5e8c4' stroke-width='12' stroke-linecap='round'/%3E%3Cellipse cx='256' cy='310' rx='80' ry='22' fill='%231a1612' opacity='0.2'/%3E%3C/svg%3E">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231a1612'/%3E%3Cellipse cx='256' cy='340' rx='140' ry='38' fill='%23c96c3a' opacity='0.35'/%3E%3Cpath d='M140 310 Q150 240 200 210 Q230 195 256 195 Q310 195 355 240 Q380 265 375 310 Q370 330 350 338 Q300 355 256 355 Q200 355 165 338 Q140 328 140 310Z' fill='%23c96c3a'/%3E%3Cpath d='M200 210 Q220 170 256 165 Q290 170 310 210' fill='none' stroke='%23f5e8c4' stroke-width='12' stroke-linecap='round'/%3E%3Cellipse cx='256' cy='310' rx='80' ry='22' fill='%231a1612' opacity='0.2'/%3E%3C/svg%3E">
+
+<!-- Splash screen color -->
+<meta name="msapplication-TileColor" content="#1a1612">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
 
@@ -540,7 +556,7 @@ function getKey() {
 }
 
 function getDefaultData() {
-  return { contributions: { vincentPaid: false, margauxPaid: false }, rent: { total: 0, vincent: 0, margaux: 0 }, budgets: { nourriture: 0, energie: 0, internet: 0 }, chargesRatio: 50, expenses: [] };
+  return { contributions: { vincentPaid: false, margauxPaid: false }, rent: { total: 0, vincent: 0, margaux: 0, paid: false }, budgets: { nourriture: 0, energie: 0, internet: 0 }, chargesRatio: 50, expenses: [] };
 }
 
 function loadData() {
@@ -552,6 +568,7 @@ function loadData() {
     if (d.contributions.vincent !== undefined) d.contributions = { vincentPaid: false, margauxPaid: false };
     if (d.rent && d.rent.paid !== undefined) delete d.rent.paid;
     if (d.chargesRatio === undefined) d.chargesRatio = 50;
+    if (d.rent && d.rent.paid === undefined) d.rent.paid = false;
     return d;
   } catch(e) { return getDefaultData(); }
 }
@@ -580,6 +597,9 @@ function calcSummary(data) {
   const margauxPaid = data.contributions.margauxPaid ? c.margaux : 0;
   const totalContribs = vincentPaid + margauxPaid;
   let paidByCommun = 0, owedToVincent = 0, owedToMargaux = 0;
+  // Le loyer est traité comme une dépense compte commun, seulement s'il est marqué payé
+  const loyerTotal = parseFloat(data.rent && data.rent.total) || 0;
+  if (loyerTotal > 0 && data.rent.paid) paidByCommun += loyerTotal;
   (data.expenses || []).forEach(e => {
     const amt = parseFloat(e.amount) || 0;
     if (e.payer === 'commun') paidByCommun += amt;
@@ -723,9 +743,26 @@ function renderBudgetProgress(data, containerId) {
   if (!container) return;
   const catSpend = {};
   (data.expenses || []).forEach(e => { catSpend[e.cat] = (catSpend[e.cat]||0) + (parseFloat(e.amount)||0); });
-  if (data.rent && data.rent.total) catSpend['loyer'] = (catSpend['loyer']||0) + (parseFloat(data.rent.total)||0);
-  const budgets = { loyer: data.rent.total || 0, ...(data.budgets||{}) };
+  const budgets = { ...(data.budgets||{}) };
+  const loyerTotal = parseFloat(data.rent && data.rent.total) || 0;
   let html = '';
+
+  // Ligne loyer fixe (toujours réglé, affiché comme charge fixe)
+  if (loyerTotal > 0) {
+    const catInfo = CATEGORIES['loyer'];
+    const lPaid = data.rent && data.rent.paid;
+    const lBadge = lPaid
+      ? `<span style="font-size:0.66rem;background:var(--sage-light);color:var(--sage);padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:600">✓ Payé</span>`
+      : `<span style="font-size:0.66rem;background:var(--red-light);color:var(--red);padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:600">Non payé</span>`;
+    html += `<div class="budget-item">
+      <div class="budget-header">
+        <div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>Loyer ${lBadge}</div>
+        <div class="budget-amounts"><strong>${fmt(loyerTotal)}</strong> <span style="color:var(--ink-faint);margin-left:5px">charge fixe</span></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill ${lPaid ? 'progress-ok' : 'progress-over'}" style="width:100%"></div></div>
+    </div>`;
+  }
+
   Object.entries(budgets).forEach(([cat, budget]) => {
     const spent = catSpend[cat] || 0;
     const bgt = parseFloat(budget) || 0;
@@ -820,6 +857,14 @@ function submitExpense() {
   renderAll();
 }
 
+function toggleRentPaid() {
+  const data = loadData();
+  data.rent.paid = !data.rent.paid;
+  saveData(data);
+  renderAll();
+  showToast(data.rent.paid ? '✓ Loyer marqué comme payé' : 'Loyer marqué comme non payé');
+}
+
 function deleteExpense(id) {
   showModal('Supprimer la dépense', '<p>Confirmer la suppression de cette dépense ?</p>', () => {
     const data = loadData();
@@ -842,11 +887,36 @@ function renderExpenses(data) {
   let expenses = [...data.expenses];
   if (activeFilter !== 'all') expenses = expenses.filter(e => e.payer === activeFilter);
   document.getElementById('expCount').textContent = `${expenses.length} dépense(s)`;
-  if (expenses.length === 0) {
+
+  // Ligne loyer virtuelle (épinglée en haut, visible seulement sur filtre "toutes" ou "commun")
+  const _rentData = loadData().rent;
+  const loyerTotal = parseFloat(_rentData && _rentData.total) || 0;
+  const loyerPaid = _rentData && _rentData.paid;
+  let loyerHtml = '';
+  if (loyerTotal > 0 && (activeFilter === 'all' || activeFilter === 'commun')) {
+    const paidStyle = loyerPaid
+      ? 'background:var(--sage-light);color:var(--sage)'
+      : 'background:var(--red-light);color:var(--red)';
+    const paidLabel = loyerPaid ? '✓ Payé' : 'Non payé';
+    const borderColor = loyerPaid ? 'var(--sage)' : 'var(--red)';
+    loyerHtml = `<div class="expense-item" style="border-color:${borderColor}">
+      <span class="expense-cat-dot" style="background:#7c5cad"></span>
+      <div class="expense-main">
+        <div class="expense-desc">Loyer <span style="font-size:0.68rem;background:var(--gold-light);color:#7a5c10;padding:1px 7px;border-radius:10px;margin-left:4px;font-weight:600">Fixe</span></div>
+        <div class="expense-meta"><span>Loyer</span><span>·</span><span>charge mensuelle</span><span class="expense-payer-badge payer-commun">Compte commun</span></div>
+      </div>
+      <div class="expense-amount">${fmt(loyerTotal)}</div>
+      <div class="expense-actions">
+        <button class="action-btn" style="opacity:1;font-size:0.7rem;padding:4px 8px;border-radius:20px;${paidStyle};font-weight:600" onclick="toggleRentPaid()">${paidLabel}</button>
+      </div>
+    </div>`;
+  }
+
+  if (expenses.length === 0 && !loyerHtml) {
     list.innerHTML = `<div class="empty"><div class="emoji">💸</div><p>Aucune dépense${activeFilter !== 'all' ? ' pour ce filtre' : ' ce mois'}</p></div>`;
     return;
   }
-  list.innerHTML = expenses.map(e => {
+  list.innerHTML = loyerHtml + expenses.map(e => {
     const catInfo = CATEGORIES[e.cat] || { label: e.cat, color: '#9a8e82' };
     const payerLabel = e.payer === 'vincent' ? 'Vincent' : e.payer === 'margaux' ? 'Margaux' : 'Compte commun';
     const dateStr = e.date ? new Date(e.date+'T12:00:00').toLocaleDateString('fr-FR', {day:'numeric',month:'short'}) : '';
@@ -1014,6 +1084,7 @@ function duplicatePrevMonth() {
     curr.budgets = { ...prev.budgets };
     curr.chargesRatio = prev.chargesRatio !== undefined ? prev.chargesRatio : 50;
     curr.contributions = { vincentPaid: false, margauxPaid: false };
+      if (curr.rent) curr.rent.paid = false;
     saveData(curr);
     renderAll();
     showToast('✓ Paramètres dupliqués');
