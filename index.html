@@ -46,6 +46,7 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  a, button, input, select, textarea, [onclick] { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.5; }
 
   /* HEADER */
@@ -275,7 +276,7 @@
 <body>
 
 <header>
-  <div class="header-left"><h1>Finances <span>Communes</span></h1></div>
+  <div class="header-left"><h1><span>FB</span></h1></div>
   <div class="month-nav">
     <button onclick="changeMonth(-1)">‹</button>
     <span id="monthDisplay"></span>
@@ -886,53 +887,57 @@ function renderExpenses(data) {
   const list = document.getElementById('expenseList');
   let expenses = [...data.expenses];
   if (activeFilter !== 'all') expenses = expenses.filter(e => e.payer === activeFilter);
-  document.getElementById('expCount').textContent = `${expenses.length} dépense(s)`;
+  document.getElementById('expCount').textContent = expenses.length + ' dépense(s)';
 
-  // Ligne loyer virtuelle (épinglée en haut, visible seulement sur filtre "toutes" ou "commun")
-  const _rentData = loadData().rent;
-  const loyerTotal = parseFloat(_rentData && _rentData.total) || 0;
-  const loyerPaid = _rentData && _rentData.paid;
-  let loyerHtml = '';
-  if (loyerTotal > 0 && (activeFilter === 'all' || activeFilter === 'commun')) {
-    const paidStyle = loyerPaid
-      ? 'background:var(--sage-light);color:var(--sage)'
-      : 'background:var(--red-light);color:var(--red)';
-    const paidLabel = loyerPaid ? '✓ Payé' : 'Non payé';
-    const borderColor = loyerPaid ? 'var(--sage)' : 'var(--red)';
-    loyerHtml = `<div class="expense-item" style="border-color:${borderColor}">
-      <span class="expense-cat-dot" style="background:#7c5cad"></span>
-      <div class="expense-main">
-        <div class="expense-desc">Loyer <span style="font-size:0.68rem;background:var(--gold-light);color:#7a5c10;padding:1px 7px;border-radius:10px;margin-left:4px;font-weight:600">Fixe</span></div>
-        <div class="expense-meta"><span>Loyer</span><span>·</span><span>charge mensuelle</span><span class="expense-payer-badge payer-commun">Compte commun</span></div>
-      </div>
-      <div class="expense-amount">${fmt(loyerTotal)}</div>
-      <div class="expense-actions">
-        <button class="action-btn" style="opacity:1;font-size:0.7rem;padding:4px 8px;border-radius:20px;${paidStyle};font-weight:600" onclick="toggleRentPaid()">${paidLabel}</button>
-      </div>
-    </div>`;
-  }
+  const rent = data.rent || {};
+  const loyerTotal = parseFloat(rent.total) || 0;
+  const loyerPaid = !!rent.paid;
+  const showLoyer = loyerTotal > 0 && (activeFilter === 'all' || activeFilter === 'commun');
 
-  if (expenses.length === 0 && !loyerHtml) {
-    list.innerHTML = `<div class="empty"><div class="emoji">💸</div><p>Aucune dépense${activeFilter !== 'all' ? ' pour ce filtre' : ' ce mois'}</p></div>`;
+  if (!showLoyer && expenses.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="emoji">💸</div><p>Aucune dépense' + (activeFilter !== 'all' ? ' pour ce filtre' : ' ce mois') + '</p></div>';
     return;
   }
-  list.innerHTML = loyerHtml + expenses.map(e => {
+
+  // Build full HTML in one shot — pas de DOM intermédiaire, pas de listeners perdus
+  let html = '';
+
+  if (showLoyer) {
+    const borderCol = loyerPaid ? 'var(--sage)' : 'var(--red)';
+    const btnBg  = loyerPaid ? 'background:var(--sage-light);color:var(--sage)' : 'background:var(--red-light);color:var(--red)';
+    const btnTxt = loyerPaid ? '&#10003; Payé' : 'Non payé';
+    html += '<div class="expense-item" style="border-color:' + borderCol + '">'
+      + '<span class="expense-cat-dot" style="background:#7c5cad"></span>'
+      + '<div class="expense-main">'
+      + '<div class="expense-desc">Loyer <span style="font-size:0.68rem;background:var(--gold-light);color:#7a5c10;padding:1px 7px;border-radius:10px;margin-left:4px;font-weight:600">Fixe</span></div>'
+      + '<div class="expense-meta"><span>Loyer</span><span>·</span><span>charge mensuelle</span><span class="expense-payer-badge payer-commun">Compte commun</span></div>'
+      + '</div>'
+      + '<div class="expense-amount">' + fmt(loyerTotal) + '</div>'
+      + '<div class="expense-actions">'
+      + '<button class="action-btn" style="opacity:1;font-size:0.7rem;padding:4px 8px;border-radius:20px;font-weight:600;' + btnBg + '" ontouchstart="" onclick="toggleRentPaid()">' + btnTxt + '</button>'
+      + '</div>'
+      + '</div>';
+  }
+
+  expenses.forEach(function(e) {
     const catInfo = CATEGORIES[e.cat] || { label: e.cat, color: '#9a8e82' };
     const payerLabel = e.payer === 'vincent' ? 'Vincent' : e.payer === 'margaux' ? 'Margaux' : 'Compte commun';
-    const dateStr = e.date ? new Date(e.date+'T12:00:00').toLocaleDateString('fr-FR', {day:'numeric',month:'short'}) : '';
-    return `<div class="expense-item">
-      <span class="expense-cat-dot" style="background:${catInfo.color}"></span>
-      <div class="expense-main">
-        <div class="expense-desc">${e.comment || catInfo.label}</div>
-        <div class="expense-meta"><span>${catInfo.label}</span><span>·</span><span>${dateStr}</span><span class="expense-payer-badge payer-${e.payer}">${payerLabel}</span></div>
-      </div>
-      <div class="expense-amount">${fmt(e.amount)}</div>
-      <div class="expense-actions">
-        <button class="action-btn" onclick="openEditExpense(${e.id})" title="Modifier">✏️</button>
-        <button class="action-btn del" onclick="deleteExpense(${e.id})" title="Supprimer">✕</button>
-      </div>
-    </div>`;
-  }).join('');
+    const dateStr = e.date ? new Date(e.date + 'T12:00:00').toLocaleDateString('fr-FR', {day:'numeric', month:'short'}) : '';
+    html += '<div class="expense-item">'
+      + '<span class="expense-cat-dot" style="background:' + catInfo.color + '"></span>'
+      + '<div class="expense-main">'
+      + '<div class="expense-desc">' + (e.comment || catInfo.label) + '</div>'
+      + '<div class="expense-meta"><span>' + catInfo.label + '</span><span>·</span><span>' + dateStr + '</span><span class="expense-payer-badge payer-' + e.payer + '">' + payerLabel + '</span></div>'
+      + '</div>'
+      + '<div class="expense-amount">' + fmt(e.amount) + '</div>'
+      + '<div class="expense-actions">'
+      + '<button class="action-btn" ontouchstart="" onclick="openEditExpense(' + e.id + ')" title="Modifier">&#9999;&#65039;</button>'
+      + '<button class="action-btn del" ontouchstart="" onclick="deleteExpense(' + e.id + ')" title="Supprimer">&#x2715;</button>'
+      + '</div>'
+      + '</div>';
+  });
+
+  list.innerHTML = html;
 }
 
 // =============================================
