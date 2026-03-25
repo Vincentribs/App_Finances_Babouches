@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Babouches</title>
 
-<!-- PWA / App meta -->
 <meta name="application-name" content="Babouches">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,12 +12,10 @@
 <meta name="theme-color" content="#1a1612">
 <meta name="mobile-web-app-capable" content="yes">
 
-<!-- Icône générée en SVG → PNG base64 inline -->
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231a1612'/%3E%3C!-- Babouche silhouette --%3E%3Cellipse cx='256' cy='340' rx='140' ry='38' fill='%23c96c3a' opacity='0.35'/%3E%3Cpath d='M140 310 Q150 240 200 210 Q230 195 256 195 Q310 195 355 240 Q380 265 375 310 Q370 330 350 338 Q300 355 256 355 Q200 355 165 338 Q140 328 140 310Z' fill='%23c96c3a'/%3E%3Cpath d='M200 210 Q220 170 256 165 Q290 170 310 210' fill='none' stroke='%23f5e8c4' stroke-width='12' stroke-linecap='round'/%3E%3Cellipse cx='256' cy='310' rx='80' ry='22' fill='%231a1612' opacity='0.2'/%3E%3C/svg%3E">
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231a1612'/%3E%3Cellipse cx='256' cy='340' rx='140' ry='38' fill='%23c96c3a' opacity='0.35'/%3E%3Cpath d='M140 310 Q150 240 200 210 Q230 195 256 195 Q310 195 355 240 Q380 265 375 310 Q370 330 350 338 Q300 355 256 355 Q200 355 165 338 Q140 328 140 310Z' fill='%23c96c3a'/%3E%3Cpath d='M200 210 Q220 170 256 165 Q290 170 310 210' fill='none' stroke='%23f5e8c4' stroke-width='12' stroke-linecap='round'/%3E%3Cellipse cx='256' cy='310' rx='80' ry='22' fill='%231a1612' opacity='0.2'/%3E%3C/svg%3E">
 
-<!-- Splash screen color -->
 <meta name="msapplication-TileColor" content="#1a1612">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -306,7 +303,6 @@
 </div>
 
 <main>
-  <!-- RÉSUMÉ -->
   <div class="section active" id="section-summary">
     <div id="carryAlert" class="carry-alert"></div>
     <div class="summary-grid" id="summaryCards"></div>
@@ -324,8 +320,21 @@
     </div>
   </div>
 
-  <!-- DÉPENSES -->
   <div class="section" id="section-expenses">
+    
+    <div class="card" id="fixedChargesCard" style="transition: all 0.2s ease; margin-bottom: 14px;">
+      <div class="card-title">
+        <div class="icon" style="background:var(--ink); color:var(--sand);">🏠</div>
+        <span id="fixedChargesTitle">Loyer & Charges fixes</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+        <div>
+          <div style="font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: var(--ink);" id="fixedChargesAmount">--</div>
+          <div class="text-sm" style="color:var(--ink-faint)">Prélèvement compte commun</div>
+        </div>
+        <button id="btnRentPaid" class="paid-badge unpaid" style="font-size: 0.85rem; padding: 10px 18px; cursor: pointer;" onclick="toggleRentPaid()">En attente</button>
+      </div>
+    </div>
     <div class="card">
       <div class="card-title">
         <div class="icon" style="background:var(--sand-dark)">≡</div>
@@ -342,7 +351,6 @@
     </div>
   </div>
 
-  <!-- BUDGETS -->
   <div class="section" id="section-budgets">
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--gold-light)">📈</div>Suivi des budgets</div>
@@ -350,7 +358,6 @@
     </div>
   </div>
 
-  <!-- PARAMÈTRES -->
   <div class="section" id="section-settings">
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">🏠</div>Loyer mensuel</div>
@@ -413,10 +420,8 @@
   </div>
 </main>
 
-<!-- FAB -->
 <button class="fab" onclick="openQuickAdd()" title="Ajouter une dépense">+</button>
 
-<!-- MODAL CONFIRM -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -431,7 +436,6 @@
   </div>
 </div>
 
-<!-- MODAL QUICK ADD / EDIT -->
 <div class="modal-overlay" id="quickAddOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -464,71 +468,40 @@
   </div>
 </div>
 
-<!-- MODAL SYNC -->
 <div class="modal-overlay" id="syncModalOverlay">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">🔗 Synchronisation à deux</div>
+      <div class="modal-title">🔗 Synchronisation en direct</div>
       <button class="modal-close" onclick="closeSyncModal()">✕</button>
     </div>
-    <div class="sync-tabs">
-      <button class="sync-tab-btn active" onclick="showSyncTab('how')">Comment ça marche</button>
-      <button class="sync-tab-btn" onclick="showSyncTab('setup')">Configurer</button>
-      <button class="sync-tab-btn" onclick="showSyncTab('status')">Statut</button>
+    
+    <div class="sync-info-box" style="margin-bottom: 16px;">
+      <strong>Comment ça marche ?</strong><br>
+      Inventez un code secret (ex: <em>AppartVM2026</em>) et entrez-le sur vos deux téléphones. Vos données se synchroniseront instantanément.
     </div>
 
-    <div class="sync-panel active" id="syncPanel-how">
-      <div class="sync-info-box">
-        <strong>Principe :</strong> L'app utilise JSONBin.io comme "pont" cloud entre vos deux téléphones. Chaque ajout de dépense se synchronise automatiquement.<br><br>
-        <strong>Confidentialité :</strong> Seul celui qui possède votre clé API peut accéder aux données.
-      </div>
-      <div class="sync-step"><div class="sync-step-num">1</div><div>L'un de vous crée un compte gratuit sur <strong>jsonbin.io</strong> → Account → API Keys → Create Access Key.</div></div>
-      <div class="sync-step"><div class="sync-step-num">2</div><div>Il entre la clé dans <em>Configurer</em> et clique <strong>Activer</strong>. Un Bin ID est créé automatiquement.</div></div>
-      <div class="sync-step"><div class="sync-step-num">3</div><div>Il partage le <strong>Bin ID</strong> (affiché dans Statut) avec l'autre. L'autre entre la même clé API + le Bin ID dans <em>Configurer</em>.</div></div>
-      <div class="sync-step"><div class="sync-step-num">4</div><div>C'est tout ! Chaque dépense ajoutée est automatiquement visible sur les deux téléphones en 30 secondes.</div></div>
-      <div class="sync-info-box" style="background:var(--sage-light);color:#2d5c50;margin-top:4px">
-        💡 <strong>Résolution de conflits :</strong> Si vous ajoutez tous les deux une dépense en même temps, les deux sont conservées. Aucune donnée n'est perdue.
-      </div>
+    <div class="form-group">
+      <label>Code secret du couple</label>
+      <input type="text" id="syncRoomId" placeholder="Votre code secret..." autocomplete="off" autocorrect="off" spellcheck="false">
     </div>
 
-    <div class="sync-panel" id="syncPanel-setup">
-      <div class="form-group">
-        <label>Clé API JSONBin.io</label>
-        <input type="text" id="syncApiKey" placeholder="$2a$10$xxxxx…" autocomplete="off" autocorrect="off" spellcheck="false">
-        <p class="text-sm mt-8">Sur jsonbin.io → Account → API Keys → Secret Key</p>
-      </div>
-      <div class="form-group">
-        <label>Bin ID <span style="font-weight:400;text-transform:none">(laisser vide pour en créer un nouveau)</span></label>
-        <input type="text" id="syncBinId" placeholder="64a3b1c2e1234567890abc12" autocomplete="off" autocorrect="off" spellcheck="false">
-        <p class="text-sm mt-8">Si votre partenaire a déjà configuré la sync, entrez l'ID qu'il vous a partagé.</p>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="activateSync()">Activer la synchronisation</button>
-        <button class="btn btn-secondary" onclick="deactivateSync()">Désactiver</button>
-      </div>
-    </div>
+    <div id="syncStatusContent" style="margin-top: 12px;"></div>
 
-    <div class="sync-panel" id="syncPanel-status">
-      <div id="syncStatusContent"></div>
-      <div id="syncBinShareBox" style="display:none;margin-top:12px">
-        <p class="text-sm" style="margin-bottom:6px"><strong>Partagez ce Bin ID</strong> à votre partenaire :</p>
-        <div class="sync-key-display" id="syncBinIdDisplay" onclick="copySyncId()" title="Cliquer pour copier"></div>
-        <p class="text-sm mt-8" style="text-align:center;color:var(--ink-faint)">Touchez pour copier</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; justify-content: space-between;">
+      <button class="btn btn-secondary" id="btnDisconnect" style="display:none; color: var(--red);" onclick="deactivateSync()">Déconnecter</button>
+      <div style="margin-left:auto;">
+        <button class="btn btn-secondary" onclick="closeSyncModal()">Fermer</button>
+        <button class="btn btn-primary" id="btnConnect" onclick="activateSync()">Se connecter</button>
       </div>
-      <div id="syncActionBtns" style="display:none;gap:8px;margin-top:14px;flex-wrap:wrap">
-        <button class="btn btn-sage" onclick="forceSyncNow()">↻ Synchroniser maintenant</button>
-        <button class="btn btn-secondary" onclick="forcePush()">⬆ Envoyer</button>
-        <button class="btn btn-secondary" onclick="forcePull()">⬇ Recevoir</button>
-      </div>
-    </div>
-
-    <div style="margin-top:18px;text-align:right">
-      <button class="btn btn-secondary" onclick="closeSyncModal()">Fermer</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
+
+
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
 <script>
 // =============================================
@@ -557,7 +530,7 @@ function getKey() {
 }
 
 function getDefaultData() {
-  return { contributions: { vincentPaid: false, margauxPaid: false }, rent: { total: 0, vincent: 0, margaux: 0, paid: false }, budgets: { nourriture: 0, energie: 0, internet: 0 }, chargesRatio: 50, expenses: [] };
+  return { contributions: { vincentPaid: false, margauxPaid: false }, rent: { total: 1082, vincent: 541, margaux: 541, paid: false }, budgets: { nourriture: 0, energie: 0, internet: 0 }, chargesRatio: 50, expenses: [] };
 }
 
 function loadData() {
@@ -567,7 +540,12 @@ function loadData() {
     const d = JSON.parse(raw);
     if (!d.contributions) d.contributions = { vincentPaid: false, margauxPaid: false };
     if (d.contributions.vincent !== undefined) d.contributions = { vincentPaid: false, margauxPaid: false };
-    if (d.rent && d.rent.paid !== undefined) delete d.rent.paid;
+    
+    // On force les 1082 € si le mois n'a pas de loyer défini
+    if (!d.rent || !d.rent.total || d.rent.total === 0) {
+      d.rent = { total: 1082, vincent: 541, margaux: 541, paid: false };
+    }
+    
     if (d.chargesRatio === undefined) d.chargesRatio = 50;
     if (d.rent && d.rent.paid === undefined) d.rent.paid = false;
     return d;
@@ -577,6 +555,14 @@ function loadData() {
 function saveData(data) {
   localStorage.setItem(getKey(), JSON.stringify(data));
   scheduleSyncPush();
+}
+
+function toggleRentPaid() {
+  const data = loadData();
+  data.rent.paid = !data.rent.paid;
+  saveData(data);
+  renderAll(); // On rafraîchit l'interface
+  showToast(data.rent.paid ? '✓ Loyer marqué comme payé' : 'Loyer mis en attente');
 }
 
 // =============================================
@@ -598,9 +584,13 @@ function calcSummary(data) {
   const margauxPaid = data.contributions.margauxPaid ? c.margaux : 0;
   const totalContribs = vincentPaid + margauxPaid;
   let paidByCommun = 0, owedToVincent = 0, owedToMargaux = 0;
-  // Le loyer est traité comme une dépense compte commun, seulement s'il est marqué payé
+  
+  // On déduit le loyer du compte commun s'il est payé
   const loyerTotal = parseFloat(data.rent && data.rent.total) || 0;
-  if (loyerTotal > 0 && data.rent.paid) paidByCommun += loyerTotal;
+  if (loyerTotal > 0 && data.rent.paid) {
+    paidByCommun += loyerTotal;
+  }
+
   (data.expenses || []).forEach(e => {
     const amt = parseFloat(e.amount) || 0;
     if (e.payer === 'commun') paidByCommun += amt;
@@ -746,31 +736,38 @@ function renderBudgetProgress(data, containerId) {
   (data.expenses || []).forEach(e => { catSpend[e.cat] = (catSpend[e.cat]||0) + (parseFloat(e.amount)||0); });
   const budgets = { ...(data.budgets||{}) };
   const loyerTotal = parseFloat(data.rent && data.rent.total) || 0;
+  const lPaid = data.rent && data.rent.paid;
   let html = '';
 
-  // Ligne loyer fixe (toujours réglé, affiché comme charge fixe)
+  // 1. GESTION DU LOYER (Barre de progression intelligente)
   if (loyerTotal > 0) {
-    const catInfo = CATEGORIES['loyer'];
-    const lPaid = data.rent && data.rent.paid;
-    const lBadge = lPaid
-      ? `<span style="font-size:0.66rem;background:var(--sage-light);color:var(--sage);padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:600">✓ Payé</span>`
-      : `<span style="font-size:0.66rem;background:var(--red-light);color:var(--red);padding:1px 7px;border-radius:10px;margin-left:6px;font-weight:600">Non payé</span>`;
+    const catInfo = CATEGORIES['loyer'] || { color: '#7c5cad' };
+    const spentLoyer = lPaid ? loyerTotal : 0; // Si payé = 1082, sinon = 0
+    const pctLoyer = lPaid ? 100 : 0;
+    const clsLoyer = lPaid ? 'progress-ok' : ''; 
+    
     html += `<div class="budget-item">
       <div class="budget-header">
-        <div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>Loyer ${lBadge}</div>
-        <div class="budget-amounts"><strong>${fmt(loyerTotal)}</strong> <span style="color:var(--ink-faint);margin-left:5px">charge fixe</span></div>
+        <div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>Loyer & Charges fixes</div>
+        <div class="budget-amounts"><strong>${fmt(spentLoyer)}</strong> / ${fmt(loyerTotal)} <span style="margin-left:5px;color:var(--ink-faint)">${lPaid ? '✓ Payé' : fmt(loyerTotal) + ' restant'}</span></div>
       </div>
-      <div class="progress-bar"><div class="progress-fill ${lPaid ? 'progress-ok' : 'progress-over'}" style="width:100%"></div></div>
+      <div class="progress-bar"><div class="progress-fill ${clsLoyer}" style="width:${pctLoyer}%"></div></div>
     </div>`;
+    
+    // Sécurité : on retire "loyer" des autres budgets pour éviter les doublons
+    delete budgets['loyer']; 
   }
 
+  // 2. AUTRES BUDGETS
   Object.entries(budgets).forEach(([cat, budget]) => {
+    if (cat === 'loyer') return; // Double sécurité anti-doublon
     const spent = catSpend[cat] || 0;
     const bgt = parseFloat(budget) || 0;
     if (bgt === 0 && spent === 0) return;
     const catInfo = CATEGORIES[cat] || { label: cat.charAt(0).toUpperCase()+cat.slice(1), color: '#9a8e82' };
     const pct = bgt > 0 ? Math.min((spent/bgt)*100, 100) : 0;
     const cls = pct < 70 ? 'progress-ok' : pct < 90 ? 'progress-warn' : 'progress-over';
+    
     html += `<div class="budget-item">
       <div class="budget-header">
         <div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>${catInfo.label}</div>
@@ -778,13 +775,15 @@ function renderBudgetProgress(data, containerId) {
       </div>
       ${bgt > 0 ? `<div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%"></div></div>` : ''}</div>`;
   });
-  // Extra spent categories
-  Object.keys(catSpend).filter(c => !Object.keys(budgets).includes(c)).forEach(cat => {
+
+  // 3. DÉPENSES HORS BUDGET
+  Object.keys(catSpend).filter(c => c !== 'loyer' && !Object.keys(budgets).includes(c)).forEach(cat => {
     const spent = catSpend[cat];
     if (!spent) return;
     const catInfo = CATEGORIES[cat] || { label: cat.charAt(0).toUpperCase()+cat.slice(1), color: '#9a8e82' };
     html += `<div class="budget-item"><div class="budget-header"><div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>${catInfo.label}</div><div class="budget-amounts"><strong>${fmt(spent)}</strong></div></div></div>`;
   });
+  
   container.innerHTML = html || '<p class="text-sm" style="color:var(--ink-faint);text-align:center;padding:16px 0">Aucune donnée disponible</p>';
 }
 
@@ -858,14 +857,6 @@ function submitExpense() {
   renderAll();
 }
 
-function toggleRentPaid() {
-  const data = loadData();
-  data.rent.paid = !data.rent.paid;
-  saveData(data);
-  renderAll();
-  showToast(data.rent.paid ? '✓ Loyer marqué comme payé' : 'Loyer marqué comme non payé');
-}
-
 function deleteExpense(id) {
   showModal('Supprimer la dépense', '<p>Confirmer la suppression de cette dépense ?</p>', () => {
     const data = loadData();
@@ -889,36 +880,44 @@ function renderExpenses(data) {
   if (activeFilter !== 'all') expenses = expenses.filter(e => e.payer === activeFilter);
   document.getElementById('expCount').textContent = expenses.length + ' dépense(s)';
 
+  // 1. MISE À JOUR DE LA NOUVELLE CARTE "LOYER"
   const rent = data.rent || {};
   const loyerTotal = parseFloat(rent.total) || 0;
   const loyerPaid = !!rent.paid;
-  const showLoyer = loyerTotal > 0 && (activeFilter === 'all' || activeFilter === 'commun');
+  
+  const btn = document.getElementById('btnRentPaid');
+  const card = document.getElementById('fixedChargesCard');
+  const title = document.getElementById('fixedChargesTitle');
+  const amount = document.getElementById('fixedChargesAmount');
 
-  if (!showLoyer && expenses.length === 0) {
+  // Afficher le montant venant des paramètres
+  if (amount) amount.textContent = fmt(loyerTotal);
+
+  // Changer les couleurs si c'est payé
+  if (loyerPaid) {
+    if (btn) { btn.className = 'paid-badge paid'; btn.innerHTML = '✓ Payé'; }
+    if (card) { card.style.borderColor = 'var(--sage)'; card.style.background = 'var(--sage-light)'; }
+    if (title) title.style.color = 'var(--sage)';
+    if (amount) amount.style.color = 'var(--sage)';
+  } else {
+    if (btn) { btn.className = 'paid-badge unpaid'; btn.innerHTML = 'En attente'; }
+    if (card) { card.style.borderColor = 'var(--border)'; card.style.background = 'var(--white)'; }
+    if (title) title.style.color = 'var(--ink)';
+    if (amount) amount.style.color = 'var(--ink)';
+  }
+
+  // Cacher la carte loyer si on filtre sur "Vincent" ou "Margaux" uniquement
+  if (card) {
+    card.style.display = (activeFilter === 'all' || activeFilter === 'commun') ? 'block' : 'none';
+  }
+
+  // 2. RENDU DE LA LISTE DES DÉPENSES NORMALES
+  if (expenses.length === 0) {
     list.innerHTML = '<div class="empty"><div class="emoji">💸</div><p>Aucune dépense' + (activeFilter !== 'all' ? ' pour ce filtre' : ' ce mois') + '</p></div>';
     return;
   }
 
-  // Build full HTML in one shot — pas de DOM intermédiaire, pas de listeners perdus
   let html = '';
-
-  if (showLoyer) {
-    const borderCol = loyerPaid ? 'var(--sage)' : 'var(--red)';
-    const btnBg  = loyerPaid ? 'background:var(--sage-light);color:var(--sage)' : 'background:var(--red-light);color:var(--red)';
-    const btnTxt = loyerPaid ? '&#10003; Payé' : 'Non payé';
-    html += '<div class="expense-item" style="border-color:' + borderCol + '">'
-      + '<span class="expense-cat-dot" style="background:#7c5cad"></span>'
-      + '<div class="expense-main">'
-      + '<div class="expense-desc">Loyer <span style="font-size:0.68rem;background:var(--gold-light);color:#7a5c10;padding:1px 7px;border-radius:10px;margin-left:4px;font-weight:600">Fixe</span></div>'
-      + '<div class="expense-meta"><span>Loyer</span><span>·</span><span>charge mensuelle</span><span class="expense-payer-badge payer-commun">Compte commun</span></div>'
-      + '</div>'
-      + '<div class="expense-amount">' + fmt(loyerTotal) + '</div>'
-      + '<div class="expense-actions">'
-      + '<button class="action-btn" style="opacity:1;font-size:0.7rem;padding:4px 8px;border-radius:20px;font-weight:600;' + btnBg + '" ontouchstart="" onclick="toggleRentPaid()">' + btnTxt + '</button>'
-      + '</div>'
-      + '</div>';
-  }
-
   expenses.forEach(function(e) {
     const catInfo = CATEGORIES[e.cat] || { label: e.cat, color: '#9a8e82' };
     const payerLabel = e.payer === 'vincent' ? 'Vincent' : e.payer === 'margaux' ? 'Margaux' : 'Compte commun';
@@ -1147,11 +1146,29 @@ function showToast(msg) {
 }
 
 // =============================================
-// SYNC ENGINE — JSONBin.io
+// SYNC ENGINE — FIREBASE (Temps Réel)
 // =============================================
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBERQisayOiZVcfppbBKjKnC7YN41yat84",
+  authDomain: "babouches-finances.firebaseapp.com",
+  projectId: "babouches-finances",
+  storageBucket: "babouches-finances.firebasestorage.app",
+  messagingSenderId: "662355866301",
+  appId: "1:662355866301:web:cd84aede78a90d3288bdd4",
+  measurementId: "G-HE3PN2GPL3"
+};
+
+// Initialisation de Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
 let syncConfig = null;
 let syncTimeout = null;
-let isSyncing = false;
+let isPushing = false;
+let unsubscribeFirestore = null;
 
 function getSyncConfig() {
   try { const r = localStorage.getItem('babouches-sync-config'); return r ? JSON.parse(r) : null; } catch(e) { return null; }
@@ -1160,19 +1177,12 @@ function saveSyncConfig(cfg) { localStorage.setItem('babouches-sync-config', JSO
 
 function initSync() {
   syncConfig = getSyncConfig();
-  if (syncConfig && syncConfig.apiKey && syncConfig.binId) {
+  if (syncConfig && syncConfig.roomId) {
     updateSyncBadge('syncing');
-    pullFromRemote(true);
-    setInterval(() => { if (syncConfig) pullFromRemote(false); }, 30000);
+    startFirestoreListener();
   } else {
     updateSyncBadge('offline');
   }
-}
-
-function scheduleSyncPush() {
-  if (!syncConfig) return;
-  clearTimeout(syncTimeout);
-  syncTimeout = setTimeout(() => pushToRemote(), 1500);
 }
 
 function getAllFinancesData() {
@@ -1184,150 +1194,143 @@ function getAllFinancesData() {
   return all;
 }
 
-async function pushToRemote() {
-  if (!syncConfig || isSyncing) return;
-  isSyncing = true;
-  updateSyncBadge('syncing');
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${syncConfig.binId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Master-Key': syncConfig.apiKey },
-      body: JSON.stringify({ payload: getAllFinancesData(), updatedAt: Date.now() })
-    });
-    if (!res.ok) throw new Error(res.status);
-    updateSyncBadge('synced');
-  } catch(e) { updateSyncBadge('error'); } finally { isSyncing = false; }
+function scheduleSyncPush() {
+  if (!syncConfig || !syncConfig.roomId) return;
+  clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(() => pushToFirebase(), 1000);
 }
 
-async function pullFromRemote(fullRefresh) {
-  if (!syncConfig) return;
+async function pushToFirebase() {
+  if (!syncConfig || isPushing) return;
+  isPushing = true;
   updateSyncBadge('syncing');
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${syncConfig.binId}/latest`, {
-      headers: { 'X-Master-Key': syncConfig.apiKey }
-    });
-    if (!res.ok) throw new Error(res.status);
-    const { record } = await res.json();
-    if (record && record.payload) {
-      let hasNew = false;
-      Object.entries(record.payload).forEach(([key, remoteRaw]) => {
-        const localRaw = localStorage.getItem(key);
-        if (!localRaw) {
-          localStorage.setItem(key, remoteRaw);
-          hasNew = true;
-        } else {
-          try {
-            const remote = JSON.parse(remoteRaw);
-            const local = JSON.parse(localRaw);
-            const localIds = new Set((local.expenses||[]).map(e => e.id));
-            const newExp = (remote.expenses||[]).filter(e => !localIds.has(e.id));
-            if (newExp.length > 0) {
-              local.expenses = [...(local.expenses||[]), ...newExp].sort((a,b) => new Date(b.date)-new Date(a.date));
-              localStorage.setItem(key, JSON.stringify(local));
-              hasNew = true;
-            }
-            // Sync settings if local is empty
-            if (remote.rent && remote.rent.total && !(local.rent && local.rent.total)) {
-              local.rent = remote.rent;
-              local.budgets = remote.budgets || local.budgets;
-              local.chargesRatio = remote.chargesRatio || local.chargesRatio;
-              localStorage.setItem(key, JSON.stringify(local));
-              hasNew = true;
-            }
-          } catch(e) {}
-        }
-      });
-      if (hasNew) { renderAll(); if (fullRefresh) showToast('↻ Données synchronisées'); }
-    }
+    await db.collection('couples').doc(syncConfig.roomId).set({
+      payload: getAllFinancesData(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
     updateSyncBadge('synced');
-  } catch(e) { updateSyncBadge('error'); }
+  } catch(e) { 
+    console.error("Erreur Push:", e);
+    updateSyncBadge('error'); 
+  } finally { 
+    isPushing = false; 
+  }
+}
+
+// L'écouteur magique : se déclenche dès que l'autre téléphone modifie une donnée
+function startFirestoreListener() {
+  if (unsubscribeFirestore) unsubscribeFirestore();
+
+  unsubscribeFirestore = db.collection('couples').doc(syncConfig.roomId)
+    .onSnapshot((doc) => {
+      if (isPushing) return; // Ignore nos propres envois
+      
+      if (doc.exists) {
+        const record = doc.data();
+        if (record && record.payload) {
+          let hasNew = false;
+          Object.entries(record.payload).forEach(([key, remoteRaw]) => {
+            const localRaw = localStorage.getItem(key);
+            if (!localRaw) {
+              localStorage.setItem(key, remoteRaw);
+              hasNew = true;
+            } else {
+              try {
+                const remote = JSON.parse(remoteRaw);
+                const local = JSON.parse(localRaw);
+                
+                // Fusion des dépenses (on ajoute celles qui manquent)
+                const localIds = new Set((local.expenses||[]).map(e => e.id));
+                const newExp = (remote.expenses||[]).filter(e => !localIds.has(e.id));
+                
+                if (newExp.length > 0) {
+                  local.expenses = [...(local.expenses||[]), ...newExp].sort((a,b) => new Date(b.date)-new Date(a.date));
+                  hasNew = true;
+                }
+                
+                // Synchro du statut du loyer et contributions
+                if (remote.rent && remote.rent.paid !== local.rent.paid) {
+                  local.rent.paid = remote.rent.paid;
+                  hasNew = true;
+                }
+                if (remote.contributions && (remote.contributions.vincentPaid !== local.contributions.vincentPaid || remote.contributions.margauxPaid !== local.contributions.margauxPaid)) {
+                  local.contributions = remote.contributions;
+                  hasNew = true;
+                }
+                
+                if (hasNew) localStorage.setItem(key, JSON.stringify(local));
+              } catch(e) {}
+            }
+          });
+          if (hasNew) { renderAll(); showToast('↻ Mise à jour en direct'); }
+        }
+      }
+      updateSyncBadge('synced');
+    }, (error) => {
+      console.error("Erreur Sync:", error);
+      updateSyncBadge('error');
+    });
 }
 
 function updateSyncBadge(state) {
   const badge = document.getElementById('syncBadge');
   badge.className = 'sync-badge ' + state;
-  document.getElementById('syncLabel').textContent = { synced: 'Sync ✓', syncing: 'Sync…', offline: 'Local', error: 'Erreur sync' }[state] || 'Local';
+  document.getElementById('syncLabel').textContent = { synced: 'En ligne', syncing: 'Sync…', offline: 'Local', error: 'Erreur sync' }[state] || 'Local';
 }
 
 function openSyncModal() {
   document.getElementById('syncModalOverlay').classList.add('open');
   renderSyncStatus();
-  if (syncConfig) {
-    document.getElementById('syncApiKey').value = syncConfig.apiKey || '';
-    document.getElementById('syncBinId').value = syncConfig.binId || '';
-  }
 }
-function closeSyncModal() { document.getElementById('syncModalOverlay').classList.remove('open'); }
 
-function showSyncTab(tab) {
-  const tabs = ['how', 'setup', 'status'];
-  document.querySelectorAll('.sync-tab-btn').forEach((b,i) => b.classList.toggle('active', tabs[i] === tab));
-  document.querySelectorAll('.sync-panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('syncPanel-' + tab).classList.add('active');
-  if (tab === 'status') renderSyncStatus();
-}
+function closeSyncModal() { document.getElementById('syncModalOverlay').classList.remove('open'); }
 
 function renderSyncStatus() {
   const sc = getSyncConfig();
   const content = document.getElementById('syncStatusContent');
-  const shareBox = document.getElementById('syncBinShareBox');
-  const actionBtns = document.getElementById('syncActionBtns');
-  if (sc && sc.binId) {
-    content.innerHTML = `<div class="sync-info-box" style="background:var(--sage-light);color:#2d5c50">✅ <strong>Synchronisation active</strong><br>Clé API : ${sc.apiKey.substring(0,14)}…</div>`;
-    document.getElementById('syncBinIdDisplay').textContent = sc.binId;
-    shareBox.style.display = 'block';
-    actionBtns.style.display = 'flex';
+  const btnConnect = document.getElementById('btnConnect');
+  const btnDisconnect = document.getElementById('btnDisconnect');
+  const inputRoom = document.getElementById('syncRoomId');
+
+  if (sc && sc.roomId) {
+    content.innerHTML = `<div style="color:var(--sage); font-weight:600; font-size: 0.9rem;">✅ Connecté (Code : ${sc.roomId})</div>`;
+    inputRoom.value = sc.roomId;
+    inputRoom.disabled = true;
+    btnConnect.style.display = 'none';
+    btnDisconnect.style.display = 'block';
   } else {
-    content.innerHTML = `<p class="text-sm" style="text-align:center;padding:20px 0;color:var(--ink-faint)">Synchronisation non configurée.<br>Allez dans <strong>Configurer</strong>.</p>`;
-    shareBox.style.display = 'none';
-    actionBtns.style.display = 'none';
+    content.innerHTML = ``;
+    inputRoom.value = '';
+    inputRoom.disabled = false;
+    btnConnect.style.display = 'block';
+    btnDisconnect.style.display = 'none';
   }
 }
 
-async function activateSync() {
-  const apiKey = document.getElementById('syncApiKey').value.trim();
-  const binId = document.getElementById('syncBinId').value.trim();
-  if (!apiKey) { showToast('⚠ Clé API manquante'); return; }
-  if (binId) {
-    saveSyncConfig({ apiKey, binId });
-    showToast('✓ Sync activée ! Connexion en cours…');
-    initSync();
-    showSyncTab('status');
-    return;
-  }
-  showToast('⏳ Création du bin…');
-  try {
-    const res = await fetch('https://api.jsonbin.io/v3/b', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Master-Key': apiKey, 'X-Bin-Name': 'babouches-finances', 'X-Bin-Private': 'true' },
-      body: JSON.stringify({ payload: getAllFinancesData(), updatedAt: Date.now() })
-    });
-    if (!res.ok) { const err = await res.json().catch(()=>({})); throw new Error(err.message || 'Erreur ' + res.status); }
-    const newBinId = (await res.json()).metadata.id;
-    saveSyncConfig({ apiKey, binId: newBinId });
-    document.getElementById('syncBinId').value = newBinId;
-    showToast('✓ Bin créé ! Partagez l\'ID à votre partenaire.');
-    showSyncTab('status');
-    initSync();
-  } catch(e) { showToast('⚠ ' + e.message); }
+function activateSync() {
+  const roomId = document.getElementById('syncRoomId').value.trim();
+  if (!roomId || roomId.length < 4) { showToast('⚠ Le code doit faire au moins 4 caractères'); return; }
+  
+  saveSyncConfig({ roomId });
+  showToast('✓ Connexion...');
+  initSync();
+  pushToFirebase(); // On envoie nos données locales pour initialiser la base
+  closeSyncModal();
 }
 
 function deactivateSync() {
-  showModal('Désactiver la synchronisation', '<p>Désactiver la sync cloud ? Vos données locales sont conservées.</p>', () => {
+  if(confirm("Se déconnecter ? Vos données resteront sur ce téléphone.")) {
     localStorage.removeItem('babouches-sync-config');
     syncConfig = null;
+    if (unsubscribeFirestore) {
+        unsubscribeFirestore();
+        unsubscribeFirestore = null;
+    }
     updateSyncBadge('offline');
     renderSyncStatus();
-    showToast('Synchronisation désactivée');
-  });
-}
-
-async function forceSyncNow() { await pullFromRemote(true); await pushToRemote(); showToast('↻ Synchronisation forcée'); }
-async function forcePush() { await pushToRemote(); showToast('⬆ Données envoyées'); }
-async function forcePull() { await pullFromRemote(true); showToast('⬇ Données reçues'); }
-function copySyncId() {
-  const id = document.getElementById('syncBinIdDisplay').textContent;
-  navigator.clipboard.writeText(id).then(() => showToast('✓ Bin ID copié !')).catch(() => showToast('ID : ' + id));
+    showToast('Déconnecté');
+  }
 }
 </script>
 </body>
