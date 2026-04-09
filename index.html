@@ -295,12 +295,34 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .edit-mode-banner { background: var(--gold-light); border: 1px solid var(--gold); border-radius: var(--radius-sm); padding: 8px 14px; font-size: 0.8rem; color: #7a5c10; margin-bottom: 12px; display: none; align-items: center; gap: 8px; }
 .edit-mode-banner.visible { display: flex; }
 
-.toast { position: fixed; bottom: calc(90px + var(--safe-bottom)); left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: var(--sand); padding: 11px 18px; border-radius: 40px; font-size: 0.83rem; font-weight: 500; z-index: 400; transition: transform 0.3s ease; box-shadow: var(--shadow-lg); white-space: nowrap; max-width: 90vw; overflow: hidden; text-overflow: ellipsis; }
-.toast.show { transform: translateX(-50%) translateY(0); }
+.toast { position: fixed; bottom: calc(90px + var(--safe-bottom)); left: 50%; transform: translateX(-50%) translateY(12px); opacity: 0; pointer-events: none; background: var(--ink); color: var(--sand); padding: 11px 18px; border-radius: 40px; font-size: 0.83rem; font-weight: 500; z-index: 400; transition: opacity 0.25s ease, transform 0.25s ease; box-shadow: var(--shadow-lg); white-space: nowrap; max-width: 90vw; overflow: hidden; text-overflow: ellipsis; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
 
-.fab { position: fixed; bottom: calc(24px + var(--safe-bottom)); right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--terracotta); color: white; border: none; font-size: 1.6rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(201,108,58,0.45); cursor: pointer; z-index: 80; transition: all 0.2s; }
-.fab:hover { background: #b55c2e; transform: scale(1.08); }
+/* FAB CONTAINER & MENU */
+.fab-backdrop { position: fixed; inset: 0; z-index: 78; display: none; }
+.fab-backdrop.open { display: block; }
+.fab-container { position: fixed; bottom: calc(24px + var(--safe-bottom)); right: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; z-index: 80; }
+.fab-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.fab-action-item { display: flex; align-items: center; gap: 10px; opacity: 0; transform: translateY(8px) scale(0.9); transition: opacity 0.2s ease, transform 0.2s ease; pointer-events: none; }
+.fab-actions.open .fab-action-item { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.fab-actions.open .fab-action-item:nth-child(1) { transition-delay: 0.08s; }
+.fab-actions.open .fab-action-item:nth-child(2) { transition-delay: 0.05s; }
+.fab-actions.open .fab-action-item:nth-child(3) { transition-delay: 0.02s; }
+.fab-action-label { background: var(--ink); color: var(--sand); padding: 6px 14px; border-radius: 20px; font-size: 0.79rem; font-weight: 500; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.25); }
+.fab-action-btn { width: 44px; height: 44px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; box-shadow: 0 3px 12px rgba(0,0,0,0.2); transition: all 0.2s; flex-shrink: 0; }
+.fab-action-btn:hover { transform: scale(1.1); }
+.fab-action-btn.act-expense { background: var(--white); color: var(--ink); border: 1px solid var(--border); }
+.fab-action-btn.act-savings { background: var(--gold); color: var(--ink); }
+.fab-action-btn.act-credit { background: var(--sage); color: white; }
+.fab { width: 56px; height: 56px; border-radius: 50%; background: var(--terracotta); color: white; border: none; font-size: 1.6rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(201,108,58,0.45); cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+.fab:hover { background: #b55c2e; }
 .fab:active { transform: scale(0.95); }
+.fab.open { background: #b55c2e; transform: rotate(45deg); }
+/* SOURCE SELECTOR */
+.source-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.source-btn { padding: 8px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: var(--sand); color: var(--ink-light); transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+.source-btn.active { background: var(--ink); color: var(--sand); border-color: var(--ink); }
+.source-btn:hover:not(.active) { border-color: var(--terracotta); color: var(--ink); }
 
 /* ===== 9. RESPONSIVE ===== */
 @media (max-width: 500px) {
@@ -383,10 +405,17 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
         🏦 Transférer le solde restant en épargne
       </button>
     </div>
-
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--gold-light)">↔</div>Remboursements</div>
       <div id="reimbursements"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <div class="icon" style="background:var(--sage-light)">↑</div>
+        Fonds ajoutés au compte
+      </div>
+      <div id="summaryCredits"></div>
     </div>
 
     <div class="card">
@@ -466,7 +495,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       <div class="card-title">
         <div class="icon" style="background:var(--sage-light)">↕</div>
         Mouvements
-        <button class="btn btn-secondary" style="margin-left:auto;padding:6px 14px;font-size:0.75rem" onclick="openSavingsMovementModal()">+ Ajouter</button>
+        <button class="btn btn-secondary" style="margin-left:auto;padding:6px 14px;font-size:0.75rem" onclick="openSavingsMovementModal()">− Retrait</button>
       </div>
       <div id="savingsHistoryList"></div>
     </div>
@@ -535,7 +564,24 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   </div>
 </main>
 
-<button class="fab" onclick="openQuickAdd()" title="Ajouter une dépense">+</button>
+<div class="fab-backdrop" id="fabBackdrop" onclick="closeFabMenu()"></div>
+<div class="fab-container">
+  <div class="fab-actions" id="fabActions">
+    <div class="fab-action-item">
+      <span class="fab-action-label">Dépense</span>
+      <button class="fab-action-btn act-expense" onclick="closeFabMenu();openQuickAdd()">💳</button>
+    </div>
+    <div class="fab-action-item">
+      <span class="fab-action-label">Épargner</span>
+      <button class="fab-action-btn act-savings" onclick="closeFabMenu();openSavingsDepositModal()">💰</button>
+    </div>
+    <div class="fab-action-item">
+      <span class="fab-action-label">Ajouter au compte</span>
+      <button class="fab-action-btn act-credit" onclick="closeFabMenu();openCreditModal()">➕</button>
+    </div>
+  </div>
+  <button class="fab" id="fabMain" onclick="toggleFabMenu()" title="Actions">+</button>
+</div>
 
 <!-- ========== MODALS ========== -->
 <div class="modal-overlay" id="modalOverlay">
@@ -584,31 +630,55 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   </div>
 </div>
 
-<!-- Savings movement modal -->
+<!-- Savings withdrawal modal -->
 <div class="modal-overlay" id="savingsMovementOverlay">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">Mouvement d'épargne</div>
+      <div class="modal-title">Retrait d'épargne</div>
       <button class="modal-close" onclick="closeSavingsMovementModal()">✕</button>
     </div>
-    <div class="form-group">
-      <label>Type</label>
-      <select id="savMovType">
-        <option value="deposit">Dépôt (+)</option>
-        <option value="withdraw">Retrait (−)</option>
-      </select>
-    </div>
+    <p class="text-sm" style="margin-bottom:14px;color:var(--sage);background:var(--sage-light);padding:9px 13px;border-radius:var(--radius-sm)">↑ Le montant retiré est automatiquement crédité au compte commun.</p>
     <div class="form-row">
       <div class="form-group"><label>Montant (€)</label><input type="number" id="savMovAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal"></div>
       <div class="form-group"><label>Date</label><input type="date" id="savMovDate"></div>
     </div>
     <div class="form-group">
       <label>Note (optionnel)</label>
-      <input type="text" id="savMovNote" placeholder="Versement mensuel, retrait vacances…" maxlength="80">
+      <input type="text" id="savMovNote" placeholder="Retrait vacances, urgence…" maxlength="80">
     </div>
     <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
       <button class="btn btn-secondary" onclick="closeSavingsMovementModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="submitSavingsMovement()">Enregistrer</button>
+      <button class="btn btn-primary" onclick="submitSavingsWithdraw()">Retirer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Savings deposit modal -->
+<div class="modal-overlay" id="savingsDepositOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Épargner</div>
+      <button class="modal-close" onclick="closeSavingsDepositModal()">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Source des fonds</label>
+      <div class="source-selector">
+        <button class="source-btn active" id="srcCommun" onclick="setSavSource('commun')">🏦 Compte commun</button>
+        <button class="source-btn" id="srcVincent" onclick="setSavSource('vincent')">👤 Vincent</button>
+        <button class="source-btn" id="srcMargaux" onclick="setSavSource('margaux')">👤 Margaux</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Montant (€)</label><input type="number" id="savDepAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal"></div>
+      <div class="form-group"><label>Date</label><input type="date" id="savDepDate"></div>
+    </div>
+    <div class="form-group">
+      <label>Note (optionnel)</label>
+      <input type="text" id="savDepNote" placeholder="Versement mensuel, projet vacances…" maxlength="80">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-secondary" onclick="closeSavingsDepositModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="submitSavingsDeposit()">Épargner</button>
     </div>
   </div>
 </div>
@@ -631,6 +701,28 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
     <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
       <button class="btn btn-secondary" onclick="closeSavingsGoalModal()">Annuler</button>
       <button class="btn btn-primary" onclick="submitSavingsGoal()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Credit account modal -->
+<div class="modal-overlay" id="creditAccountOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Ajouter des fonds au compte</div>
+      <button class="modal-close" onclick="closeCreditModal()">✕</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Montant (€)</label><input type="number" id="creditAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal"></div>
+      <div class="form-group"><label>Date</label><input type="date" id="creditDate"></div>
+    </div>
+    <div class="form-group">
+      <label>Note (optionnel)</label>
+      <input type="text" id="creditNote" placeholder="Remboursement, virement extérieur…" maxlength="80">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-secondary" onclick="closeCreditModal()">Annuler</button>
+      <button class="btn btn-sage" onclick="submitCredit()">Ajouter</button>
     </div>
   </div>
 </div>
@@ -683,8 +775,7 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 // Dev mode : activé uniquement sur localhost / 127.0.0.1 → bypass caché en prod
-//const DEV_MODE = ['localhost', '127.0.0.1', ''].includes(location.hostname);
-const DEV_MODE = true;
+const DEV_MODE = ['localhost', '127.0.0.1', ''].includes(location.hostname);
 
 const ALLOWED_EMAILS = ['ribesse.vincent@gmail.com', 'margaux.huens@gmail.com'];
 
@@ -717,6 +808,7 @@ let activeFilter = 'all';
 let editingId = null;
 let savingsChartInstance = null;  // instance Chart.js pour pouvoir la détruire
 let isBypassMode = false;
+let currentSavSource = 'commun';  // source sélectionnée dans la modal dépôt épargne
 
 const DOC_REF = () => db.collection('couples').doc('vincent_margaux');
 
@@ -746,11 +838,13 @@ function debounce(fn, delay) {
   };
 }
 
+let _toastTimer = null;
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { t.classList.remove('show'); _toastTimer = null; }, 2000);
 }
 
 function getKey(y = currentYear, m = currentMonth) {
@@ -816,7 +910,17 @@ async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     await auth.signInWithPopup(provider);
   } catch (err) {
-    showAuthError('Erreur de connexion. Réessayez.');
+    const codes = {
+      'auth/popup-blocked':        'Popup bloquée par le navigateur. Autorisez les popups pour ce site.',
+      'auth/popup-closed-by-user': 'Fenêtre fermée avant la connexion.',
+      'auth/cancelled-by-user':    'Connexion annulée.',
+      'auth/unauthorized-domain':  'Domaine non autorisé dans Firebase Console → Authentication → Domaines autorisés.',
+      'auth/operation-not-allowed':'Google Sign-In non activé dans Firebase Console → Authentication → Fournisseurs.',
+      'auth/network-request-failed':'Erreur réseau. Vérifiez votre connexion.',
+    };
+    const msg = codes[err.code] || `Erreur (${err.code || err.message})`;
+    showAuthError(msg);
+    console.error('Auth error:', err.code, err.message);
     document.getElementById('authLoading').style.display = 'none';
     document.getElementById('btnGoogleSignIn').disabled = false;
   }
@@ -853,6 +957,7 @@ function getDefaultData() {
     budgets: { nourriture: 0, energie: 0, internet: 0 },
     chargesRatio: DEFAULT_RATIO,
     expenses: [],
+    credits: [],
     reimbSettled: false
   };
 }
@@ -871,6 +976,7 @@ function loadData() {
   safe.rent = { ...getDefaultData().rent, ...(d.rent || {}) };
   safe.budgets = { ...(d.budgets || {}) };
   safe.expenses = Array.isArray(d.expenses) ? d.expenses : [];
+  safe.credits = Array.isArray(d.credits) ? d.credits : [];
   return safe;
 }
 
@@ -981,9 +1087,10 @@ function calcSummary(data) {
     else if (e.payer === 'margaux') owedToMargaux += amt;
   });
 
+  const manualCredits = (data.credits || []).reduce((s, c) => s + (parseFloat(c.amount) || 0), 0);
   const totalExpenses = paidByCommun + owedToVincent + owedToMargaux;
-  const balance = totalContribs - paidByCommun - owedToVincent - owedToMargaux;
-  return { totalContribs, paidByCommun, owedToVincent, owedToMargaux, totalExpenses, balance, c };
+  const balance = totalContribs + manualCredits - paidByCommun - owedToVincent - owedToMargaux;
+  return { totalContribs, manualCredits, paidByCommun, owedToVincent, owedToMargaux, totalExpenses, balance, c };
 }
 
 function getPrevCarry() {
@@ -1265,6 +1372,27 @@ function renderSummary(data) {
   }
   document.getElementById('reimbursements').innerHTML = `<div class="reimbursement-list">${reimbs}</div>`;
 
+  // Fonds manuels ajoutés au compte
+  const credits = data.credits || [];
+  let creditsHtml = '';
+  if (credits.length > 0) {
+    creditsHtml = credits.map(cr => {
+      const dateStr = cr.date ? new Date(cr.date + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '';
+      return `<div class="savings-history-item" style="margin-bottom:6px">
+        <div class="savings-history-icon deposit">↑</div>
+        <div class="savings-history-main">
+          <div class="savings-history-note">${escapeHtml(cr.note || 'Fond ajouté')}</div>
+          <div class="savings-history-date">${escapeHtml(dateStr)}</div>
+        </div>
+        <div class="savings-history-amount deposit">+${fmt(cr.amount)}</div>
+        <button class="savings-history-delete" onclick="deleteCredit(${cr.id})" title="Supprimer">✕</button>
+      </div>`;
+    }).join('');
+  } else {
+    creditsHtml = `<p class="text-sm" style="color:var(--ink-faint);text-align:center;padding:10px 0">Aucun fond ajouté ce mois</p>`;
+  }
+  document.getElementById('summaryCredits').innerHTML = creditsHtml;
+
   renderBudgetProgress(data, 'summaryBudgets');
 }
 
@@ -1426,8 +1554,7 @@ function renderSavingsScreen() {
     </div>
     ${goalBlock}
     <div class="savings-actions">
-      <button class="btn-savings-action" onclick="openSavingsMovementModal('deposit')">+ Dépôt</button>
-      <button class="btn-savings-action" onclick="openSavingsMovementModal('withdraw')">− Retrait</button>
+      <button class="btn-savings-action" onclick="openSavingsMovementModal()">− Retrait</button>
     </div>`;
 
   // Éditeur d'objectif
@@ -1485,8 +1612,7 @@ function clearSavingsGoal() {
 }
 
 // ---------- SAVINGS MODALS ----------
-function openSavingsMovementModal(type = 'deposit') {
-  document.getElementById('savMovType').value = type;
+function openSavingsMovementModal() {
   document.getElementById('savMovAmount').value = '';
   document.getElementById('savMovDate').value = todayISO();
   document.getElementById('savMovNote').value = '';
@@ -1498,26 +1624,22 @@ function closeSavingsMovementModal() {
   document.getElementById('savingsMovementOverlay').classList.remove('open');
 }
 
-function submitSavingsMovement() {
-  const type = document.getElementById('savMovType').value;
+function submitSavingsWithdraw() {
   const amount = parseFloat(document.getElementById('savMovAmount').value);
   const date = document.getElementById('savMovDate').value;
   const note = document.getElementById('savMovNote').value.trim();
   if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
   if (!date) { showToast('⚠ Date manquante'); return; }
-
-  // Vérifie qu'on n'essaie pas de retirer plus que le solde
-  if (type === 'withdraw') {
-    const savings = getSavings();
-    if (amount > savings.balance + EPSILON) {
-      showToast('⚠ Solde insuffisant pour ce retrait');
-      return;
-    }
-  }
-
-  addSavingsMovement({ amount, type, source: 'manual', note, date });
+  const savings = getSavings();
+  if (amount > savings.balance + EPSILON) { showToast('⚠ Solde insuffisant pour ce retrait'); return; }
+  addSavingsMovement({ amount, type: 'withdraw', source: 'manual', note, date });
+  // Crédit automatique du compte commun
+  const data = loadData();
+  data.credits.push({ id: Date.now() + 1, amount, date, note: note || 'Retrait d\'épargne' });
+  data.credits.sort((a, b) => new Date(b.date) - new Date(a.date));
+  saveData(data);
   closeSavingsMovementModal();
-  showToast(type === 'deposit' ? `✓ Dépôt de ${fmt(amount)}` : `✓ Retrait de ${fmt(amount)}`);
+  showToast(`✓ ${fmt(amount)} retirés · compte commun crédité`);
 }
 
 function openSavingsGoalModal() {
@@ -1530,6 +1652,102 @@ function openSavingsGoalModal() {
 
 function closeSavingsGoalModal() {
   document.getElementById('savingsGoalOverlay').classList.remove('open');
+}
+
+// ---- ÉPARGNE — DÉPÔT ----
+function setSavSource(source) {
+  currentSavSource = source;
+  ['commun', 'vincent', 'margaux'].forEach(s => {
+    const el = document.getElementById('src' + s.charAt(0).toUpperCase() + s.slice(1));
+    if (el) el.classList.toggle('active', s === source);
+  });
+}
+
+function openSavingsDepositModal() {
+  currentSavSource = 'commun';
+  setSavSource('commun');
+  document.getElementById('savDepAmount').value = '';
+  document.getElementById('savDepDate').value = todayISO();
+  document.getElementById('savDepNote').value = '';
+  document.getElementById('savingsDepositOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('savDepAmount').focus(), 300);
+}
+
+function closeSavingsDepositModal() {
+  document.getElementById('savingsDepositOverlay').classList.remove('open');
+}
+
+function submitSavingsDeposit() {
+  const amount = parseFloat(document.getElementById('savDepAmount').value);
+  const date = document.getElementById('savDepDate').value;
+  const note = document.getElementById('savDepNote').value.trim();
+  if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
+  if (!date) { showToast('⚠ Date manquante'); return; }
+  const source = currentSavSource;
+  addSavingsMovement({ amount, type: 'deposit', source: source === 'commun' ? 'transfer' : source, note, date });
+  if (source === 'commun') {
+    const data = loadData();
+    data.expenses.push({ id: Date.now() + 1, amount, date, cat: 'epargne', payer: 'commun', comment: note || 'Virement vers la cagnotte' });
+    data.expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+    saveData(data);
+  }
+  closeSavingsDepositModal();
+  const who = source === 'commun' ? 'depuis le compte' : `par ${source.charAt(0).toUpperCase() + source.slice(1)}`;
+  showToast(`✓ ${fmt(amount)} épargnés ${who} 💰`);
+}
+
+// ---- FAB MENU ----
+function toggleFabMenu() {
+  const isOpen = document.getElementById('fabActions').classList.contains('open');
+  if (isOpen) closeFabMenu(); else openFabMenu();
+}
+
+function openFabMenu() {
+  document.getElementById('fabActions').classList.add('open');
+  document.getElementById('fabMain').classList.add('open');
+  document.getElementById('fabBackdrop').classList.add('open');
+}
+
+function closeFabMenu() {
+  document.getElementById('fabActions').classList.remove('open');
+  document.getElementById('fabMain').classList.remove('open');
+  document.getElementById('fabBackdrop').classList.remove('open');
+}
+
+// ---- CRÉDITS MANUELS DU COMPTE ----
+function openCreditModal() {
+  document.getElementById('creditAmount').value = '';
+  document.getElementById('creditDate').value = todayISO();
+  document.getElementById('creditNote').value = '';
+  document.getElementById('creditAccountOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('creditAmount').focus(), 300);
+}
+
+function closeCreditModal() {
+  document.getElementById('creditAccountOverlay').classList.remove('open');
+}
+
+function submitCredit() {
+  const amount = parseFloat(document.getElementById('creditAmount').value);
+  const date = document.getElementById('creditDate').value;
+  const note = document.getElementById('creditNote').value.trim();
+  if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
+  if (!date) { showToast('⚠ Date manquante'); return; }
+  const data = loadData();
+  data.credits.push({ id: Date.now(), amount, date, note });
+  data.credits.sort((a, b) => new Date(b.date) - new Date(a.date));
+  saveData(data);
+  closeCreditModal();
+  showToast(`✓ ${fmt(amount)} ajoutés au compte`);
+}
+
+function deleteCredit(id) {
+  showModal('Supprimer le fond', '<p>Supprimer ce fond manuel ? Le solde du compte sera ajusté.</p>', () => {
+    const data = loadData();
+    data.credits = data.credits.filter(c => c.id != id);
+    saveData(data);
+    showToast('✓ Fond supprimé');
+  });
 }
 
 function submitSavingsGoal() {
@@ -1914,7 +2132,7 @@ function closeMenu() { document.getElementById('headerDropdown').classList.remov
 // ============================================================
 document.addEventListener('click', e => { if (!e.target.closest('.header-menu-wrap')) closeMenu(); });
 
-['modalOverlay', 'quickAddOverlay', 'savingsMovementOverlay', 'savingsGoalOverlay'].forEach(id => {
+['modalOverlay', 'quickAddOverlay', 'savingsMovementOverlay', 'savingsGoalOverlay', 'savingsDepositOverlay', 'creditAccountOverlay'].forEach(id => {
   const el = document.getElementById(id);
   if (!el) return;
   el.addEventListener('click', function(e) {
@@ -1923,6 +2141,8 @@ document.addEventListener('click', e => { if (!e.target.closest('.header-menu-wr
       else if (id === 'quickAddOverlay') closeQuickAdd();
       else if (id === 'savingsMovementOverlay') closeSavingsMovementModal();
       else if (id === 'savingsGoalOverlay') closeSavingsGoalModal();
+      else if (id === 'savingsDepositOverlay') closeSavingsDepositModal();
+      else if (id === 'creditAccountOverlay') closeCreditModal();
     }
   });
 });
@@ -1934,6 +2154,8 @@ document.addEventListener('keydown', e => {
     closeQuickAdd();
     closeSavingsMovementModal();
     closeSavingsGoalModal();
+    closeSavingsDepositModal();
+    closeCreditModal();
   }
 });
 
