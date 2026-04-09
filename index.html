@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Babouches</title>
 
-    <meta name="application-name" content="Babouches">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Babouches">
     <meta name="theme-color" content="#1a1612">
 
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%231a1612'/%3E%3Cpath d='M140 310 Q150 240 200 210 Q230 195 256 195 Q310 195 355 240 Q380 265 375 310 Q370 330 350 338 Q300 355 256 355 Q200 355 165 338 Q140 328 140 310Z' fill='%23c96c3a'/%3E%3C/svg%3E">
@@ -36,636 +34,558 @@
             --shadow-lg: 0 8px 40px rgba(26,22,18,0.14);
             --radius: 12px;
             --radius-sm: 8px;
-            /* Safe area for iPhone 11+ */
+            /* Gestion de l'encoche iPhone 11 et + */
             --safe-top: env(safe-area-inset-top, 20px);
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.5; padding-bottom: var(--safe-bottom); }
+        body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(--ink); min-height: 100vh; font-size: 15px; padding-bottom: var(--safe-bottom); overflow-x: hidden; }
 
-        /* AUTH SCREEN */
+        /* AUTH SCREEN (OVERLAY) */
         #auth-screen {
             position: fixed; inset: 0; background: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; color: var(--sand); text-align: center; padding: 20px;
         }
-        #auth-screen h1 { font-family: 'DM Serif Display', serif; font-size: 3rem; margin-bottom: 10px; }
+        #auth-screen h1 { font-family: 'DM Serif Display', serif; font-size: 3.5rem; margin-bottom: 10px; }
         #auth-screen h1 span { color: var(--terracotta); }
-        .btn-google { background: var(--white); color: var(--ink); padding: 14px 24px; border-radius: 40px; border: none; font-weight: 600; display: flex; align-items: center; gap: 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 30px; }
+        .btn-google { background: var(--white); color: var(--ink); padding: 14px 24px; border-radius: 40px; border: none; font-weight: 600; display: flex; align-items: center; gap: 10px; cursor: pointer; margin-top: 30px; }
+        .btn-bypass { background: transparent; color: var(--ink-faint); border: 1px solid var(--ink-faint); margin-top: 15px; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; }
 
         /* HEADER */
         header {
             background: var(--ink); color: var(--sand);
             padding: calc(var(--safe-top) + 10px) 16px 14px;
-            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            display: flex; align-items: center; justify-content: space-between;
             position: sticky; top: 0; z-index: 100;
             box-shadow: 0 2px 20px rgba(0,0,0,0.2);
         }
-        .header-left h1 { font-family: 'DM Serif Display', serif; font-size: 1.2rem; white-space: nowrap; }
+        .header-left h1 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; }
         .header-left h1 span { color: var(--terracotta); }
 
-        .month-nav { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border-radius: 40px; padding: 5px 5px 5px 12px; }
-        .month-nav span { font-size: 0.76rem; font-weight: 500; min-width: 90px; text-align: center; text-transform: uppercase; }
-        .month-nav button { background: rgba(255,255,255,0.12); border: none; color: var(--sand); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; }
-
-        .header-menu-wrap { position: relative; }
-        .btn-menu { background: rgba(255,255,255,0.1); border: none; color: var(--sand); width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        .month-nav { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border-radius: 40px; padding: 5px 12px; }
+        .month-nav span { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; min-width: 90px; text-align: center; }
+        .month-nav button { background: none; border: none; color: var(--sand); font-size: 1.2rem; cursor: pointer; padding: 0 5px; }
 
         /* TABS */
-        .tabs { background: var(--white); border-bottom: 1px solid var(--border); display: flex; overflow-x: auto; position: sticky; top: calc(62px + var(--safe-top)); z-index: 90; }
-        .tab { padding: 13px 18px; font-size: 0.75rem; font-weight: 500; color: var(--ink-faint); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; text-transform: uppercase; }
+        .tabs { background: var(--white); border-bottom: 1px solid var(--border); display: flex; position: sticky; top: calc(60px + var(--safe-top)); z-index: 90; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .tab { padding: 14px 20px; font-size: 0.72rem; font-weight: 600; color: var(--ink-faint); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em; }
         .tab.active { color: var(--terracotta); border-bottom-color: var(--terracotta); }
 
-        /* MAIN */
-        main { max-width: 860px; margin: 0 auto; padding: 20px 14px 100px; }
+        /* MAIN CONTENT */
+        main { max-width: 800px; margin: 0 auto; padding: 20px 16px 100px; }
         .section { display: none; }
         .section.active { display: block; }
 
         /* CARDS */
-        .card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 14px; border: 1px solid var(--border); }
-        .card-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-bottom: 14px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
-        .card-title .icon { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+        .card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 16px; border: 1px solid var(--border); }
+        .card-title { font-family: 'DM Serif Display', serif; font-size: 1.1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .card-title .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
 
         /* SUMMARY GRID */
-        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
-        .stat-card { background: var(--white); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-        .stat-card .label { font-size: 0.68rem; font-weight: 500; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; }
-        .stat-card .value { font-family: 'DM Serif Display', serif; font-size: 1.65rem; color: var(--ink); }
-        .stat-card.accent { background: var(--ink); color: var(--sand); }
-        .stat-card.accent .value { color: var(--sand); }
-        .stat-card.cagnotte { background: var(--gold); color: white; border-color: var(--gold); }
-        .stat-card.cagnotte .value { color: white; }
-        .stat-card.cagnotte .label { color: rgba(255,255,255,0.8); }
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        .stat-card { background: var(--white); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border); }
+        .stat-card .label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 4px; }
+        .stat-card .value { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--ink); }
+        .stat-card.dark { background: var(--ink); color: var(--sand); }
+        .stat-card.dark .value { color: var(--sand); }
+        .stat-card.gold { background: var(--gold); border-color: var(--gold); color: white; }
+        .stat-card.gold .value { color: white; }
 
-        /* REIMBURSEMENTS */
-        .reimb-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.88rem; margin-bottom: 8px; }
-        .reimb-item.owed { background: var(--terracotta-light); }
-        .reimb-item.balanced { background: var(--sage-light); }
-        .reimb-amount { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-left: auto; color: var(--terracotta); }
+        /* REMBOURSEMENTS */
+        .reimb-list { display: flex; flex-direction: column; gap: 10px; }
+        .reimb-item { padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--sand); position: relative; }
+        .reimb-item.pending { border-left: 4px solid var(--terracotta); }
+        .reimb-label { font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; }
+        .reimb-amount { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--terracotta); }
+        .btn-done { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: var(--ink); color: white; border: none; padding: 8px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; cursor: pointer; }
 
-        /* BUTTONS */
-        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; border: none; border-radius: 40px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        /* CAGNOTTE ACTION */
+        .cagnotte-banner { background: var(--gold-light); border: 1px dashed var(--gold); padding: 15px; border-radius: var(--radius); text-align: center; margin-bottom: 16px; }
+        .btn-save { background: var(--gold); color: white; border: none; padding: 10px 20px; border-radius: 40px; font-weight: 600; font-size: 0.85rem; cursor: pointer; margin-top: 10px; width: 100%; }
+
+        /* EXPENSES */
+        .expense-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--white); border-bottom: 1px solid var(--border); }
+        .exp-info { flex: 1; }
+        .exp-desc { font-weight: 600; font-size: 0.9rem; }
+        .exp-meta { font-size: 0.7rem; color: var(--ink-faint); text-transform: uppercase; }
+        .exp-amt { font-family: 'DM Serif Display', serif; font-size: 1.1rem; }
+        .payer-tag { font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; margin-left: 5px; }
+        .tag-v { background: var(--sage-light); color: var(--sage); }
+        .tag-m { background: var(--terracotta-light); color: var(--terracotta); }
+        .tag-c { background: var(--sand-dark); color: var(--ink); }
+
+        /* FORMS */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--ink-light); margin-bottom: 5px; }
+        input, select { width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 1.5px solid var(--border); font-family: inherit; font-size: 1rem; outline: none; background: var(--white); }
+        .btn { padding: 14px; border-radius: 40px; border: none; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
         .btn-primary { background: var(--terracotta); color: white; }
         .btn-secondary { background: var(--sand-dark); color: var(--ink); }
-        .btn-settle { background: var(--ink); color: white; font-size: 0.7rem; padding: 6px 12px; margin-top: 5px; }
-        .btn-cagnotte { background: var(--gold); color: white; margin-top: 10px; width: 100%; justify-content: center; }
-
-        /* FORM ELEMENTS */
-        .form-group { margin-bottom: 12px; }
-        label { display: block; font-size: 0.76rem; font-weight: 500; text-transform: uppercase; color: var(--ink-light); margin-bottom: 4px; }
-        input, select { width: 100%; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; background: var(--sand); outline: none; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-        /* EXPENSE LIST */
-        .expense-item { display: flex; align-items: center; gap: 10px; padding: 11px 13px; background: var(--sand); border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 7px; }
-        .expense-desc { font-weight: 500; font-size: 0.87rem; }
-        .expense-meta { font-size: 0.72rem; color: var(--ink-faint); }
-        .expense-amount { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-left: auto; }
-
-        /* DROPDOWN MENU */
-        .header-dropdown { position: absolute; top: calc(100% + 8px); right: 0; background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow-lg); border: 1px solid var(--border); min-width: 210px; z-index: 200; overflow: hidden; display: none; }
-        .header-dropdown.open { display: block; }
-        .dropdown-item { padding: 12px 16px; font-size: 0.85rem; font-weight: 500; color: var(--ink); cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
-        .dropdown-item:hover { background: var(--sand); }
-
-        /* PROGRESS BARS */
-        .progress-bar { height: 6px; background: var(--sand-dark); border-radius: 3px; overflow: hidden; margin-top: 6px; }
-        .progress-fill { height: 100%; background: var(--sage); }
 
         /* FAB */
-        .fab { position: fixed; bottom: calc(24px + var(--safe-bottom)); right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--terracotta); color: white; border: none; font-size: 1.6rem; box-shadow: 0 4px 20px rgba(201,108,58,0.45); cursor: pointer; z-index: 80; }
+        .fab { position: fixed; bottom: calc(25px + var(--safe-bottom)); right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--terracotta); color: white; border: none; font-size: 1.8rem; box-shadow: var(--shadow-lg); z-index: 100; display: flex; align-items: center; justify-content: center; }
 
-        /* MODALS */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(26,22,18,0.5); z-index: 200; display: none; align-items: flex-end; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+        /* MODAL */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: flex-end; justify-content: center; backdrop-filter: blur(4px); }
         .modal-overlay.open { display: flex; }
-        .modal { background: var(--white); border-radius: var(--radius); padding: 24px; width: 100%; max-width: 500px; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+        .modal { background: var(--white); width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 24px; animation: slideUp 0.3s ease-out; padding-bottom: calc(24px + var(--safe-bottom)); }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         /* TOAST */
-        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: var(--sand); padding: 11px 18px; border-radius: 40px; font-size: 0.83rem; z-index: 400; transition: 0.3s; }
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: white; padding: 12px 24px; border-radius: 40px; font-size: 0.85rem; z-index: 1000; transition: 0.3s; white-space: nowrap; }
         .toast.show { transform: translateX(-50%) translateY(0); }
-        
-        @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } .summary-grid { grid-template-columns: 1fr 1fr; } }
+
+        /* PROGRESS BAR */
+        .progress-bar { height: 8px; background: var(--sand-dark); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .progress-fill { height: 100%; background: var(--sage); border-radius: 4px; }
     </style>
 </head>
 <body>
 
-<div id="auth-screen">
-    <h1><span>B</span>abouches</h1>
-    <p>Gestion financière de Vincent & Margaux</p>
-    <div id="auth-error" style="color:var(--red); margin-top:20px; display:none; font-size:0.9rem;">Accès refusé. Compte non autorisé.</div>
-    <button class="btn-google" id="loginBtn">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18" alt="Google">
-        Se connecter avec Google
-    </button>
-</div>
-
-<header>
-    <div class="header-left"><h1><span>FB</span></h1></div>
-    <div class="month-nav">
-        <button onclick="changeMonth(-1)">‹</button>
-        <span id="monthDisplay"></span>
-        <button onclick="changeMonth(1)">›</button>
-    </div>
-    <div class="header-menu-wrap">
-        <button class="btn-menu" onclick="toggleMenu()">···</button>
-        <div class="header-dropdown" id="headerDropdown">
-            <button class="dropdown-item" onclick="duplicatePrevMonth()">⊕ Dupliquer mois préc.</button>
-            <button class="dropdown-item" onclick="exportCSV()">⬇ Exporter CSV</button>
-            <div style="height:1px; background:var(--border)"></div>
-            <button class="dropdown-item" style="color:var(--red)" onclick="logout()">Se déconnecter</button>
-        </div>
-    </div>
-</header>
-
-<div class="tabs">
-    <div class="tab active" onclick="showTab('summary',this)">Résumé</div>
-    <div class="tab" onclick="showTab('expenses',this)">Dépenses</div>
-    <div class="tab" onclick="showTab('budgets',this)">Budgets</div>
-    <div class="tab" onclick="showTab('settings',this)">Paramètres</div>
-</div>
-
-<main>
-    <div class="section active" id="section-summary">
-        <div class="summary-grid" id="summaryCards"></div>
-        
-        <div id="cagnotteAction"></div>
-
-        <div class="card">
-            <div class="card-title"><div class="icon" style="background:var(--gold-light)">↔</div>Remboursements</div>
-            <div id="reimbursements"></div>
-        </div>
-
-        <div class="card">
-            <div class="card-title"><div class="icon" style="background:var(--sage-light)">📊</div>Budgets actifs</div>
-            <div id="summaryBudgets"></div>
-        </div>
+    <div id="auth-screen">
+        <h1><span>B</span>abouches</h1>
+        <p>Vincent & Margaux</p>
+        <button class="btn-google" id="loginBtn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg" width="18" alt="G">
+            Connexion Google
+        </button>
+        <button class="btn-bypass" onclick="bypassAuth()">Accès Démo (Test Sans Compte)</button>
+        <div id="auth-error" style="color:var(--red); margin-top:20px; display:none; font-size:0.8rem;">Accès refusé.</div>
     </div>
 
-    <div class="section" id="section-expenses">
-        <div class="card" id="rentCard">
-            <div class="card-title"><div class="icon" style="background:var(--ink); color:white;">🏠</div>Loyer & Charges</div>
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div id="rentDisplay" style="font-family:'DM Serif Display'; font-size:1.5rem;">0,00 €</div>
-                <button id="btnRentPaid" class="btn" onclick="toggleRentPaid()">En attente</button>
+    <header>
+        <div class="header-left"><h1><span>B</span>abouches</h1></div>
+        <div class="month-nav">
+            <button onclick="changeMonth(-1)">‹</button>
+            <span id="monthDisplay">Avril 2026</span>
+            <button onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="header-menu-wrap">
+            <button style="background:none; border:none; color:white; font-size:1.5rem;" onclick="toggleMenu()">⋮</button>
+            <div id="headerDropdown" style="display:none; position:absolute; right:0; top:40px; background:white; color:black; padding:10px; border-radius:8px; box-shadow:var(--shadow-lg); min-width:180px;">
+                <div style="padding:10px; font-size:0.8rem; cursor:pointer;" onclick="duplicateMonth()">Dupliquer mois préc.</div>
+                <div style="padding:10px; font-size:0.8rem; cursor:pointer; color:var(--red);" onclick="location.reload()">Déconnexion</div>
             </div>
         </div>
-        <div class="expense-list" id="expenseList"></div>
+    </header>
+
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('summary', this)">Résumé</div>
+        <div class="tab" onclick="showTab('expenses', this)">Dépenses</div>
+        <div class="tab" onclick="showTab('budgets', this)">Budgets</div>
+        <div class="tab" onclick="showTab('settings', this)">Paramètres</div>
     </div>
 
-    <div class="section" id="section-budgets">
-        <div class="card">
-            <div class="card-title">Suivi détaillé</div>
-            <div id="budgetTracking"></div>
-        </div>
-    </div>
+    <main>
+        <div id="section-summary" class="section active">
+            <div id="cagnotteBanner" class="cagnotte-banner" style="display:none;"></div>
+            
+            <div class="summary-grid">
+                <div class="stat-card dark"><div class="label">Reste à vivre</div><div id="sum-balance" class="value">0€</div></div>
+                <div class="stat-card gold"><div class="label">Cagnotte Globale</div><div id="sum-cagnotte" class="value">0€</div></div>
+                <div class="stat-card"><div class="label">Total Dépenses</div><div id="sum-exp" class="value">0€</div></div>
+                <div class="stat-card"><div class="label">Ratio Actuel</div><div id="sum-ratio" class="value">50/50</div></div>
+            </div>
 
-    <div class="section" id="section-settings">
-        <div class="card">
-            <div class="card-title">Loyer mensuel</div>
-            <div class="form-row">
-                <div class="form-group"><label>Total</label><input type="number" id="rentTotal" oninput="autoCalcRent()"></div>
-                <div class="form-group"><label>Part Vincent</label><input type="number" id="rentVincent"></div>
+            <div class="card">
+                <div class="card-title"><div class="icon" style="background:var(--gold-light)">↔</div>Remboursements</div>
+                <div id="reimb-list" class="reimb-list"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><div class="icon" style="background:var(--sage-light)">📊</div>Suivi Budgets</div>
+                <div id="summary-budgets"></div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-title">Budgets mensuels</div>
-            <div id="budgetSettings"></div>
-            <button class="btn btn-secondary" style="width:100%; margin-top:10px;" onclick="addBudgetRow()">+ Ajouter</button>
-            <button class="btn btn-primary" style="width:100%; margin-top:10px;" onclick="saveBudgets()">Enregistrer</button>
-        </div>
-        <div class="card">
-            <div class="card-title">Ratio Charges</div>
-            <input type="range" id="ratioSlider" min="0" max="100" step="5" style="width:100%">
-            <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-top:5px;">
-                <span>Vincent: <b id="ratioV">50%</b></span>
-                <span>Margaux: <b id="ratioM">50%</b></span>
-            </div>
-            <button class="btn btn-primary" style="width:100%; margin-top:15px;" onclick="saveRatio()">Enregistrer Ratio</button>
-        </div>
-    </div>
-</main>
 
-<button class="fab" onclick="openQuickAdd()">+</button>
-
-<div class="modal-overlay" id="quickAddOverlay">
-    <div class="modal">
-        <div class="card-title">Ajouter une dépense</div>
-        <div class="form-group"><label>Description</label><input type="text" id="expDesc"></div>
-        <div class="form-row">
-            <div class="form-group"><label>Montant (€)</label><input type="number" id="expAmt" step="0.01"></div>
-            <div class="form-group"><label>Catégorie</label><select id="expCat"></select></div>
-        </div>
-        <div class="form-group"><label>Payé par</label>
-            <select id="expPayer">
-                <option value="commun">Compte commun</option>
-                <option value="vincent">Vincent</option>
-                <option value="margaux">Margaux</option>
-            </select>
-        </div>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="btn btn-secondary" style="flex:1" onclick="closeQuickAdd()">Annuler</button>
-            <button class="btn btn-primary" style="flex:1" onclick="submitExpense()">Ajouter</button>
-        </div>
-    </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
-
-<script>
-// =============================================
-// CONFIGURATION & INITIALISATION
-// =============================================
-const firebaseConfig = {
-    apiKey: "AIzaSyBERQisayOiZVcfppbBKjKnC7YN41yat84",
-    authDomain: "babouches-finances.firebaseapp.com",
-    projectId: "babouches-finances",
-    storageBucket: "babouches-finances.firebasestorage.app",
-    messagingSenderId: "662355866301",
-    appId: "1:662355866301:web:cd84aede78a90d3288bdd4"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-const provider = new firebase.auth.GoogleAuthProvider();
-
-const ALLOWED_EMAILS = ['ribesse.vincent@gmail.com', 'margaux.huens@gmail.com'];
-const CATEGORIES = {
-    nourriture: { label: 'Nourriture', color: '#4a7c6e' },
-    energie: { label: 'Énergie', color: '#d4a843' },
-    internet: { label: 'Internet', color: '#3a7cb5' },
-    transport: { label: 'Transport', color: '#c96c3a' },
-    loisirs: { label: 'Loisirs', color: '#5c9ce0' },
-    autre: { label: 'Autre', color: '#9a8e82' }
-};
-
-let currentYear = new Date().getFullYear();
-let currentMonth = new Date().getMonth() + 1;
-let globalData = { finances: {}, cagnotte: 0 };
-let isOffline = false;
-
-// =============================================
-// AUTHENTIFICATION
-// =============================================
-document.getElementById('loginBtn').onclick = () => {
-    auth.signInWithRedirect(provider);
-};
-
-auth.onAuthStateChanged(user => {
-    if (user) {
-        if (ALLOWED_EMAILS.includes(user.email)) {
-            document.getElementById('auth-screen').style.display = 'none';
-            initApp();
-        } else {
-            document.getElementById('auth-error').style.display = 'block';
-            auth.signOut();
-        }
-    } else {
-        document.getElementById('auth-screen').style.display = 'flex';
-    }
-});
-
-function logout() { auth.signOut(); }
-
-// =============================================
-// DATA SYNC (FIRESTORE)
-// =============================================
-function initApp() {
-    // Écoute temps réel
-    db.collection('couples').doc('vincent_margaux').onSnapshot(doc => {
-        if (doc.exists) {
-            globalData = doc.data();
-            localStorage.setItem('babouches_backup', JSON.stringify(globalData));
-            renderAll();
-        } else {
-            // Initialisation si premier usage
-            saveGlobalData();
-        }
-    });
-}
-
-async function saveGlobalData() {
-    try {
-        await db.collection('couples').doc('vincent_margaux').set(globalData);
-    } catch (e) {
-        showToast("Erreur de synchro - Mode local");
-    }
-}
-
-function getMonthKey() { return `${currentYear}-${String(currentMonth).padStart(2, '0')}`; }
-
-function getCurrentMonthData() {
-    const key = getMonthKey();
-    if (!globalData.finances[key]) {
-        globalData.finances[key] = {
-            expenses: [],
-            budgets: { nourriture: 0, energie: 0, internet: 0 },
-            rent: { total: 1082, vincent: 541, paid: false },
-            ratio: 50,
-            settled: { vincent: false, margaux: false }
-        };
-    }
-    return globalData.finances[key];
-}
-
-// =============================================
-// RENDU UI
-// =============================================
-function renderAll() {
-    updateMonthDisplay();
-    const data = getCurrentMonthData();
-    renderSummary(data);
-    renderExpenses(data);
-    renderSettings(data);
-    populateCats();
-}
-
-function updateMonthDisplay() {
-    const d = new Date(currentYear, currentMonth - 1);
-    document.getElementById('monthDisplay').textContent = d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
-}
-
-function changeMonth(dir) {
-    currentMonth += dir;
-    if (currentMonth > 12) { currentMonth = 1; currentYear++; }
-    if (currentMonth < 1) { currentMonth = 12; currentYear--; }
-    renderAll();
-}
-
-function renderSummary(data) {
-    const stats = calcStats(data);
-    const grid = document.getElementById('summaryCards');
-    
-    let html = `
-        <div class="stat-card accent"><div class="label">Solde</div><div class="value">${fmt(stats.balance)}</div></div>
-        <div class="stat-card"><div class="label">Dépenses</div><div class="value">${fmt(stats.totalExp)}</div></div>
-        <div class="stat-card cagnotte"><div class="label">Cagnotte commune</div><div class="value">${fmt(globalData.cagnotte || 0)}</div></div>
-        <div class="stat-card"><div class="label">Ratio</div><div class="value">${data.ratio}% / ${100-data.ratio}%</div></div>
-    `;
-    grid.innerHTML = html;
-
-    // Bouton Cagnotte
-    const cagArea = document.getElementById('cagnotteAction');
-    if (stats.balance > 0.01) {
-        cagArea.innerHTML = `<button class="btn btn-cagnotte" onclick="transferToCagnotte(${stats.balance})">💰 Mettre ${fmt(stats.balance)} en épargne</button>`;
-    } else {
-        cagArea.innerHTML = '';
-    }
-
-    // Remboursements
-    let rHtml = '';
-    if (!data.settled.vincent && stats.owedToV > 0.01) {
-        rHtml += `<div class="reimb-item owed">Le compte doit à Vincent <span class="reimb-amount">${fmt(stats.owedToV)}</span><br><button class="btn btn-settle" onclick="markSettled('vincent')">Marquer comme fait</button></div>`;
-    }
-    if (!data.settled.margaux && stats.owedToM > 0.01) {
-        rHtml += `<div class="reimb-item owed">Le compte doit à Margaux <span class="reimb-amount">${fmt(stats.owedToM)}</span><br><button class="btn btn-settle" onclick="markSettled('margaux')">Marquer comme fait</button></div>`;
-    }
-    if (rHtml === '') rHtml = `<div class="reimb-item balanced">✓ Tout est réglé</div>`;
-    document.getElementById('reimbursements').innerHTML = rHtml;
-
-    // Budgets Summary
-    renderBudgetBars(data, 'summaryBudgets');
-}
-
-function renderExpenses(data) {
-    const list = document.getElementById('expenseList');
-    
-    // Loyer Card
-    const rentVal = parseFloat(data.rent.total) || 0;
-    document.getElementById('rentDisplay').textContent = fmt(rentVal);
-    const btn = document.getElementById('btnRentPaid');
-    btn.className = data.rent.paid ? 'btn btn-primary' : 'btn btn-secondary';
-    btn.textContent = data.rent.paid ? '✓ Payé' : 'En attente';
-
-    if (data.expenses.length === 0) {
-        list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--ink-faint)">Aucune dépense</div>';
-        return;
-    }
-
-    list.innerHTML = data.expenses.map(e => `
-        <div class="expense-item">
-            <div>
-                <div class="expense-desc">${e.desc}</div>
-                <div class="expense-meta">${CATEGORIES[e.cat]?.label || e.cat} • Par ${e.payer}</div>
-            </div>
-            <div class="expense-amount">${fmt(e.amt)}</div>
-            <button style="border:none; background:none; color:var(--red); padding:5px" onclick="deleteExp(${e.id})">✕</button>
-        </div>
-    `).join('');
-}
-
-function renderSettings(data) {
-    document.getElementById('rentTotal').value = data.rent.total;
-    document.getElementById('rentVincent').value = data.rent.vincent;
-    document.getElementById('ratioSlider').value = data.ratio;
-    document.getElementById('ratioV').textContent = data.ratio + '%';
-    document.getElementById('ratioM').textContent = (100 - data.ratio) + '%';
-
-    const bS = document.getElementById('budgetSettings');
-    bS.innerHTML = Object.entries(data.budgets).map(([cat, val]) => `
-        <div class="form-row" style="margin-bottom:8px">
-            <input type="text" value="${cat}" readonly>
-            <input type="number" class="b-val" data-cat="${cat}" value="${val}">
-        </div>
-    `).join('');
-}
-
-// =============================================
-// LOGIQUE METIER
-// =============================================
-function calcStats(data) {
-    const ratioV = data.ratio / 100;
-    const ratioM = (100 - data.ratio) / 100;
-    const totalBgt = Object.values(data.budgets).reduce((a, b) => a + (parseFloat(b) || 0), 0);
-    const rent = parseFloat(data.rent.total) || 0;
-    
-    const contribV = (parseFloat(data.rent.vincent) || 0) + (totalBgt * ratioV);
-    const contribM = (rent - (parseFloat(data.rent.vincent) || 0)) + (totalBgt * ratioM);
-    
-    let paidByCommun = data.rent.paid ? rent : 0;
-    let owedToV = 0;
-    let owedToM = 0;
-
-    data.expenses.forEach(e => {
-        const a = parseFloat(e.amt) || 0;
-        if (e.payer === 'commun') paidByCommun += a;
-        else if (e.payer === 'vincent') owedToV += a;
-        else if (e.payer === 'margaux') owedToM += a;
-    });
-
-    return {
-        totalContrib: contribV + contribM,
-        totalExp: paidByCommun + owedToV + owedToM,
-        balance: (contribV + contribM) - (paidByCommun + owedToV + owedToM),
-        owedToV, owedToM
-    };
-}
-
-async function submitExpense() {
-    const desc = document.getElementById('expDesc').value;
-    const amt = parseFloat(document.getElementById('expAmt').value);
-    const cat = document.getElementById('expCat').value;
-    const payer = document.getElementById('expPayer').value;
-
-    if (!desc || !amt) return;
-
-    const data = getCurrentMonthData();
-    data.expenses.unshift({ id: Date.now(), desc, amt, cat, payer });
-    await saveGlobalData();
-    closeQuickAdd();
-    showToast("Dépense ajoutée");
-}
-
-async function deleteExp(id) {
-    const data = getCurrentMonthData();
-    data.expenses = data.expenses.filter(e => e.id !== id);
-    await saveGlobalData();
-}
-
-async function toggleRentPaid() {
-    const data = getCurrentMonthData();
-    data.rent.paid = !data.rent.paid;
-    await saveGlobalData();
-}
-
-async function markSettled(who) {
-    const data = getCurrentMonthData();
-    data.settled[who] = true;
-    await saveGlobalData();
-    showToast("Remboursement validé");
-}
-
-async function transferToCagnotte(amt) {
-    if (!confirm(`Transférer ${fmt(amt)} dans la cagnotte ?`)) return;
-    globalData.cagnotte = (globalData.cagnotte || 0) + amt;
-    // On simule une dépense "Épargne" pour équilibrer le mois
-    const data = getCurrentMonthData();
-    data.expenses.push({ id: Date.now(), desc: "Virement Épargne", amt: amt, cat: "autre", payer: "commun" });
-    await saveGlobalData();
-    showToast("Économies enregistrées ! 🚀");
-}
-
-async function saveBudgets() {
-    const data = getCurrentMonthData();
-    document.querySelectorAll('.b-val').forEach(input => {
-        data.budgets[input.dataset.cat] = parseFloat(input.value) || 0;
-    });
-    await saveGlobalData();
-    showToast("Budgets enregistrés");
-}
-
-async function saveRatio() {
-    const data = getCurrentMonthData();
-    data.ratio = parseInt(document.getElementById('ratioSlider').value);
-    await saveGlobalData();
-}
-
-function autoCalcRent() {
-    const total = parseFloat(document.getElementById('rentTotal').value) || 0;
-    document.getElementById('rentVincent').value = (total / 2).toFixed(2);
-}
-
-async function duplicatePrevMonth() {
-    let pm = currentMonth - 1, py = currentYear;
-    if (pm < 1) { pm = 12; py--; }
-    const prevKey = `${py}-${String(pm).padStart(2, '0')}`;
-    const prevData = globalData.finances[prevKey];
-    
-    if (prevData) {
-        const current = getCurrentMonthData();
-        current.rent = { ...prevData.rent, paid: false };
-        current.budgets = { ...prevData.budgets };
-        current.ratio = prevData.ratio;
-        await saveGlobalData();
-        showToast("Mois dupliqué !");
-    }
-}
-
-// =============================================
-// UTILS & UI NAVIGATION
-// =============================================
-function showTab(tab, el) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('section-' + tab).classList.add('active');
-    el.classList.add('active');
-}
-
-function toggleMenu() { document.getElementById('headerDropdown').classList.toggle('open'); }
-function openQuickAdd() { 
-    document.getElementById('quickAddOverlay').classList.add('open');
-    document.getElementById('expDesc').focus();
-}
-function closeQuickAdd() { document.getElementById('quickAddOverlay').classList.remove('open'); }
-
-function fmt(n) { return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n || 0); }
-
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function populateCats() {
-    const sel = document.getElementById('expCat');
-    if (sel.options.length > 0) return;
-    Object.entries(CATEGORIES).forEach(([k, v]) => {
-        const opt = document.createElement('option');
-        opt.value = k; opt.textContent = v.label;
-        sel.appendChild(opt);
-    });
-}
-
-function renderBudgetBars(data, containerId) {
-    const cont = document.getElementById(containerId);
-    const spends = {};
-    data.expenses.forEach(e => spends[e.cat] = (spends[e.cat] || 0) + e.amt);
-    
-    cont.innerHTML = Object.entries(data.budgets).map(([cat, limit]) => {
-        if (limit <= 0 && !spends[cat]) return '';
-        const spent = spends[cat] || 0;
-        const pct = limit > 0 ? Math.min((spent / limit) * 100, 100) : 0;
-        return `
-            <div style="margin-bottom:12px">
-                <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px">
-                    <span>${CATEGORIES[cat]?.label}</span>
-                    <span><b>${fmt(spent)}</b> / ${fmt(limit)}</span>
+        <div id="section-expenses" class="section">
+            <div class="card" id="rent-card">
+                <div class="card-title"><div class="icon" style="background:var(--ink); color:white;">🏠</div>Loyer & Fixes</div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div id="rent-val" style="font-family:'DM Serif Display'; font-size:1.6rem;">1082,00 €</div>
+                    <button id="btn-rent-status" class="btn" style="padding:8px 16px; font-size:0.8rem;" onclick="toggleRent()">En attente</button>
                 </div>
-                <div class="progress-bar"><div class="progress-fill" style="width:${pct}%; background:${pct > 95 ? 'var(--red)' : 'var(--sage)'}"></div></div>
             </div>
-        `;
-    }).join('');
-}
+            <div id="expense-list-container" class="card" style="padding:0; overflow:hidden;"></div>
+        </div>
 
-function exportCSV() {
-    const data = getCurrentMonthData();
-    let csv = "Description,Montant,Categorie,Payeur\n";
-    data.expenses.forEach(e => {
-        csv += `"${e.desc}",${e.amt},${e.cat},${e.payer}\n`;
-    });
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('href', url);
-    a.setAttribute('download', `Babouches-${getMonthKey()}.csv`);
-    a.click();
-}
+        <div id="section-budgets" class="section">
+            <div class="card">
+                <div class="card-title">Détails par catégorie</div>
+                <div id="detailed-budgets"></div>
+            </div>
+        </div>
 
-// Close menu on click outside
-document.addEventListener('click', e => {
-    if (!e.target.closest('.header-menu-wrap')) document.getElementById('headerDropdown').classList.remove('open');
-});
+        <div id="section-settings" class="section">
+            <div class="card">
+                <div class="card-title">Configuration Loyer</div>
+                <div class="form-group"><label>Montant Total (€)</label><input type="number" id="set-rent-total" step="0.01"></div>
+                <div class="form-group"><label>Part de Vincent (€)</label><input type="number" id="set-rent-v" step="0.01"></div>
+            </div>
+            <div class="card">
+                <div class="card-title">Ratio des charges</div>
+                <input type="range" id="ratio-slider" min="0" max="100" step="5" style="width:100%; accent-color:var(--terracotta);">
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-top:10px; font-weight:600;">
+                    <span>Vincent: <span id="v-label">50</span>%</span>
+                    <span>Margaux: <span id="m-label">50</span>%</span>
+                </div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;" onclick="saveSettings()">Enregistrer les réglages</button>
+        </div>
+    </main>
 
-// Listener pour le slider ratio
-document.getElementById('ratioSlider').oninput = function() {
-    document.getElementById('ratioV').textContent = this.value + '%';
-    document.getElementById('ratioM').textContent = (100 - this.value) + '%';
-};
-</script>
+    <button class="fab" onclick="openAddModal()">+</button>
 
+    <div id="modal-add" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal">
+            <div class="card-title">Nouvelle dépense</div>
+            <div class="form-group"><label>Description</label><input type="text" id="add-desc" placeholder="Ex: Courses Carrefour"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="form-group"><label>Montant (€)</label><input type="number" id="add-amt" step="0.01" inputmode="decimal"></div>
+                <div class="form-group"><label>Catégorie</label>
+                    <select id="add-cat">
+                        <option value="nourriture">Nourriture</option>
+                        <option value="energie">Énergie</option>
+                        <option value="internet">Internet</option>
+                        <option value="loisirs">Loisirs</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Payé par</label>
+                <select id="add-payer">
+                    <option value="commun">Compte Commun</option>
+                    <option value="vincent">Vincent</option>
+                    <option value="margaux">Margaux</option>
+                </select>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <button class="btn btn-secondary" style="flex:1" onclick="closeModal(null)">Annuler</button>
+                <button class="btn btn-primary" style="flex:1" onclick="submitExpense()">Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // CONFIG FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyBERQisayOiZVcfppbBKjKnC7YN41yat84",
+            authDomain: "babouches-finances.firebaseapp.com",
+            projectId: "babouches-finances",
+            storageBucket: "babouches-finances.firebasestorage.app",
+            messagingSenderId: "662355866301",
+            appId: "1:662355866301:web:cd84aede78a90d3288bdd4"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        const ALLOWED_EMAILS = ['ribesse.vincent@gmail.com', 'margaux.huens@gmail.com'];
+        const CATEGORIES = {
+            nourriture: { label: 'Nourriture', color: '#4a7c6e' },
+            energie: { label: 'Énergie', color: '#d4a843' },
+            internet: { label: 'Internet', color: '#3a7cb5' },
+            loisirs: { label: 'Loisirs', color: '#5c9ce0' },
+            autre: { label: 'Autre', color: '#9a8e82' }
+        };
+
+        // ETAT GLOBAL
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth() + 1;
+        let globalData = {
+            cagnotte: 0,
+            finances: {} // Key: "YYYY-MM"
+        };
+
+        // AUTH LOGIC
+        function bypassAuth() {
+            document.getElementById('auth-screen').style.display = 'none';
+            initFirestore();
+        }
+
+        document.getElementById('loginBtn').onclick = () => {
+            auth.signInWithRedirect(provider);
+        };
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                if (ALLOWED_EMAILS.includes(user.email)) {
+                    document.getElementById('auth-screen').style.display = 'none';
+                    initFirestore();
+                } else {
+                    document.getElementById('auth-error').style.display = 'block';
+                    auth.signOut();
+                }
+            }
+        });
+
+        // FIRESTORE SYNC
+        function initFirestore() {
+            db.collection('couples').doc('vincent_margaux').onSnapshot(doc => {
+                if (doc.exists) {
+                    globalData = doc.data();
+                    renderAll();
+                } else {
+                    saveToCloud(); // Init
+                }
+            });
+        }
+
+        async function saveToCloud() {
+            try {
+                await db.collection('couples').doc('vincent_margaux').set(globalData);
+            } catch (e) { console.error(e); }
+        }
+
+        function getMonthKey() { return `${currentYear}-${String(currentMonth).padStart(2, '0')}`; }
+
+        function getMonthData() {
+            const key = getMonthKey();
+            if (!globalData.finances[key]) {
+                globalData.finances[key] = {
+                    expenses: [],
+                    budgets: { nourriture: 400, energie: 150, internet: 50 },
+                    rent: { total: 1082, vincent: 541, paid: false },
+                    ratio: 50,
+                    settled: { vincent: false, margaux: false }
+                };
+            }
+            return globalData.finances[key];
+        }
+
+        // NAVIGATION
+        function showTab(id, el) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('section-' + id).classList.add('active');
+            el.classList.add('active');
+        }
+
+        function changeMonth(dir) {
+            currentMonth += dir;
+            if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+            if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+            renderAll();
+        }
+
+        function toggleMenu() {
+            const m = document.getElementById('headerDropdown');
+            m.style.display = m.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // RENDU
+        function renderAll() {
+            const data = getMonthData();
+            const d = new Date(currentYear, currentMonth - 1);
+            document.getElementById('monthDisplay').textContent = d.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+
+            // Calculs
+            const stats = calculateStats(data);
+            
+            // Résumé
+            document.getElementById('sum-balance').textContent = fmt(stats.balance);
+            document.getElementById('sum-cagnotte').textContent = fmt(globalData.cagnotte);
+            document.getElementById('sum-exp').textContent = fmt(stats.totalExpenses);
+            document.getElementById('sum-ratio').textContent = `${data.ratio}/${100-data.ratio}`;
+
+            // Bannière Cagnotte
+            const banner = document.getElementById('cagnotteBanner');
+            if (stats.balance > 0.01) {
+                banner.style.display = 'block';
+                banner.innerHTML = `Solde positif de <strong>${fmt(stats.balance)}</strong> disponible ! <button class="btn-save" onclick="transferToCagnotte(${stats.balance})">Mettre en épargne</button>`;
+            } else { banner.style.display = 'none'; }
+
+            // Remboursements
+            const rList = document.getElementById('reimb-list');
+            let rHtml = '';
+            if (stats.owedToV > 0.01 && !data.settled.vincent) {
+                rHtml += `<div class="reimb-item pending"><div class="reimb-label">Le compte doit à Vincent</div><div class="reimb-amount">${fmt(stats.owedToV)}</div><button class="btn-done" onclick="markDone('vincent')">Réglé</button></div>`;
+            }
+            if (stats.owedToM > 0.01 && !data.settled.margaux) {
+                rHtml += `<div class="reimb-item pending"><div class="reimb-label">Le compte doit à Margaux</div><div class="reimb-amount">${fmt(stats.owedToM)}</div><button class="btn-done" onclick="markDone('margaux')">Réglé</button></div>`;
+            }
+            rList.innerHTML = rHtml || '<div style="font-size:0.8rem; color:var(--sage); font-weight:600;">✓ Tout est à jour</div>';
+
+            // Liste Dépenses
+            renderExpenseList(data);
+            
+            // Settings
+            document.getElementById('set-rent-total').value = data.rent.total;
+            document.getElementById('set-rent-v').value = data.rent.vincent;
+            document.getElementById('ratio-slider').value = data.ratio;
+            document.getElementById('v-label').textContent = data.ratio;
+            document.getElementById('m-label').textContent = 100 - data.ratio;
+
+            // Budgets Bars
+            renderBudgetBars(data);
+        }
+
+        function calculateStats(data) {
+            const rV = data.ratio / 100;
+            const rM = (100 - data.ratio) / 100;
+            const totalBgt = Object.values(data.budgets).reduce((a, b) => a + b, 0);
+            
+            const contribV = data.rent.vincent + (totalBgt * rV);
+            const contribM = (data.rent.total - data.rent.vincent) + (totalBgt * rM);
+            const totalBudgeted = contribV + contribM;
+
+            let spentCommun = data.rent.paid ? data.rent.total : 0;
+            let owedToV = 0, owedToM = 0;
+
+            data.expenses.forEach(e => {
+                if (e.payer === 'commun') spentCommun += e.amt;
+                else if (e.payer === 'vincent') owedToV += e.amt;
+                else if (e.payer === 'margaux') owedToM += e.amt;
+            });
+
+            return {
+                totalExpenses: spentCommun + owedToV + owedToM,
+                balance: totalBudgeted - (spentCommun + owedToV + owedToM),
+                owedToV, owedToM
+            };
+        }
+
+        function renderExpenseList(data) {
+            const container = document.getElementById('expense-list-container');
+            if (data.expenses.length === 0) {
+                container.innerHTML = '<div style="padding:40px; text-align:center; color:var(--ink-faint); font-size:0.8rem;">Aucune dépense ce mois-ci</div>';
+                return;
+            }
+            container.innerHTML = data.expenses.map((e, idx) => `
+                <div class="expense-item">
+                    <div class="exp-info">
+                        <div class="exp-desc">${e.desc} <span class="payer-tag tag-${e.payer[0]}">${e.payer === 'commun' ? 'C' : e.payer === 'vincent' ? 'V' : 'M'}</span></div>
+                        <div class="exp-meta">${CATEGORIES[e.cat].label}</div>
+                    </div>
+                    <div class="exp-amt">${fmt(e.amt)}</div>
+                    <button style="border:none; background:none; color:var(--red); padding-left:10px;" onclick="deleteExp(${idx})">✕</button>
+                </div>
+            `).join('');
+            
+            // Loyer UI
+            document.getElementById('rent-val').textContent = fmt(data.rent.total);
+            const btn = document.getElementById('btn-rent-status');
+            btn.className = data.rent.paid ? 'btn btn-primary' : 'btn btn-secondary';
+            btn.textContent = data.rent.paid ? '✓ Payé' : 'En attente';
+            document.getElementById('rent-card').style.borderColor = data.rent.paid ? 'var(--sage)' : 'var(--border)';
+        }
+
+        function renderBudgetBars(data) {
+            const container = document.getElementById('summary-budgets');
+            const detailContainer = document.getElementById('detailed-budgets');
+            const spends = {};
+            data.expenses.forEach(e => spends[e.cat] = (spends[e.cat] || 0) + e.amt);
+
+            const html = Object.entries(data.budgets).map(([cat, limit]) => {
+                const spent = spends[cat] || 0;
+                const pct = Math.min((spent / limit) * 100, 100);
+                const color = pct > 90 ? 'var(--red)' : 'var(--sage)';
+                return `
+                    <div style="margin-bottom:12px;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
+                            <span>${CATEGORIES[cat].label}</span>
+                            <span><strong>${fmt(spent)}</strong> / ${fmt(limit)}</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%; background:${color};"></div></div>
+                    </div>
+                `;
+            }).join('');
+            container.innerHTML = html;
+            detailContainer.innerHTML = html;
+        }
+
+        // ACTIONS
+        async function submitExpense() {
+            const desc = document.getElementById('add-desc').value;
+            const amt = parseFloat(document.getElementById('add-amt').value);
+            const cat = document.getElementById('add-cat').value;
+            const payer = document.getElementById('add-payer').value;
+
+            if (!desc || isNaN(amt)) return;
+
+            const data = getMonthData();
+            data.expenses.unshift({ desc, amt, cat, payer, date: new Date().toISOString() });
+            await saveToCloud();
+            closeModal(null);
+            showToast("Dépense enregistrée");
+        }
+
+        async function deleteExp(idx) {
+            if (!confirm("Supprimer cette dépense ?")) return;
+            const data = getMonthData();
+            data.expenses.splice(idx, 1);
+            await saveToCloud();
+        }
+
+        async function toggleRent() {
+            const data = getMonthData();
+            data.rent.paid = !data.rent.paid;
+            await saveToCloud();
+        }
+
+        async function markDone(who) {
+            const data = getMonthData();
+            data.settled[who] = true;
+            await saveToCloud();
+            showToast("Marqué comme réglé !");
+        }
+
+        async function transferToCagnotte(amt) {
+            globalData.cagnotte += amt;
+            // On balance le mois en créant une dépense de virement fictive
+            const data = getMonthData();
+            data.expenses.push({ desc: "Virement Épargne", amt: amt, cat: "autre", payer: "commun", date: new Date().toISOString() });
+            await saveToCloud();
+            showToast("Argent mis à l'abri ! 🚀");
+        }
+
+        async function saveSettings() {
+            const data = getMonthData();
+            data.rent.total = parseFloat(document.getElementById('set-rent-total').value);
+            data.rent.vincent = parseFloat(document.getElementById('set-rent-v').value);
+            data.ratio = parseInt(document.getElementById('ratio-slider').value);
+            await saveToCloud();
+            showToast("Réglages sauvegardés");
+        }
+
+        async function duplicateMonth() {
+            let pm = currentMonth - 1, py = currentYear;
+            if (pm < 1) { pm = 12; py--; }
+            const prevKey = `${py}-${String(pm).padStart(2, '0')}`;
+            if (!globalData.finances[prevKey]) return showToast("Mois précédent vide");
+            
+            const prev = globalData.finances[prevKey];
+            const current = getMonthData();
+            current.rent = { ...prev.rent, paid: false };
+            current.budgets = { ...prev.budgets };
+            current.ratio = prev.ratio;
+            await saveToCloud();
+            showToast("Structure du mois copiée !");
+        }
+
+        // MODALS & UTILS
+        function openAddModal() { document.getElementById('modal-add').classList.add('open'); }
+        function closeModal(e) { if (!e || e.target.id === 'modal-add') document.getElementById('modal-add').classList.remove('open'); }
+        function fmt(n) { return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(n); }
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.textContent = m; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        document.getElementById('ratio-slider').oninput = function() {
+            document.getElementById('v-label').textContent = this.value;
+            document.getElementById('m-label').textContent = 100 - this.value;
+        };
+    </script>
 </body>
 </html>
