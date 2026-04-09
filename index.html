@@ -376,10 +376,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   <div class="section active" id="section-summary">
     <div id="carryAlert" class="carry-alert"></div>
 
-    <div class="card cagnotte-card">
-      <div id="cagnotteDisplay"></div>
-    </div>
-
     <div class="summary-grid" id="summaryCards"></div>
 
     <div id="transferWrap" style="display:none;margin-bottom:14px">
@@ -1212,17 +1208,6 @@ function renderSummary(data) {
       <div class="savings-goal-track"><div class="savings-goal-fill" style="width:${goalPct}%"></div></div>
       <div class="savings-goal-pct">${goalPct.toFixed(0)}%</div>
     </div>` : '';
-
-  document.getElementById('cagnotteDisplay').innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-      <div style="flex:1;min-width:0">
-        <div class="cagnotte-label">Cagnotte épargne 🏦</div>
-        <div class="cagnotte-value">${fmt(savings.balance)}</div>
-        <div class="cagnotte-sub">Épargne commune accumulée</div>
-      </div>
-      <div style="font-size:2.2rem;opacity:0.6;flex-shrink:0">💰</div>
-    </div>
-    ${goalBlock}`;
 
   // Bouton transfert
   const transferWrap = document.getElementById('transferWrap');
