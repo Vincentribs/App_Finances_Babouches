@@ -406,6 +406,16 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       </button>
     </div>
     <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--sage-light)">📊</div>Budgets par catégorie</div>
+      <div id="summaryBudgets"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">📈</div>Historique 6 mois</div>
+      <div id="historyChart"></div>
+    </div>
+
+    <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--gold-light)">↔</div>Remboursements</div>
       <div id="reimbursements"></div>
     </div>
@@ -416,16 +426,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
         Fonds ajoutés au compte
       </div>
       <div id="summaryCredits"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--sage-light)">📊</div>Budgets par catégorie</div>
-      <div id="summaryBudgets"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">📈</div>Historique 6 mois</div>
-      <div id="historyChart"></div>
     </div>
   </div>
 
@@ -495,7 +495,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       <div class="card-title">
         <div class="icon" style="background:var(--sage-light)">↕</div>
         Mouvements
-        <button class="btn btn-secondary" style="margin-left:auto;padding:6px 14px;font-size:0.75rem" onclick="openSavingsMovementModal()">− Retrait</button>
       </div>
       <div id="savingsHistoryList"></div>
     </div>
@@ -966,10 +965,21 @@ function getDefaultSavings() {
   return { balance: 0, goal: 0, goalLabel: '', history: [] };
 }
 
+function applyGlobalSettings(data) {
+  const gs = firestoreDoc && firestoreDoc.settings;
+  if (!gs) return data;
+  return {
+    ...data,
+    rent: { ...data.rent, ...(gs.rent || {}), paid: false },
+    budgets: gs.budgets ? { ...gs.budgets } : data.budgets,
+    chargesRatio: gs.chargesRatio !== undefined ? gs.chargesRatio : data.chargesRatio
+  };
+}
+
 function loadData() {
-  if (!firestoreDoc || !firestoreDoc.months) return getDefaultData();
+  if (!firestoreDoc || !firestoreDoc.months) return applyGlobalSettings(getDefaultData());
   const d = firestoreDoc.months[getKey()];
-  if (!d) return getDefaultData();
+  if (!d) return applyGlobalSettings(getDefaultData());
   // Defaults pour champs manquants (lecture seule — pas de persist)
   const safe = { ...getDefaultData(), ...d };
   safe.contributions = { ...getDefaultData().contributions, ...(d.contributions || {}) };
@@ -1005,6 +1015,22 @@ function saveData(data) {
   renderAll();
   _pendingSaves.set(key, data);
   _flushSaves();
+}
+
+// Sauvegarde des paramètres globaux (loyer, budgets, ratio) — partagés entre tous les mois
+const _flushGlobalSettings = debounce(() => {
+  if (isBypassMode || !firestoreDoc || !firestoreDoc.settings) return;
+  DOC_REF().update({
+    settings: firestoreDoc.settings,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(err => console.error('Settings save failed:', err));
+}, SAVE_DEBOUNCE_MS);
+
+function saveGlobalSettings(patch) {
+  if (!currentUser) return;
+  if (!firestoreDoc) firestoreDoc = { months: {}, savings: getDefaultSavings() };
+  firestoreDoc.settings = { ...(firestoreDoc.settings || {}), ...patch };
+  _flushGlobalSettings();
 }
 
 function saveSavings(savings) {
@@ -1143,10 +1169,11 @@ function addSavingsMovement({ amount, type, source = 'manual', note = '', date =
 }
 
 function deleteSavingsMovement(id) {
+  const nid = String(id);
   const savings = getSavings();
-  const entry = savings.history.find(h => h.id == id);
-  if (!entry) return;
-  const newHistory = savings.history.filter(h => h.id != id);
+  const entry = savings.history.find(h => String(h.id) === nid);
+  if (!entry) { showToast('⚠ Mouvement introuvable'); return; }
+  const newHistory = savings.history.filter(h => String(h.id) !== nid);
   const delta = entry.type === 'deposit' ? -entry.amount : entry.amount;
   const newBalance = Math.max(0, savings.balance + delta);
   saveSavings({ ...savings, balance: newBalance, history: newHistory });
@@ -1982,6 +2009,7 @@ function onRentInput(changed) {
   data.rent.vincent = parseFloat(document.getElementById('rentVincent').value) || 0;
   data.rent.margaux = parseFloat(document.getElementById('rentMargaux').value) || 0;
   saveData(data); // déjà debouncé côté Firestore
+  saveGlobalSettings({ rent: { total: data.rent.total, vincent: data.rent.vincent, margaux: data.rent.margaux } });
   updateRentNote(data);
   renderContribCards(data);
 }
@@ -2011,6 +2039,7 @@ function saveRatio() {
   const data = loadData();
   data.chargesRatio = val;
   saveData(data);
+  saveGlobalSettings({ chargesRatio: val });
   showToast(`✓ Ratio : Vincent ${val}% / Margaux ${100 - val}%`);
 }
 
@@ -2036,6 +2065,7 @@ function saveBudgets() {
     data.budgets[cat] = amount;
   });
   saveData(data);
+  saveGlobalSettings({ budgets: data.budgets });
   showToast(dupWarn ? '⚠ Catégories dupliquées fusionnées' : '✓ Paramètres enregistrés');
 }
 
