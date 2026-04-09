@@ -356,7 +356,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 </head>
 <body>
 
-<!-- ① AUTH OVERLAY — affiché par défaut, masqué après connexion -->
 <div id="authOverlay" class="auth-overlay">
   <div class="auth-card">
     <div class="auth-logo">👟</div>
@@ -371,13 +370,16 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       </svg>
       Se connecter avec Google
     </button>
+    
+    <button class="btn-google" style="background: var(--sand); border-style: dashed; margin-top: 10px;" onclick="bypassAuth()">
+      🛠 Tester l'app (Bypass)
+    </button>
     <div id="authError" class="auth-error"></div>
     <div id="authLoading" class="auth-loading" style="display:none">Connexion en cours…</div>
     <div class="auth-lock">🔒 Réservé à ribesse.vincent@gmail.com<br>et margaux.huens@gmail.com</div>
   </div>
 </div>
 
-<!-- APPLICATION — masquée jusqu'à l'authentification -->
 <div id="appWrapper" style="display:none">
 
 <header>
@@ -412,18 +414,15 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 
 <main>
 
-  <!-- ===== RÉSUMÉ ===== -->
   <div class="section active" id="section-summary">
     <div id="carryAlert" class="carry-alert"></div>
 
-    <!-- ⑤ CAGNOTTE -->
     <div class="card cagnotte-card" id="cagnotteCard" style="margin-bottom:14px">
       <div id="cagnotteDisplay"></div>
     </div>
 
     <div class="summary-grid" id="summaryCards"></div>
 
-    <!-- ⑤ Bouton transfert épargne (conditionnel) -->
     <div id="transferWrap" style="display:none;margin-bottom:14px">
       <button class="btn-transfer" style="width:100%;justify-content:center" onclick="transferToCagnotte()">
         🏦 Transférer le solde restant en épargne
@@ -446,7 +445,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
     </div>
   </div>
 
-  <!-- ===== DÉPENSES ===== -->
   <div class="section" id="section-expenses">
     <div class="card fixed-charges-card" id="fixedChargesCard">
       <div class="card-title">
@@ -478,7 +476,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
     </div>
   </div>
 
-  <!-- ===== BUDGETS ===== -->
   <div class="section" id="section-budgets">
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--gold-light)">📈</div>Suivi des budgets</div>
@@ -486,7 +483,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
     </div>
   </div>
 
-  <!-- ===== PARAMÈTRES ===== -->
   <div class="section" id="section-settings">
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">🏠</div>Loyer mensuel</div>
@@ -551,7 +547,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 
 <button class="fab" onclick="openQuickAdd()" title="Ajouter une dépense">+</button>
 
-<!-- MODAL CONFIRMATION -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -566,7 +561,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   </div>
 </div>
 
-<!-- MODAL QUICK-ADD / EDIT DÉPENSE -->
 <div class="modal-overlay" id="quickAddOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -601,10 +595,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 
 <div class="toast" id="toast"></div>
 
-</div><!-- /appWrapper -->
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+</div><script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
@@ -661,6 +652,19 @@ const DOC_REF = () => db.collection('couples').doc('vincent_margaux');
 // ==============================================
 // ① AUTH ENGINE
 // ==============================================
+
+// ====== FONCTION DE BYPASS AJOUTÉE ICI ======
+function bypassAuth() {
+  console.warn("Bypass de l'authentification activé pour le test.");
+  const fakeUser = {
+    email: 'ribesse.vincent@gmail.com',
+    displayName: 'Testeur Vincent'
+  };
+  currentUser = fakeUser;
+  onSignedIn(fakeUser);
+}
+// ============================================
+
 auth.onAuthStateChanged(user => {
   if (user && ALLOWED_EMAILS.includes(user.email)) {
     currentUser = user;
