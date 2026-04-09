@@ -144,7 +144,7 @@ main { max-width: 860px; margin: 0 auto; padding: 20px 14px; padding-bottom: cal
 .savings-history-amount { font-family: 'DM Serif Display', serif; font-size: 1.05rem; white-space: nowrap; }
 .savings-history-amount.deposit { color: var(--sage); }
 .savings-history-amount.withdraw { color: var(--red); }
-.savings-history-delete { background: none; border: none; color: var(--ink-faint); cursor: pointer; padding: 4px 6px; font-size: 0.8rem; border-radius: 4px; transition: all 0.2s; }
+.savings-history-delete { background: none; border: none; color: var(--ink-faint); cursor: pointer; padding: 8px 10px; font-size: 0.9rem; border-radius: 6px; transition: all 0.2s; min-width: 36px; min-height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .savings-history-delete:hover { background: var(--red-light); color: var(--red); }
 
 .savings-chart-wrap { position: relative; height: 220px; margin-top: 12px; }
@@ -591,7 +591,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
     <div id="modalBody"></div>
     <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end" id="modalFooter">
       <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
-      <button class="btn btn-primary" id="modalConfirmBtn">Confirmer</button>
+      <button class="btn btn-primary" id="modalConfirmBtn" onclick="confirmModal()">Confirmer</button>
     </div>
   </div>
 </div>
@@ -2134,15 +2134,25 @@ function confirmReset() {
 // ============================================================
 // 13. MODALS, TABS, MENU
 // ============================================================
+let _modalAction = null;
+
 function showModal(title, body, onConfirm) {
   document.getElementById('modalTitle').textContent = title;
   document.getElementById('modalBody').innerHTML = body;
   document.getElementById('modalFooter').style.display = 'flex';
-  document.getElementById('modalConfirmBtn').onclick = () => { onConfirm(); closeModal(); };
+  _modalAction = onConfirm;
   document.getElementById('modalOverlay').classList.add('open');
 }
 
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function confirmModal() {
+  if (_modalAction) { _modalAction(); _modalAction = null; }
+  closeModal();
+}
+
+function closeModal() {
+  _modalAction = null;
+  document.getElementById('modalOverlay').classList.remove('open');
+}
 
 function showTab(tab, el) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
