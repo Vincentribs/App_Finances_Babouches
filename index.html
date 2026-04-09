@@ -703,6 +703,29 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   </div>
 </div>
 
+<!-- Savings balance adjust modal -->
+<div class="modal-overlay" id="savingsAdjustOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Ajuster le solde</div>
+      <button class="modal-close" onclick="closeSavingsAdjustModal()">✕</button>
+    </div>
+    <p class="text-sm" style="margin-bottom:14px;color:var(--ink-faint)">Correction manuelle du solde d'épargne. Un mouvement d'ajustement sera ajouté à l'historique.</p>
+    <div class="form-group">
+      <label>Nouveau solde (€)</label>
+      <input type="number" id="savAdjustAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal">
+    </div>
+    <div class="form-group">
+      <label>Note (optionnel)</label>
+      <input type="text" id="savAdjustNote" placeholder="Correction, erreur de saisie…" maxlength="80">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-secondary" onclick="closeSavingsAdjustModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="submitSavingsAdjust()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
 <!-- Credit account modal -->
 <div class="modal-overlay" id="creditAccountOverlay">
   <div class="modal">
@@ -1573,7 +1596,10 @@ function renderSavingsScreen() {
     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
       <div style="flex:1;min-width:0">
         <div class="cagnotte-label">Solde d'épargne</div>
-        <div class="cagnotte-value">${fmt(savings.balance)}</div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <div class="cagnotte-value">${fmt(savings.balance)}</div>
+          <button onclick="openSavingsAdjustModal()" title="Ajuster le solde" style="background:rgba(255,255,255,0.12);border:none;color:rgba(245,240,232,0.55);cursor:pointer;border-radius:6px;padding:3px 7px;font-size:0.72rem;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">✏️ ajuster</button>
+        </div>
         <div class="cagnotte-sub">${savings.history.length} mouvement(s)</div>
       </div>
       <div style="font-size:2.2rem;opacity:0.6;flex-shrink:0">💰</div>
@@ -1678,6 +1704,39 @@ function openSavingsGoalModal() {
 
 function closeSavingsGoalModal() {
   document.getElementById('savingsGoalOverlay').classList.remove('open');
+}
+
+// ---- ÉPARGNE — AJUSTEMENT MANUEL DU SOLDE ----
+function openSavingsAdjustModal() {
+  const savings = getSavings();
+  document.getElementById('savAdjustAmount').value = savings.balance || '';
+  document.getElementById('savAdjustNote').value = '';
+  document.getElementById('savingsAdjustOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('savAdjustAmount').focus(), 300);
+}
+
+function closeSavingsAdjustModal() {
+  document.getElementById('savingsAdjustOverlay').classList.remove('open');
+}
+
+function submitSavingsAdjust() {
+  const newBalance = parseFloat(document.getElementById('savAdjustAmount').value);
+  const note = document.getElementById('savAdjustNote').value.trim();
+  if (isNaN(newBalance) || newBalance < 0) { showToast('⚠ Montant invalide'); return; }
+  const savings = getSavings();
+  const diff = Math.round((newBalance - savings.balance) * 100) / 100;
+  if (Math.abs(diff) < 0.01) { closeSavingsAdjustModal(); return; }
+  const entry = {
+    id: Date.now() + Math.floor(Math.random() * 1000),
+    date: todayISO(),
+    amount: Math.abs(diff),
+    type: diff > 0 ? 'deposit' : 'withdraw',
+    source: 'adjustment',
+    note: note || `Ajustement manuel (${diff > 0 ? '+' : ''}${fmt(diff)})`
+  };
+  saveSavings({ ...savings, balance: newBalance, history: [...savings.history, entry] });
+  closeSavingsAdjustModal();
+  showToast(`✓ Solde ajusté à ${fmt(newBalance)}`);
 }
 
 // ---- ÉPARGNE — DÉPÔT ----
