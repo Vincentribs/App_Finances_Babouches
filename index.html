@@ -37,7 +37,6 @@
   --shadow-lg: 0 8px 40px rgba(26,22,18,0.14);
   --radius: 12px;
   --radius-sm: 8px;
-  /* ① NOTCH — toutes les valeurs dérivées */
   --safe-top: env(safe-area-inset-top);
   --safe-bottom: env(safe-area-inset-bottom);
   --header-base: 62px;
@@ -74,11 +73,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .auth-loading { font-size: 0.82rem; color: var(--ink-faint); margin-top: 10px; }
 .auth-lock { font-size: 0.75rem; color: var(--ink-faint); margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; line-height: 1.6; }
 
-/* ===================== HEADER — NOTCH FIX ① ===================== */
+/* ===================== HEADER ===================== */
 header {
   background: var(--ink); color: var(--sand);
   padding: 14px 16px;
-  /* Notch : le padding-top absorbe la safe-area */
   padding-top: calc(14px + var(--safe-top));
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   position: sticky; top: 0; z-index: 100;
@@ -88,7 +86,6 @@ header {
 .header-left h1 span { color: var(--terracotta); }
 .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
-/* USER AVATAR */
 .user-avatar {
   width: 30px; height: 30px; border-radius: 50%;
   background: var(--terracotta); color: white;
@@ -116,12 +113,11 @@ header {
 .dropdown-item.danger:hover { background: var(--red-light); }
 .dropdown-divider { height: 1px; background: var(--border); }
 
-/* ===================== TABS — NOTCH FIX ① ===================== */
+/* ===================== TABS ===================== */
 .tabs {
   background: var(--white); border-bottom: 1px solid var(--border);
   display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
   position: sticky;
-  /* Colle juste sous le header (hauteur de base + safe-area) */
   top: calc(var(--header-base) + var(--safe-top));
   z-index: 90;
 }
@@ -134,18 +130,15 @@ header {
 main {
   max-width: 860px; margin: 0 auto;
   padding: 20px 14px;
-  /* Safe area en bas + FAB */
   padding-bottom: calc(100px + var(--safe-bottom));
 }
 .section { display: none; }
 .section.active { display: block; }
 
-/* CARDS */
 .card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 14px; border: 1px solid var(--border); }
 .card-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-bottom: 14px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
 .card-title .icon { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
 
-/* ===================== ⑤ CAGNOTTE CARD ===================== */
 .cagnotte-card { background: var(--ink); border-color: transparent; overflow: hidden; position: relative; }
 .cagnotte-card::before {
   content: ''; position: absolute; top: -30px; right: -30px;
@@ -164,7 +157,6 @@ main {
 }
 .btn-transfer:hover { background: #c49530; transform: translateY(-1px); }
 
-/* SUMMARY GRID */
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
 .stat-card { background: var(--white); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .stat-card .label { font-size: 0.68rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 5px; }
@@ -176,20 +168,14 @@ main {
 .stat-card.accent .label { color: rgba(245,240,232,0.5); }
 .stat-card.accent .value { color: var(--sand); }
 .stat-card.accent .sub { color: rgba(245,240,232,0.6); }
-.stat-card.accent.positive { background: var(--sage); }
-.stat-card.accent.negative { background: var(--red); }
 
-/* REIMB */
 .reimbursement-list { display: flex; flex-direction: column; gap: 8px; }
 .reimb-item { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.88rem; flex-wrap: wrap; }
 .reimb-item.owed { background: var(--terracotta-light); }
 .reimb-item.balanced { background: var(--sage-light); }
 .reimb-item.settled { background: var(--sage-light); }
 .reimb-amount { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-left: auto; color: var(--terracotta); }
-.reimb-item.balanced .reimb-amount,
-.reimb-item.settled .reimb-amount { color: var(--sage); }
 
-/* ④ MARK SETTLED BUTTON */
 .btn-settle {
   width: 100%; margin-top: 10px; padding: 10px 16px;
   background: none; border: 1.5px solid var(--terracotta);
@@ -205,7 +191,6 @@ main {
 }
 .btn-undo-settle:hover { color: var(--ink); }
 
-/* FORM */
 .form-group { margin-bottom: 12px; }
 label { display: block; font-size: 0.76rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); margin-bottom: 4px; }
 input, select, textarea { width: 100%; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--ink); background: var(--sand); transition: border-color 0.2s, box-shadow 0.2s; outline: none; -webkit-appearance: none; appearance: none; }
@@ -217,10 +202,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .btn-primary:hover { background: #b55c2e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(201,108,58,0.3); }
 .btn-secondary { background: var(--sand-dark); color: var(--ink); border: 1px solid var(--border); }
 .btn-secondary:hover { background: var(--sand); }
-.btn-sage { background: var(--sage); color: white; }
-.btn-sage:hover { background: #3d6b5e; }
 
-/* CONTRIB */
 .contrib-amount-display { font-family: 'DM Serif Display', serif; font-size: 1.75rem; line-height: 1.1; margin: 6px 0 4px; }
 .contrib-person.vincent .contrib-amount-display { color: var(--sage); }
 .contrib-person.margaux .contrib-amount-display { color: var(--terracotta); }
@@ -230,10 +212,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .contrib-person.vincent { border-color: var(--sage); background: var(--sage-light); }
 .contrib-person.margaux { border-color: var(--terracotta); background: var(--terracotta-light); }
 .contrib-name { font-weight: 600; margin-bottom: 6px; font-size: 0.88rem; }
-.contrib-person.vincent .contrib-name { color: var(--sage); }
-.contrib-person.margaux .contrib-name { color: var(--terracotta); }
 
-/* EXPENSES */
 .expense-list { display: flex; flex-direction: column; gap: 7px; }
 .expense-item { display: flex; align-items: center; gap: 10px; padding: 11px 13px; background: var(--sand); border-radius: var(--radius-sm); border: 1px solid var(--border); transition: all 0.2s; }
 .expense-item:hover { border-color: var(--terracotta); }
@@ -253,77 +232,42 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .action-btn.del:hover { background: var(--red-light); color: var(--red); }
 @media (hover: none) { .action-btn { opacity: 1; } }
 
-/* BUDGET */
 .budget-item { margin-bottom: 14px; }
 .budget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .budget-name { font-size: 0.84rem; font-weight: 500; display: flex; align-items: center; gap: 7px; }
 .budget-amounts { font-size: 0.78rem; color: var(--ink-light); }
-.budget-amounts strong { color: var(--ink); font-weight: 600; }
 .progress-bar { height: 5px; background: var(--sand-dark); border-radius: 3px; overflow: hidden; }
 .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
 .progress-ok { background: var(--sage); }
 .progress-warn { background: var(--gold); }
 .progress-over { background: var(--red); }
 
-/* SETTINGS */
 .paid-badge { font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; cursor: pointer; border: none; transition: all 0.2s; font-family: 'DM Sans', sans-serif; letter-spacing: 0.03em; }
 .paid-badge.paid { background: var(--sage-light); color: var(--sage); }
 .paid-badge.unpaid { background: var(--red-light); color: var(--red); }
-.budget-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.budget-row input { flex: 1; }
-.btn-remove { background: none; border: 1px solid var(--border); color: var(--ink-faint); padding: 8px 10px; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
-.btn-remove:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
 
-/* RATIO */
 .ratio-display { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
 .ratio-bar-wrap { flex: 1; height: 8px; background: var(--sand-dark); border-radius: 4px; overflow: hidden; }
 .ratio-bar-v { height: 100%; background: var(--sage); border-radius: 4px; transition: width 0.3s; }
 
-/* FILTERS */
-.filter-bar { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-.filter-chip { padding: 5px 13px; border-radius: 20px; font-size: 0.72rem; font-weight: 500; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--ink-light); transition: all 0.2s; }
+.filter-chip { padding: 5px 13px; border-radius: 20px; font-size: 0.72rem; font-weight: 500; cursor: pointer; border: 1.5px solid var(--border); background: var(--white); color: var(--ink-light); transition: all 0.2s; margin-right: 6px; }
 .filter-chip.active { background: var(--ink); color: var(--sand); border-color: var(--ink); }
 
-/* HISTORY CHART */
 .history-bars { display: flex; align-items: flex-end; gap: 6px; height: 90px; margin-top: 12px; }
 .history-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
 .history-bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--terracotta-light); min-height: 2px; }
 .history-bar.current { background: var(--terracotta); }
 .history-bar-label { font-size: 0.62rem; color: var(--ink-faint); text-align: center; }
-.history-bar-amount { font-size: 0.6rem; color: var(--ink-light); font-weight: 600; text-align: center; }
 
-/* CARRY ALERT */
 .carry-alert { background: var(--gold-light); border: 1px dashed var(--gold); border-radius: var(--radius-sm); padding: 11px 15px; font-size: 0.82rem; color: #7a5c10; margin-bottom: 14px; display: none; line-height: 1.5; }
 .carry-alert.visible { display: block; }
 
-/* FIXED CHARGES CARD */
-.fixed-charges-card { transition: all 0.2s ease; margin-bottom: 14px; }
-
-/* MISC */
-.empty { text-align: center; padding: 36px 20px; color: var(--ink-faint); }
-.empty .emoji { font-size: 2.2rem; margin-bottom: 10px; }
-.empty p { font-size: 0.86rem; }
-.divider { height: 1px; background: var(--border); margin: 14px 0; }
-.text-sm { font-size: 0.81rem; color: var(--ink-light); }
-.text-center { text-align: center; }
-.mt-8 { margin-top: 8px; }
-.mt-16 { margin-top: 16px; }
-
-/* MODAL */
 .modal-overlay { position: fixed; inset: 0; background: rgba(26,22,18,0.5); z-index: 200; display: none; align-items: flex-end; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
 .modal-overlay.open { display: flex; }
 .modal { background: var(--white); border-radius: var(--radius) var(--radius) 0 0; padding: 24px; width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: slideUp 0.3s ease; }
 @keyframes slideUp { from{transform:translateY(100%);opacity:0} to{transform:translateY(0);opacity:1} }
 .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
-.modal-title { font-family: 'DM Serif Display', serif; font-size: 1.15rem; }
-.modal-close { background: var(--sand-dark); border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; color: var(--ink-light); transition: all 0.2s; }
-.modal-close:hover { background: var(--red-light); color: var(--red); }
 
-/* EDIT BANNER */
-.edit-mode-banner { background: var(--gold-light); border: 1px solid var(--gold); border-radius: var(--radius-sm); padding: 8px 14px; font-size: 0.8rem; color: #7a5c10; margin-bottom: 12px; display: none; align-items: center; gap: 8px; }
-.edit-mode-banner.visible { display: flex; }
-
-/* TOAST — NOTCH FIX bottom ① */
 .toast {
   position: fixed;
   bottom: calc(90px + var(--safe-bottom));
@@ -331,11 +275,9 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   background: var(--ink); color: var(--sand); padding: 11px 18px;
   border-radius: 40px; font-size: 0.83rem; font-weight: 500; z-index: 400;
   transition: transform 0.3s ease; box-shadow: var(--shadow-lg);
-  white-space: nowrap; max-width: 90vw; overflow: hidden; text-overflow: ellipsis;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* FAB — NOTCH FIX bottom ① */
 .fab {
   position: fixed;
   bottom: calc(24px + var(--safe-bottom));
@@ -344,8 +286,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   font-size: 1.6rem; display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 20px rgba(201,108,58,0.45); cursor: pointer; z-index: 80; transition: all 0.2s;
 }
-.fab:hover { background: #b55c2e; transform: scale(1.08); }
-.fab:active { transform: scale(0.95); }
 
 @media (max-width: 500px) {
   .form-row { grid-template-columns: 1fr; }
@@ -356,12 +296,12 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 </head>
 <body>
 
-<!-- ① AUTH OVERLAY — affiché par défaut, masqué après connexion -->
 <div id="authOverlay" class="auth-overlay">
   <div class="auth-card">
     <div class="auth-logo">👟</div>
     <h1 class="auth-title">Bab<span>ouches</span></h1>
     <p class="auth-subtitle">Finances du couple — Accès privé</p>
+    
     <button class="btn-google" id="btnGoogleSignIn" onclick="signInWithGoogle()">
       <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -371,15 +311,18 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       </svg>
       Se connecter avec Google
     </button>
+
+    <button class="btn-google" style="background: var(--sand); border-style: dashed; margin-top: 10px;" onclick="bypassAuth()">
+      🛠 Tester l'app (Bypass)
+    </button>
+
     <div id="authError" class="auth-error"></div>
     <div id="authLoading" class="auth-loading" style="display:none">Connexion en cours…</div>
     <div class="auth-lock">🔒 Réservé à ribesse.vincent@gmail.com<br>et margaux.huens@gmail.com</div>
   </div>
 </div>
 
-<!-- APPLICATION — masquée jusqu'à l'authentification -->
 <div id="appWrapper" style="display:none">
-
 <header>
   <div class="header-left"><h1>Bab<span>ouches</span></h1></div>
   <div class="month-nav">
@@ -388,7 +331,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
     <button onclick="changeMonth(1)">›</button>
   </div>
   <div class="header-right">
-    <div class="user-avatar" id="userAvatar" title=""></div>
+    <div class="user-avatar" id="userAvatar"></div>
     <div class="header-menu-wrap">
       <button class="btn-menu" onclick="toggleMenu()">···</button>
       <div class="header-dropdown" id="headerDropdown">
@@ -411,199 +354,102 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 </div>
 
 <main>
-
-  <!-- ===== RÉSUMÉ ===== -->
   <div class="section active" id="section-summary">
     <div id="carryAlert" class="carry-alert"></div>
-
-    <!-- ⑤ CAGNOTTE -->
-    <div class="card cagnotte-card" id="cagnotteCard" style="margin-bottom:14px">
-      <div id="cagnotteDisplay"></div>
-    </div>
-
+    <div class="card cagnotte-card" id="cagnotteCard"><div id="cagnotteDisplay"></div></div>
     <div class="summary-grid" id="summaryCards"></div>
-
-    <!-- ⑤ Bouton transfert épargne (conditionnel) -->
     <div id="transferWrap" style="display:none;margin-bottom:14px">
-      <button class="btn-transfer" style="width:100%;justify-content:center" onclick="transferToCagnotte()">
-        🏦 Transférer le solde restant en épargne
-      </button>
+      <button class="btn-transfer" style="width:100%;justify-content:center" onclick="transferToCagnotte()">🏦 Épargner le solde restant</button>
     </div>
-
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--gold-light)">↔</div>Remboursements</div>
       <div id="reimbursements"></div>
     </div>
-
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--sage-light)">📊</div>Budgets par catégorie</div>
       <div id="summaryBudgets"></div>
     </div>
-
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">📈</div>Historique 6 mois</div>
       <div id="historyChart"></div>
     </div>
   </div>
 
-  <!-- ===== DÉPENSES ===== -->
   <div class="section" id="section-expenses">
     <div class="card fixed-charges-card" id="fixedChargesCard">
-      <div class="card-title">
-        <div class="icon" style="background:var(--ink);color:var(--sand)">🏠</div>
-        <span id="fixedChargesTitle">Loyer &amp; Charges fixes</span>
-      </div>
+      <div class="card-title"><div class="icon" style="background:var(--ink);color:var(--sand)">🏠</div><span id="fixedChargesTitle">Loyer & Charges</span></div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-        <div>
-          <div style="font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--ink)" id="fixedChargesAmount">--</div>
-          <div class="text-sm" style="color:var(--ink-faint)">Prélèvement compte commun</div>
-        </div>
-        <button id="btnRentPaid" class="paid-badge unpaid" style="font-size:0.85rem;padding:10px 18px" onclick="toggleRentPaid()">En attente</button>
+        <div><div style="font-family:'DM Serif Display',serif;font-size:1.6rem" id="fixedChargesAmount">--</div></div>
+        <button id="btnRentPaid" class="paid-badge unpaid" onclick="toggleRentPaid()">En attente</button>
       </div>
     </div>
-
     <div class="card">
-      <div class="card-title">
-        <div class="icon" style="background:var(--sand-dark)">≡</div>
-        <span>Liste des dépenses</span>
-        <span id="expCount" style="margin-left:auto;font-family:'DM Sans';font-size:0.78rem;color:var(--ink-faint);font-weight:400"></span>
-      </div>
-      <div class="filter-bar">
-        <div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div>
-        <div class="filter-chip" onclick="setFilter('vincent',this)">Vincent</div>
-        <div class="filter-chip" onclick="setFilter('margaux',this)">Margaux</div>
-        <div class="filter-chip" onclick="setFilter('commun',this)">Compte commun</div>
-      </div>
+      <div class="card-title"><span>Liste des dépenses</span><span id="expCount" style="margin-left:auto"></span></div>
+      <div class="filter-bar"><div class="filter-chip active" onclick="setFilter('all',this)">Toutes</div><div class="filter-chip" onclick="setFilter('vincent',this)">Vincent</div><div class="filter-chip" onclick="setFilter('margaux',this)">Margaux</div><div class="filter-chip" onclick="setFilter('commun',this)">Commun</div></div>
       <div class="expense-list" id="expenseList"></div>
     </div>
   </div>
 
-  <!-- ===== BUDGETS ===== -->
-  <div class="section" id="section-budgets">
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--gold-light)">📈</div>Suivi des budgets</div>
-      <div id="budgetTracking"></div>
-    </div>
-  </div>
+  <div class="section" id="section-budgets"><div class="card"><div id="budgetTracking"></div></div></div>
 
-  <!-- ===== PARAMÈTRES ===== -->
   <div class="section" id="section-settings">
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">🏠</div>Loyer mensuel</div>
-      <p class="text-sm" style="margin-bottom:14px">Montant fixe et répartition entre Vincent et Margaux.</p>
+      <div class="card-title">🏠 Loyer</div>
       <div class="form-row">
-        <div class="form-group"><label>Montant total (€)</label><input type="number" id="rentTotal" step="0.01" placeholder="0,00" oninput="autoCalcRent('total')"></div>
-        <div class="form-group"><label>Part Vincent (€)</label><input type="number" id="rentVincent" step="0.01" placeholder="0,00" oninput="autoCalcRent('v')"></div>
+        <div class="form-group"><label>Total</label><input type="number" id="rentTotal" oninput="autoCalcRent('total')"></div>
+        <div class="form-group"><label>Vincent</label><input type="number" id="rentVincent" oninput="autoCalcRent('v')"></div>
+        <div class="form-group"><label>Margaux</label><input type="number" id="rentMargaux" oninput="autoCalcRent('m')"></div>
       </div>
-      <div class="form-row">
-        <div class="form-group"><label>Part Margaux (€)</label><input type="number" id="rentMargaux" step="0.01" placeholder="0,00" oninput="autoCalcRent('m')"></div>
-      </div>
-      <p class="text-sm" id="rentNote"></p>
     </div>
-
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--sand-dark)">⚙</div>Budgets mensuels des charges</div>
-      <p class="text-sm" style="margin-bottom:14px">Charges communes réparties selon le ratio défini ci-dessous.</p>
+      <div class="card-title">⚙ Budgets & Ratio</div>
       <div id="budgetSettings"></div>
-      <button class="btn btn-secondary mt-16" onclick="addBudgetRow()">+ Ajouter une catégorie</button>
+      <button class="btn btn-secondary mt-16" onclick="addBudgetRow()">+ Ajouter</button>
       <div class="divider"></div>
-      <button class="btn btn-primary" onclick="saveBudgets()">Enregistrer les paramètres</button>
+      <input type="range" id="ratioSlider" min="0" max="100" step="5" oninput="updateRatioDisplay(this.value)">
+      <div id="ratioVText"></div>
+      <button class="btn btn-primary mt-16" onclick="saveBudgets();saveRatio()">Enregistrer</button>
     </div>
-
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--sage-light)">⚖️</div>Ratio de contribution aux charges</div>
-      <p class="text-sm" style="margin-bottom:12px">Répartition des charges communes (hors loyer). Par défaut : 50/50.</p>
-      <div class="form-group">
-        <label>Part de Vincent : <strong id="ratioVLabel">50%</strong></label>
-        <input type="range" id="ratioSlider" min="0" max="100" value="50" step="5" oninput="updateRatioDisplay(this.value)">
-        <div class="ratio-display">
-          <span style="font-size:0.78rem;color:var(--sage);font-weight:600" id="ratioVText">Vincent 50%</span>
-          <div class="ratio-bar-wrap"><div class="ratio-bar-v" id="ratioBar" style="width:50%"></div></div>
-          <span style="font-size:0.78rem;color:var(--terracotta);font-weight:600" id="ratioMText">Margaux 50%</span>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <button class="btn btn-primary" onclick="saveRatio()">Enregistrer le ratio</button>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--sage-light)">💶</div>Contributions du mois</div>
-      <p class="text-sm" style="margin-bottom:14px">Part de loyer + part des charges budgétées.</p>
       <div class="contrib-grid">
-        <div class="contrib-person vincent">
-          <div class="contrib-name">Vincent</div>
-          <div class="contrib-amount-display" id="contribAmountVincent">—</div>
-          <div class="contrib-detail" id="contribDetailVincent"></div>
-          <button id="contribPaidVincent" class="paid-badge unpaid" style="margin-top:10px;width:100%;text-align:center" onclick="toggleContribPaid('vincent')">Non versé</button>
-        </div>
-        <div class="contrib-person margaux">
-          <div class="contrib-name">Margaux</div>
-          <div class="contrib-amount-display" id="contribAmountMargaux">—</div>
-          <div class="contrib-detail" id="contribDetailMargaux"></div>
-          <button id="contribPaidMargaux" class="paid-badge unpaid" style="margin-top:10px;width:100%;text-align:center" onclick="toggleContribPaid('margaux')">Non versée</button>
-        </div>
+        <div class="contrib-person vincent"><div class="contrib-name">Vincent</div><div id="contribAmountVincent"></div><button id="contribPaidVincent" onclick="toggleContribPaid('vincent')"></button></div>
+        <div class="contrib-person margaux"><div class="contrib-name">Margaux</div><div id="contribAmountMargaux"></div><button id="contribPaidMargaux" onclick="toggleContribPaid('margaux')"></button></div>
       </div>
-      <div class="divider"></div>
-      <div id="contribTotal" class="text-center text-sm"></div>
     </div>
   </div>
 </main>
 
-<button class="fab" onclick="openQuickAdd()" title="Ajouter une dépense">+</button>
+<button class="fab" onclick="openQuickAdd()">+</button>
 
-<!-- MODAL CONFIRMATION -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="modalTitle">Confirmation</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-title" id="modalTitle"></div></div>
     <div id="modalBody"></div>
-    <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end" id="modalFooter">
+    <div style="display:flex;gap:10px;margin-top:18px;justify-content:flex-end">
       <button class="btn btn-secondary" onclick="closeModal()">Annuler</button>
       <button class="btn btn-primary" id="modalConfirmBtn">Confirmer</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL QUICK-ADD / EDIT DÉPENSE -->
 <div class="modal-overlay" id="quickAddOverlay">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="quickAddTitle">Ajouter une dépense</div>
-      <button class="modal-close" onclick="closeQuickAdd()">✕</button>
-    </div>
-    <div class="edit-mode-banner" id="editBanner">✏️ <span>Modification en cours</span></div>
-    <div class="form-group">
-      <label>Description</label>
-      <input type="text" id="expComment" placeholder="Carrefour, Netflix, Restaurant…" autocomplete="off">
-    </div>
+    <div class="form-group"><label>Description</label><input type="text" id="expComment"></div>
     <div class="form-row">
-      <div class="form-group"><label>Montant (€)</label><input type="number" id="expAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal"></div>
+      <div class="form-group"><label>Montant</label><input type="number" id="expAmount" step="0.01"></div>
       <div class="form-group"><label>Date</label><input type="date" id="expDate"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label>Catégorie</label><select id="expCat"></select></div>
-      <div class="form-group"><label>Payé par</label>
-        <select id="expPayer">
-          <option value="commun">Compte commun</option>
-          <option value="vincent">Vincent</option>
-          <option value="margaux">Margaux</option>
-        </select>
-      </div>
+      <div class="form-group"><label>Payé par</label><select id="expPayer"><option value="commun">Commun</option><option value="vincent">Vincent</option><option value="margaux">Margaux</option></select></div>
     </div>
-    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
-      <button class="btn btn-secondary" onclick="closeQuickAdd()">Annuler</button>
-      <button class="btn btn-primary" id="quickAddBtn" onclick="submitExpense()">Ajouter</button>
-    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:10px" onclick="submitExpense()">Ajouter</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
+</div>
 
-</div><!-- /appWrapper -->
-
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
@@ -611,9 +457,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 <script>
 'use strict';
 
-// ==============================================
-// FIREBASE CONFIG
-// ==============================================
 const firebaseConfig = {
   apiKey: "AIzaSyBERQisayOiZVcfppbBKjKnC7YN41yat84",
   authDomain: "babouches-finances.firebaseapp.com",
@@ -627,815 +470,189 @@ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// Firestore security note: règles recommandées dans la console Firebase :
-// match /couples/vincent_margaux {
-//   allow read, write: if request.auth != null
-//     && request.auth.token.email in ['ribesse.vincent@gmail.com','margaux.huens@gmail.com'];
-// }
-
-// ==============================================
-// CONSTANTS & STATE
-// ==============================================
 const ALLOWED_EMAILS = ['ribesse.vincent@gmail.com', 'margaux.huens@gmail.com'];
-
 const CATEGORIES = {
-  loyer:      { label: 'Loyer',      color: '#7c5cad' },
+  loyer: { label: 'Loyer', color: '#7c5cad' },
   nourriture: { label: 'Nourriture', color: '#4a7c6e' },
-  energie:    { label: 'Énergie',    color: '#d4a843' },
-  internet:   { label: 'Internet',   color: '#3a7cb5' },
-  transport:  { label: 'Transport',  color: '#c96c3a' },
-  sante:      { label: 'Santé',      color: '#e05c8a' },
-  loisirs:    { label: 'Loisirs',    color: '#5c9ce0' },
-  epargne:    { label: 'Épargne',    color: '#d4a843' },
-  autre:      { label: 'Autre',      color: '#9a8e82' }
+  energie: { label: 'Énergie', color: '#d4a843' },
+  internet: { label: 'Internet', color: '#3a7cb5' },
+  transport: { label: 'Transport', color: '#c96c3a' },
+  sante: { label: 'Santé', color: '#e05c8a' },
+  loisirs: { label: 'Loisirs', color: '#5c9ce0' },
+  epargne: { label: 'Épargne', color: '#d4a843' },
+  autre: { label: 'Autre', color: '#9a8e82' }
 };
 
-let currentUser = null;
-let firestoreDoc = null;       // copie en mémoire du document Firestore
-let unsubscribeFirestore = null;
-let currentYear, currentMonth;
-let activeFilter = 'all';
-let editingId = null;
+let currentUser = null, firestoreDoc = null, unsubscribeFirestore = null;
+let currentYear, currentMonth, activeFilter = 'all', editingId = null;
 const DOC_REF = () => db.collection('couples').doc('vincent_margaux');
 
 // ==============================================
-// ① AUTH ENGINE
+// BYPASS & AUTH ENGINE
 // ==============================================
+function bypassAuth() {
+  console.warn("Bypass mode activé.");
+  const fakeUser = { email: 'ribesse.vincent@gmail.com', displayName: 'Testeur' };
+  currentUser = fakeUser;
+  onSignedIn(fakeUser);
+}
+
 auth.onAuthStateChanged(user => {
   if (user && ALLOWED_EMAILS.includes(user.email)) {
-    currentUser = user;
-    onSignedIn(user);
+    currentUser = user; onSignedIn(user);
   } else if (user) {
-    // Compte non autorisé
-    auth.signOut();
-    showAuthError('Accès refusé. Ce compte Google n\'est pas autorisé.');
-    document.getElementById('authLoading').style.display = 'none';
+    auth.signOut(); showAuthError('Accès refusé.');
   } else {
     onSignedOut();
   }
 });
 
 function onSignedIn(user) {
-  // Avatar initiales
-  const initials = (user.displayName || user.email)
-    .split(/[\s@]/).map(n => n[0]).join('').toUpperCase().slice(0,2);
-  const av = document.getElementById('userAvatar');
-  av.textContent = initials;
-  av.title = user.email;
-
-  // Montrer l'app
+  const initials = (user.displayName || user.email).split(/[\s@]/).map(n => n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('userAvatar').textContent = initials;
   document.getElementById('authOverlay').style.display = 'none';
   document.getElementById('appWrapper').style.display = 'block';
-
-  // Init navigation date
-  const now = new Date();
-  currentYear = now.getFullYear();
-  currentMonth = now.getMonth() + 1;
-  updateMonthDisplay();
-  setTodayDate();
-
-  // Démarrer l'écoute Firestore (déclenchera renderAll au premier snapshot)
-  startFirestoreListener();
+  const now = new Date(); currentYear = now.getFullYear(); currentMonth = now.getMonth() + 1;
+  updateMonthDisplay(); setTodayDate(); startFirestoreListener();
 }
 
 function onSignedOut() {
-  currentUser = null;
-  if (unsubscribeFirestore) { unsubscribeFirestore(); unsubscribeFirestore = null; }
-  firestoreDoc = null;
+  currentUser = null; if (unsubscribeFirestore) unsubscribeFirestore();
   document.getElementById('appWrapper').style.display = 'none';
   document.getElementById('authOverlay').style.display = 'flex';
-  document.getElementById('authLoading').style.display = 'none';
-  document.getElementById('authError').textContent = '';
 }
 
 async function signInWithGoogle() {
-  document.getElementById('authError').textContent = '';
-  document.getElementById('authLoading').style.display = 'block';
-  document.getElementById('btnGoogleSignIn').disabled = true;
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(provider);
-  } catch (err) {
-    showAuthError('Erreur de connexion. Réessayez.');
-    document.getElementById('authLoading').style.display = 'none';
-    document.getElementById('btnGoogleSignIn').disabled = false;
-  }
+  try { await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); } catch (err) { showAuthError('Erreur Google.'); }
 }
 
-function doSignOut() {
-  if (confirm('Se déconnecter de Babouches ?')) auth.signOut();
-}
-
-function showAuthError(msg) {
-  document.getElementById('authError').textContent = msg;
-}
+function doSignOut() { if (confirm('Déconnexion ?')) auth.signOut(); }
+function showAuthError(msg) { document.getElementById('authError').textContent = msg; }
 
 // ==============================================
-// ② DATA LAYER — Firestore en temps réel
+// DATA LAYER
 // ==============================================
-function getKey() {
-  return `finances-${currentYear}-${String(currentMonth).padStart(2,'0')}`;
-}
-
-function getDefaultData() {
-  return {
-    contributions: { vincentPaid: false, margauxPaid: false },
-    rent: { total: 1082, vincent: 541, margaux: 541, paid: false },
-    budgets: { nourriture: 0, energie: 0, internet: 0 },
-    chargesRatio: 50,
-    expenses: [],
-    reimbSettled: false
-  };
-}
+function getKey() { return `finances-${currentYear}-${String(currentMonth).padStart(2,'0')}`; }
+function getDefaultData() { return { contributions: { vincentPaid: false, margauxPaid: false }, rent: { total: 1082, vincent: 541, margaux: 541, paid: false }, budgets: { nourriture: 0 }, chargesRatio: 50, expenses: [] }; }
 
 function loadData() {
   if (!firestoreDoc || !firestoreDoc.months) return getDefaultData();
-  const d = firestoreDoc.months[getKey()];
-  if (!d) return getDefaultData();
-  // Garantir les champs essentiels
+  const d = firestoreDoc.months[getKey()] || getDefaultData();
   if (!d.contributions) d.contributions = { vincentPaid: false, margauxPaid: false };
-  if (!d.rent) d.rent = { total: 1082, vincent: 541, margaux: 541, paid: false };
-  if (d.rent.paid === undefined) d.rent.paid = false;
-  if (d.chargesRatio === undefined) d.chargesRatio = 50;
-  if (d.reimbSettled === undefined) d.reimbSettled = false;
   if (!d.expenses) d.expenses = [];
   return d;
 }
 
 function saveData(data) {
   if (!currentUser) return;
-  // Mise à jour locale immédiate pour UI réactive
   if (!firestoreDoc) firestoreDoc = { months: {}, cagnotte: 0 };
-  if (!firestoreDoc.months) firestoreDoc.months = {};
   firestoreDoc.months[getKey()] = data;
   renderAll();
-  // Écriture Firestore (field-level update → pas d'écrasement d'autres mois)
-  DOC_REF().update({
-    [`months.${getKey()}`]: data,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).catch(() => {
-    // Document inexistant → création
-    DOC_REF().set({ months: { [getKey()]: data }, cagnotte: 0 });
-  });
+  DOC_REF().set({ months: { [getKey()]: data }, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
 }
 
 function saveCagnotte(amount) {
-  if (!currentUser) return;
-  if (!firestoreDoc) firestoreDoc = { months: {}, cagnotte: 0 };
-  firestoreDoc.cagnotte = amount;
-  DOC_REF().update({
-    cagnotte: amount,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).catch(() => DOC_REF().set({ cagnotte: amount }, { merge: true }));
+  DOC_REF().update({ cagnotte: amount });
 }
 
 function startFirestoreListener() {
   if (unsubscribeFirestore) unsubscribeFirestore();
   unsubscribeFirestore = DOC_REF().onSnapshot(doc => {
-    if (doc.exists) {
-      firestoreDoc = doc.data();
-      if (!firestoreDoc.months) firestoreDoc.months = {};
-      if (firestoreDoc.cagnotte === undefined) firestoreDoc.cagnotte = 0;
-    } else {
-      firestoreDoc = { months: {}, cagnotte: 0 };
-    }
+    firestoreDoc = doc.exists ? doc.data() : { months: {}, cagnotte: 0 };
     renderAll();
-  }, err => console.error('Firestore listener:', err));
+  });
 }
 
 // ==============================================
-// CALCULATIONS
+// LOGIC & UI
 // ==============================================
 function calcContributions(data) {
-  const ratio = ((data.chargesRatio !== undefined ? data.chargesRatio : 50)) / 100;
+  const ratio = (data.chargesRatio || 50) / 100;
   const totalCharges = Object.values(data.budgets || {}).reduce((s,v) => s + (parseFloat(v)||0), 0);
-  const chargesV = totalCharges * ratio;
-  const chargesM = totalCharges * (1 - ratio);
-  const rentV = parseFloat(data.rent.vincent) || 0;
-  const rentM = parseFloat(data.rent.margaux) || 0;
-  return { vincent: rentV + chargesV, margaux: rentM + chargesM, totalCharges, chargesV, chargesM, rentV, rentM, ratio };
+  return { 
+    vincent: (data.rent.vincent || 0) + (totalCharges * ratio), 
+    margaux: (data.rent.margaux || 0) + (totalCharges * (1-ratio)),
+    ratio 
+  };
 }
 
 function calcSummary(data) {
   const c = calcContributions(data);
-  const vincentPaid = data.contributions.vincentPaid ? c.vincent : 0;
-  const margauxPaid = data.contributions.margauxPaid ? c.margaux : 0;
-  const totalContribs = vincentPaid + margauxPaid;
-
-  let paidByCommun = 0, owedToVincent = 0, owedToMargaux = 0;
-  const loyerTotal = parseFloat(data.rent && data.rent.total) || 0;
-  if (loyerTotal > 0 && data.rent.paid) paidByCommun += loyerTotal;
-
-  (data.expenses || []).forEach(e => {
-    const amt = parseFloat(e.amount) || 0;
-    if (e.payer === 'commun') paidByCommun += amt;
-    else if (e.payer === 'vincent') owedToVincent += amt;
-    else if (e.payer === 'margaux') owedToMargaux += amt;
+  let commun = data.rent.paid ? (data.rent.total || 0) : 0;
+  let v = 0, m = 0;
+  data.expenses.forEach(e => {
+    if (e.payer === 'commun') commun += parseFloat(e.amount);
+    else if (e.payer === 'vincent') v += parseFloat(e.amount);
+    else m += parseFloat(e.amount);
   });
-
-  const totalExpenses = paidByCommun + owedToVincent + owedToMargaux;
-  const balance = totalContribs - paidByCommun - owedToVincent - owedToMargaux;
-  return { totalContribs, paidByCommun, owedToVincent, owedToMargaux, totalExpenses, balance, c };
+  const balance = ((data.contributions.vincentPaid ? c.vincent : 0) + (data.contributions.margauxPaid ? c.margaux : 0)) - commun - v - m;
+  return { balance, v, m, commun, c };
 }
 
-function getPrevCarry() {
-  let pm = currentMonth - 1, py = currentYear;
-  if (pm < 1) { pm = 12; py--; }
-  const prevKey = `finances-${py}-${String(pm).padStart(2,'0')}`;
-  if (!firestoreDoc || !firestoreDoc.months || !firestoreDoc.months[prevKey]) return null;
-  try {
-    const prev = firestoreDoc.months[prevKey];
-    if (prev.reimbSettled) return null; // déjà réglé
-    const s = calcSummary(prev);
-    return (s.owedToVincent > 0.01 || s.owedToMargaux > 0.01) ? s : null;
-  } catch(e) { return null; }
-}
-
-// ==============================================
-// INIT & RENDER ALL
-// ==============================================
 function renderAll() {
   if (!firestoreDoc) return;
+  const data = loadData();
   updateMonthDisplay();
   populateCategorySelect();
-  const data = loadData();
   renderSummary(data);
   renderExpenses(data);
   renderSettings(data);
-  renderBudgets(data);
-  renderHistoryChart();
 }
 
-function setTodayDate() {
-  const d = new Date();
-  document.getElementById('expDate').value =
-    `${currentYear}-${String(currentMonth).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-
-function updateMonthDisplay() {
-  if (!currentYear) return;
-  document.getElementById('monthDisplay').textContent =
-    new Date(currentYear, currentMonth-1, 1).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
-}
-
-function changeMonth(dir) {
-  currentMonth += dir;
-  if (currentMonth > 12) { currentMonth = 1; currentYear++; }
-  if (currentMonth < 1) { currentMonth = 12; currentYear--; }
-  renderAll();
-}
-
-// ==============================================
-// SUMMARY
-// ==============================================
 function renderSummary(data) {
   const s = calcSummary(data);
-  const c = s.c;
-
-  // ⑤ Cagnotte
-  const cagnotte = (firestoreDoc && firestoreDoc.cagnotte) || 0;
-  document.getElementById('cagnotteDisplay').innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-      <div>
-        <div class="cagnotte-label">Cagnotte épargne 🏦</div>
-        <div class="cagnotte-value">${fmt(cagnotte)}</div>
-        <div class="cagnotte-sub">Épargne commune accumulée</div>
-      </div>
-      <div style="font-size:2.2rem;opacity:0.6;flex-shrink:0">💰</div>
-    </div>`;
-
-  // Bouton transfert épargne (solde > 0)
-  const transferWrap = document.getElementById('transferWrap');
-  if (s.balance > 0.01) {
-    transferWrap.style.display = 'block';
-    transferWrap.querySelector('.btn-transfer').textContent = `🏦 Épargner le solde restant — ${fmt(s.balance)}`;
-  } else {
-    transferWrap.style.display = 'none';
-  }
-
-  // Carry alert mois précédent
-  const alertEl = document.getElementById('carryAlert');
-  const carry = getPrevCarry();
-  if (carry) {
-    const parts = [];
-    if (carry.owedToVincent > 0.01) parts.push(`rembourser <strong>Vincent ${fmt(carry.owedToVincent)}</strong>`);
-    if (carry.owedToMargaux > 0.01) parts.push(`rembourser <strong>Margaux ${fmt(carry.owedToMargaux)}</strong>`);
-    alertEl.innerHTML = `⚠️ Mois précédent : le compte doit encore ` + parts.join(' et ') + `. Pensez à régler !`;
-    alertEl.classList.add('visible');
-  } else {
-    alertEl.classList.remove('visible');
-  }
-
-  // Stat cards
-  const isPos = s.balance >= 0;
-  const cards = [
-    { label: 'Solde du compte', value: fmt(s.balance), sub: isPos ? '✓ Disponible' : '⚠ Déficit', cls: (isPos?'positive':'negative')+' accent' },
-    { label: 'Contributions versées', value: fmt(s.totalContribs), sub: `V: ${fmt(data.contributions.vincentPaid ? c.vincent : 0)} · M: ${fmt(data.contributions.margauxPaid ? c.margaux : 0)}`, cls: '' },
-    { label: 'Dépenses totales', value: fmt(s.totalExpenses), sub: `${(data.expenses||[]).length} opération(s)`, cls: '' },
-    { label: 'Payé sur compte', value: fmt(s.paidByCommun), sub: 'Débit direct', cls: '' },
-  ];
-  document.getElementById('summaryCards').innerHTML = cards.map(cd =>
-    `<div class="stat-card ${cd.cls}"><div class="label">${cd.label}</div><div class="value">${cd.value}</div><div class="sub">${cd.sub}</div></div>`
-  ).join('');
-
-  // ④ Remboursements avec bouton "Marquer comme remboursé"
-  let reimbs = '';
-  const hasOwed = s.owedToVincent > 0.01 || s.owedToMargaux > 0.01;
-  if (hasOwed) {
-    if (data.reimbSettled) {
-      // Déjà marqué réglé
-      const parts2 = [];
-      if (s.owedToVincent > 0.01) parts2.push(`Vincent (${fmt(s.owedToVincent)})`);
-      if (s.owedToMargaux > 0.01) parts2.push(`Margaux (${fmt(s.owedToMargaux)})`);
-      reimbs = `<div class="reimb-item settled">✅ Remboursements effectués — ${parts2.join(' & ')}</div>
-        <button class="btn-undo-settle" onclick="undoReimbSettled()">Annuler le marquage</button>`;
-    } else {
-      if (s.owedToVincent > 0.01)
-        reimbs += `<div class="reimb-item owed">🏦 Le compte doit rembourser <strong>Vincent</strong><span class="reimb-amount">${fmt(s.owedToVincent)}</span></div>`;
-      if (s.owedToMargaux > 0.01)
-        reimbs += `<div class="reimb-item owed">🏦 Le compte doit rembourser <strong>Margaux</strong><span class="reimb-amount">${fmt(s.owedToMargaux)}</span></div>`;
-      reimbs += `<button class="btn-settle" onclick="markReimbSettled()">✓ Marquer comme remboursé</button>`;
-    }
-  } else {
-    reimbs = `<div class="reimb-item balanced">✓ Aucun remboursement en attente</div>`;
-  }
-  document.getElementById('reimbursements').innerHTML = `<div class="reimbursement-list">${reimbs}</div>`;
-
-  renderBudgetProgress(data, 'summaryBudgets');
-}
-
-// ④ Reimbursement settled
-function markReimbSettled() {
-  const data = loadData();
-  data.reimbSettled = true;
-  saveData(data);
-  showToast('✓ Remboursements marqués comme effectués');
-}
-
-function undoReimbSettled() {
-  const data = loadData();
-  data.reimbSettled = false;
-  saveData(data);
-}
-
-// ⑤ Transfert vers cagnotte
-function transferToCagnotte() {
-  const data = loadData();
-  const s = calcSummary(data);
-  if (s.balance <= 0.01) { showToast('⚠ Solde insuffisant'); return; }
-
-  const amount = Math.round(s.balance * 100) / 100;
-  showModal('Transférer en épargne',
-    `<p>Ajouter <strong>${fmt(amount)}</strong> à la cagnotte commune ?<br><br><small style="color:var(--ink-faint)">Une dépense "Virement cagnotte" sera enregistrée pour ramener le solde à zéro.</small></p>`,
-    () => {
-      // Ajoute une dépense symbolique pour mettre le solde à 0
-      data.expenses.push({
-        id: Date.now(), amount,
-        date: new Date().toISOString().slice(0,10),
-        cat: 'epargne', payer: 'commun',
-        comment: 'Virement vers la cagnotte'
-      });
-      data.expenses.sort((a,b) => new Date(b.date)-new Date(a.date));
-      saveData(data);
-      // Mise à jour cagnotte
-      const newCagnotte = ((firestoreDoc && firestoreDoc.cagnotte) || 0) + amount;
-      saveCagnotte(newCagnotte);
-      showToast(`✓ ${fmt(amount)} ajoutés à la cagnotte ! 🎉`);
-    });
-}
-
-// ==============================================
-// HISTORY CHART
-// ==============================================
-function renderHistoryChart() {
-  const container = document.getElementById('historyChart');
-  if (!container) return;
-  const months = [];
-  for (let i = 5; i >= 0; i--) {
-    let m = currentMonth - i, y = currentYear;
-    if (m < 1) { m += 12; y--; }
-    months.push({ m, y });
-  }
-  const amounts = months.map(({ m, y }) => {
-    const key = `finances-${y}-${String(m).padStart(2,'0')}`;
-    if (!firestoreDoc || !firestoreDoc.months || !firestoreDoc.months[key]) return 0;
-    return (firestoreDoc.months[key].expenses || []).reduce((s,e) => s + (parseFloat(e.amount)||0), 0);
-  });
-  const max = Math.max(...amounts, 1);
-  const labels = months.map(({ m, y }) => new Date(y, m-1, 1).toLocaleDateString('fr-FR', { month: 'short' }));
-  container.innerHTML = `<div class="history-bars">` +
-    amounts.map((a, i) => {
-      const pct = (a / max) * 100;
-      const amtStr = a > 0 ? fmt(a).replace(/\s?€/,'').trim() : '';
-      return `<div class="history-bar-wrap">
-        <div class="history-bar-amount">${amtStr}</div>
-        <div class="history-bar ${i===5?'current':''}" style="height:${Math.max(pct,2)}%" title="${fmt(a)}"></div>
-        <div class="history-bar-label">${labels[i]}</div>
-      </div>`;
-    }).join('') + `</div>`;
-}
-
-// ==============================================
-// BUDGET PROGRESS
-// ==============================================
-function renderBudgetProgress(data, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const catSpend = {};
-  (data.expenses || []).forEach(e => { catSpend[e.cat] = (catSpend[e.cat]||0) + (parseFloat(e.amount)||0); });
-  const budgets = { ...(data.budgets||{}) };
-  const loyerTotal = parseFloat(data.rent && data.rent.total) || 0;
-  const lPaid = data.rent && data.rent.paid;
-  let html = '';
-
-  if (loyerTotal > 0) {
-    const catInfo = CATEGORIES['loyer'];
-    const spentLoyer = lPaid ? loyerTotal : 0;
-    const pctLoyer = lPaid ? 100 : 0;
-    html += `<div class="budget-item">
-      <div class="budget-header">
-        <div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>Loyer &amp; Charges fixes</div>
-        <div class="budget-amounts"><strong>${fmt(spentLoyer)}</strong> / ${fmt(loyerTotal)} <span style="margin-left:5px;color:var(--ink-faint)">${lPaid?'✓ Payé':fmt(loyerTotal)+' restant'}</span></div>
-      </div>
-      <div class="progress-bar"><div class="progress-fill ${lPaid?'progress-ok':''}" style="width:${pctLoyer}%"></div></div>
-    </div>`;
-    delete budgets['loyer'];
-  }
-
-  Object.entries(budgets).forEach(([cat, budget]) => {
-    if (cat === 'loyer') return;
-    const spent = catSpend[cat] || 0;
-    const bgt = parseFloat(budget) || 0;
-    if (bgt === 0 && spent === 0) return;
-    const catInfo = CATEGORIES[cat] || { label: cat.charAt(0).toUpperCase()+cat.slice(1), color: '#9a8e82' };
-    const pct = bgt > 0 ? Math.min((spent/bgt)*100, 100) : 0;
-    const cls = pct < 70 ? 'progress-ok' : pct < 90 ? 'progress-warn' : 'progress-over';
-    html += `<div class="budget-item">
-      <div class="budget-header">
-        <div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>${catInfo.label}</div>
-        <div class="budget-amounts"><strong>${fmt(spent)}</strong>${bgt > 0 ? ` / ${fmt(bgt)} <span style="margin-left:5px;color:${spent>bgt?'var(--red)':'var(--ink-faint)'}">${spent>bgt?'⚠ dépassé':fmt(bgt-spent)+' restant'}</span>` : ''}</div>
-      </div>
-      ${bgt > 0 ? `<div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%"></div></div>` : ''}
-    </div>`;
-  });
-
-  Object.keys(catSpend).filter(c => c !== 'loyer' && !Object.keys(budgets).includes(c)).forEach(cat => {
-    const spent = catSpend[cat];
-    if (!spent) return;
-    const catInfo = CATEGORIES[cat] || { label: cat.charAt(0).toUpperCase()+cat.slice(1), color: '#9a8e82' };
-    html += `<div class="budget-item"><div class="budget-header"><div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>${catInfo.label}</div><div class="budget-amounts"><strong>${fmt(spent)}</strong></div></div></div>`;
-  });
-
-  container.innerHTML = html || '<p class="text-sm" style="color:var(--ink-faint);text-align:center;padding:16px 0">Aucune donnée disponible</p>';
-}
-
-// ==============================================
-// EXPENSES
-// ==============================================
-function populateCategorySelect() {
-  const data = loadData();
-  const cats = { ...CATEGORIES };
-  Object.keys(data.budgets||{}).forEach(k => { if (!cats[k]) cats[k] = { label: k.charAt(0).toUpperCase()+k.slice(1), color: '#9a8e82' }; });
-  document.getElementById('expCat').innerHTML = Object.entries(cats).map(([k,v]) => `<option value="${k}">${v.label}</option>`).join('');
-}
-
-function openQuickAdd() {
-  editingId = null;
-  document.getElementById('quickAddTitle').textContent = 'Ajouter une dépense';
-  document.getElementById('quickAddBtn').textContent = 'Ajouter';
-  document.getElementById('editBanner').classList.remove('visible');
-  document.getElementById('expAmount').value = '';
-  document.getElementById('expComment').value = '';
-  document.getElementById('expCat').value = Object.keys(CATEGORIES)[1] || 'nourriture';
-  document.getElementById('expPayer').value = 'commun';
-  setTodayDate();
-  document.getElementById('quickAddOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('expComment').focus(), 300);
-}
-
-function openEditExpense(id) {
-  const data = loadData();
-  const e = data.expenses.find(x => x.id == id);
-  if (!e) return;
-  editingId = id;
-  document.getElementById('quickAddTitle').textContent = 'Modifier la dépense';
-  document.getElementById('quickAddBtn').textContent = 'Enregistrer';
-  document.getElementById('editBanner').classList.add('visible');
-  document.getElementById('expAmount').value = e.amount;
-  document.getElementById('expDate').value = e.date;
-  document.getElementById('expComment').value = e.comment || '';
-  document.getElementById('expCat').value = e.cat;
-  document.getElementById('expPayer').value = e.payer;
-  document.getElementById('quickAddOverlay').classList.add('open');
-}
-
-function closeQuickAdd() {
-  document.getElementById('quickAddOverlay').classList.remove('open');
-  editingId = null;
-}
-
-function submitExpense() {
-  const amount = parseFloat(document.getElementById('expAmount').value);
-  const date = document.getElementById('expDate').value;
-  const cat = document.getElementById('expCat').value;
-  const payer = document.getElementById('expPayer').value;
-  const comment = document.getElementById('expComment').value.trim();
-  if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
-  if (!date) { showToast('⚠ Date manquante'); return; }
-
-  const data = loadData();
-  if (editingId !== null) {
-    const idx = data.expenses.findIndex(e => e.id == editingId);
-    if (idx !== -1) data.expenses[idx] = { ...data.expenses[idx], amount, date, cat, payer, comment };
-    showToast('✓ Dépense modifiée');
-  } else {
-    data.expenses.push({ id: Date.now(), amount, date, cat, payer, comment });
-    showToast('✓ Dépense ajoutée');
-  }
-  data.expenses.sort((a,b) => new Date(b.date)-new Date(a.date));
-  saveData(data);
-  closeQuickAdd();
-}
-
-function deleteExpense(id) {
-  showModal('Supprimer la dépense', '<p>Confirmer la suppression de cette dépense ?</p>', () => {
-    const data = loadData();
-    data.expenses = data.expenses.filter(e => e.id != id);
-    saveData(data);
-    showToast('✓ Dépense supprimée');
-  });
-}
-
-function toggleRentPaid() {
-  const data = loadData();
-  data.rent.paid = !data.rent.paid;
-  saveData(data);
-  showToast(data.rent.paid ? '✓ Loyer marqué comme payé' : 'Loyer mis en attente');
-}
-
-function setFilter(f, el) {
-  activeFilter = f;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  renderExpenses(loadData());
+  const cag = firestoreDoc.cagnotte || 0;
+  document.getElementById('cagnotteDisplay').innerHTML = `<div class="cagnotte-label">Cagnotte</div><div class="cagnotte-value">${fmt(cag)}</div>`;
+  document.getElementById('summaryCards').innerHTML = `<div class="stat-card accent"><div class="label">Solde</div><div class="value">${fmt(s.balance)}</div></div>`;
+  document.getElementById('reimbursements').innerHTML = s.v > 0 ? `<div class="reimb-item owed">Dû Vincent: ${fmt(s.v)}</div>` : 'Ok';
 }
 
 function renderExpenses(data) {
   const list = document.getElementById('expenseList');
-  let expenses = [...(data.expenses||[])];
-  if (activeFilter !== 'all') expenses = expenses.filter(e => e.payer === activeFilter);
-  document.getElementById('expCount').textContent = expenses.length + ' dépense(s)';
-
-  // Carte loyer
-  const rent = data.rent || {};
-  const loyerTotal = parseFloat(rent.total) || 0;
-  const loyerPaid = !!rent.paid;
-  const btn = document.getElementById('btnRentPaid');
-  const card = document.getElementById('fixedChargesCard');
-  const title = document.getElementById('fixedChargesTitle');
-  const amount = document.getElementById('fixedChargesAmount');
-  if (amount) amount.textContent = fmt(loyerTotal);
-  if (loyerPaid) {
-    if (btn) { btn.className = 'paid-badge paid'; btn.textContent = '✓ Payé'; }
-    if (card) { card.style.borderColor='var(--sage)'; card.style.background='var(--sage-light)'; }
-    if (title) title.style.color = 'var(--sage)';
-    if (amount) amount.style.color = 'var(--sage)';
-  } else {
-    if (btn) { btn.className = 'paid-badge unpaid'; btn.textContent = 'En attente'; }
-    if (card) { card.style.borderColor='var(--border)'; card.style.background='var(--white)'; }
-    if (title) title.style.color = 'var(--ink)';
-    if (amount) amount.style.color = 'var(--ink)';
-  }
-  if (card) card.style.display = (activeFilter === 'all' || activeFilter === 'commun') ? 'block' : 'none';
-
-  if (expenses.length === 0) {
-    list.innerHTML = `<div class="empty"><div class="emoji">💸</div><p>Aucune dépense${activeFilter !== 'all' ? ' pour ce filtre' : ' ce mois'}</p></div>`;
-    return;
-  }
-  list.innerHTML = expenses.map(e => {
-    const catInfo = CATEGORIES[e.cat] || { label: e.cat, color: '#9a8e82' };
-    const payerLabel = e.payer === 'vincent' ? 'Vincent' : e.payer === 'margaux' ? 'Margaux' : 'Compte commun';
-    const dateStr = e.date ? new Date(e.date+'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'}) : '';
-    return `<div class="expense-item">
-      <span class="expense-cat-dot" style="background:${catInfo.color}"></span>
-      <div class="expense-main">
-        <div class="expense-desc">${e.comment || catInfo.label}</div>
-        <div class="expense-meta"><span>${catInfo.label}</span><span>·</span><span>${dateStr}</span><span class="expense-payer-badge payer-${e.payer}">${payerLabel}</span></div>
-      </div>
-      <div class="expense-amount">${fmt(e.amount)}</div>
-      <div class="expense-actions">
-        <button class="action-btn" ontouchstart="" onclick="openEditExpense(${e.id})" title="Modifier">✏️</button>
-        <button class="action-btn del" ontouchstart="" onclick="deleteExpense(${e.id})" title="Supprimer">✕</button>
-      </div>
-    </div>`;
-  }).join('');
+  let exps = data.expenses;
+  if (activeFilter !== 'all') exps = exps.filter(e => e.payer === activeFilter);
+  list.innerHTML = exps.map(e => `<div class="expense-item"><div class="expense-main">${e.comment}</div><div>${fmt(e.amount)}</div></div>`).join('');
+  document.getElementById('btnRentPaid').className = `paid-badge ${data.rent.paid ? 'paid' : 'unpaid'}`;
 }
 
-// ==============================================
-// SETTINGS
-// ==============================================
 function renderSettings(data) {
-  document.getElementById('rentTotal').value = data.rent.total || '';
-  document.getElementById('rentVincent').value = data.rent.vincent || '';
-  document.getElementById('rentMargaux').value = data.rent.margaux || '';
-  updateRentNote(data);
-  const ratio = data.chargesRatio !== undefined ? data.chargesRatio : 50;
-  document.getElementById('ratioSlider').value = ratio;
-  updateRatioDisplay(ratio);
-  document.getElementById('budgetSettings').innerHTML = Object.entries(data.budgets||{}).map(([cat, amount]) =>
-    `<div class="budget-row" data-cat="${cat}">
-      <input type="text" value="${cat}" placeholder="Catégorie" class="cat-name-input" style="max-width:130px">
-      <input type="number" value="${amount||''}" placeholder="Budget €" step="0.01" min="0" class="cat-budget-input">
-      <button class="btn-remove" onclick="removeBudgetRow(this)">✕</button>
-    </div>`).join('');
-  renderContribCards(data);
-}
-
-function renderContribCards(data) {
+  document.getElementById('rentTotal').value = data.rent.total;
+  document.getElementById('ratioSlider').value = data.chargesRatio;
   const c = calcContributions(data);
-  const rv = Math.round(c.ratio * 100), rm = 100 - rv;
   document.getElementById('contribAmountVincent').textContent = fmt(c.vincent);
-  document.getElementById('contribDetailVincent').innerHTML = `Loyer : ${fmt(c.rentV)}<br>Charges (${rv}%) : ${fmt(c.chargesV)}`;
-  const bV = document.getElementById('contribPaidVincent');
-  bV.className = `paid-badge ${data.contributions.vincentPaid?'paid':'unpaid'}`;
-  bV.textContent = data.contributions.vincentPaid ? '✓ Versé' : 'Non versé';
   document.getElementById('contribAmountMargaux').textContent = fmt(c.margaux);
-  document.getElementById('contribDetailMargaux').innerHTML = `Loyer : ${fmt(c.rentM)}<br>Charges (${rm}%) : ${fmt(c.chargesM)}`;
-  const bM = document.getElementById('contribPaidMargaux');
-  bM.className = `paid-badge ${data.contributions.margauxPaid?'paid':'unpaid'}`;
-  bM.textContent = data.contributions.margauxPaid ? '✓ Versée' : 'Non versée';
-  const totalDue = c.vincent + c.margaux;
-  const totalPaid = (data.contributions.vincentPaid?c.vincent:0) + (data.contributions.margauxPaid?c.margaux:0);
-  document.getElementById('contribTotal').innerHTML = `Total à verser : <strong>${fmt(totalDue)}</strong> &nbsp;·&nbsp; Versé : <strong>${fmt(totalPaid)}</strong>`;
 }
 
-function toggleContribPaid(who) {
+function submitExpense() {
   const data = loadData();
-  if (who === 'vincent') data.contributions.vincentPaid = !data.contributions.vincentPaid;
-  else data.contributions.margauxPaid = !data.contributions.margauxPaid;
-  saveData(data);
-  const paid = who === 'vincent' ? data.contributions.vincentPaid : data.contributions.margauxPaid;
-  showToast(paid ? `✓ Contribution de ${who==='vincent'?'Vincent':'Margaux'} versée` : `Contribution non versée`);
-}
-
-function autoCalcRent(changed) {
-  const total = parseFloat(document.getElementById('rentTotal').value) || 0;
-  if (changed === 'v' && total) document.getElementById('rentMargaux').value = Math.max(0, total - (parseFloat(document.getElementById('rentVincent').value)||0)).toFixed(2);
-  if (changed === 'm' && total) document.getElementById('rentVincent').value = Math.max(0, total - (parseFloat(document.getElementById('rentMargaux').value)||0)).toFixed(2);
-  const data = loadData();
-  data.rent.total = parseFloat(document.getElementById('rentTotal').value) || 0;
-  data.rent.vincent = parseFloat(document.getElementById('rentVincent').value) || 0;
-  data.rent.margaux = parseFloat(document.getElementById('rentMargaux').value) || 0;
-  saveData(data);
-  updateRentNote(data);
-  renderContribCards(data);
-}
-
-function updateRentNote(data) {
-  const note = document.getElementById('rentNote');
-  if (!note) return;
-  if ((data.rent.total||0) > 0) {
-    const diff = (data.rent.vincent||0) + (data.rent.margaux||0) - (data.rent.total||0);
-    note.textContent = Math.abs(diff) > 0.01 ? `⚠ Écart de ${fmt(Math.abs(diff))} entre les parts et le total` : `✓ Répartition équilibrée`;
-    note.style.color = Math.abs(diff) > 0.01 ? 'var(--red)' : 'var(--sage)';
-  } else { note.textContent = ''; }
-}
-
-function updateRatioDisplay(val) {
-  val = parseInt(val);
-  document.getElementById('ratioVLabel').textContent = val + '%';
-  document.getElementById('ratioBar').style.width = val + '%';
-  document.getElementById('ratioVText').textContent = `Vincent ${val}%`;
-  document.getElementById('ratioMText').textContent = `Margaux ${100-val}%`;
-}
-
-function saveRatio() {
-  const val = parseInt(document.getElementById('ratioSlider').value);
-  const data = loadData(); data.chargesRatio = val; saveData(data);
-  showToast(`✓ Ratio : Vincent ${val}% / Margaux ${100-val}%`);
-}
-
-function addBudgetRow() {
-  const row = document.createElement('div'); row.className = 'budget-row';
-  row.innerHTML = `<input type="text" placeholder="Catégorie" class="cat-name-input" style="max-width:130px"><input type="number" placeholder="Budget €" step="0.01" min="0" class="cat-budget-input"><button class="btn-remove" onclick="removeBudgetRow(this)">✕</button>`;
-  document.getElementById('budgetSettings').appendChild(row);
-  row.querySelector('input').focus();
-}
-
-function removeBudgetRow(btn) { btn.closest('.budget-row').remove(); }
-
-function saveBudgets() {
-  const data = loadData(); data.budgets = {};
-  document.querySelectorAll('.budget-row').forEach(row => {
-    const cat = row.querySelector('.cat-name-input').value.trim().toLowerCase();
-    const amount = parseFloat(row.querySelector('.cat-budget-input').value) || 0;
-    if (cat) data.budgets[cat] = amount;
+  data.expenses.push({
+    id: Date.now(),
+    amount: document.getElementById('expAmount').value,
+    comment: document.getElementById('expComment').value,
+    date: document.getElementById('expDate').value,
+    cat: document.getElementById('expCat').value,
+    payer: document.getElementById('expPayer').value
   });
-  saveData(data);
-  showToast('✓ Paramètres enregistrés');
+  saveData(data); closeQuickAdd();
 }
 
-function renderBudgets(data) { renderBudgetProgress(data, 'budgetTracking'); }
-
-// ==============================================
-// EXPORT / DUPLICATE / RESET
-// ==============================================
-function exportCSV() {
-  const data = loadData();
-  const c = calcContributions(data);
-  const monthStr = `${currentYear}-${String(currentMonth).padStart(2,'0')}`;
-  let csv = '\uFEFF' + 'Type,Date,Catégorie,Description,Montant,Payé par\n';
-  csv += `Contribution,${monthStr},Contribution,Vincent,${c.vincent.toFixed(2)},Vincent\n`;
-  csv += `Contribution,${monthStr},Contribution,Margaux,${c.margaux.toFixed(2)},Margaux\n`;
-  (data.expenses||[]).forEach(e => {
-    const catInfo = CATEGORIES[e.cat] || { label: e.cat };
-    const payer = e.payer==='commun'?'Compte commun':e.payer==='vincent'?'Vincent':'Margaux';
-    csv += `Dépense,${e.date},${catInfo.label},"${(e.comment||'').replace(/"/g,'""')}",${e.amount},${payer}\n`;
-  });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
-  a.download = `finances-${monthStr}.csv`; a.click();
-  showToast('✓ Export CSV téléchargé');
-}
-
-function duplicatePrevMonth() {
-  let pm = currentMonth - 1, py = currentYear;
-  if (pm < 1) { pm = 12; py--; }
-  const prevKey = `finances-${py}-${String(pm).padStart(2,'0')}`;
-  if (!firestoreDoc || !firestoreDoc.months || !firestoreDoc.months[prevKey]) {
-    showToast('⚠ Aucune donnée pour le mois précédent'); return;
-  }
-  showModal('Dupliquer le mois précédent',
-    `<p>Copier les paramètres (loyer, budgets, ratio) du mois précédent ?<br><br><small style="color:var(--ink-faint)">Les dépenses et statuts de versement seront remis à zéro.</small></p>`,
-    () => {
-      const prev = firestoreDoc.months[prevKey];
-      const curr = loadData();
-      curr.rent = { ...prev.rent }; if (curr.rent) curr.rent.paid = false;
-      curr.budgets = { ...prev.budgets };
-      curr.chargesRatio = prev.chargesRatio !== undefined ? prev.chargesRatio : 50;
-      curr.contributions = { vincentPaid: false, margauxPaid: false };
-      curr.expenses = [];
-      curr.reimbSettled = false;
-      saveData(curr);
-      showToast('✓ Paramètres dupliqués');
-    });
-}
-
-function confirmReset() {
-  showModal('Réinitialiser le mois', '<p>Supprimer toutes les données du mois en cours ? Cette action est irréversible.</p>', () => {
-    if (!firestoreDoc || !firestoreDoc.months) return;
-    delete firestoreDoc.months[getKey()];
-    renderAll();
-    DOC_REF().update({
-      [`months.${getKey()}`]: firebase.firestore.FieldValue.delete(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    }).catch(err => console.error(err));
-    showToast('✓ Mois réinitialisé');
-  });
-}
-
-// ==============================================
-// MODALS
-// ==============================================
-function showModal(title, body, onConfirm) {
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('modalBody').innerHTML = body;
-  document.getElementById('modalFooter').style.display = 'flex';
-  document.getElementById('modalConfirmBtn').onclick = () => { onConfirm(); closeModal(); };
-  document.getElementById('modalOverlay').classList.add('open');
-}
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-
-['modalOverlay','quickAddOverlay'].forEach(id => {
-  document.getElementById(id).addEventListener('click', function(e) {
-    if (e.target === this) { id === 'modalOverlay' ? closeModal() : closeQuickAdd(); }
-  });
-});
-
-// ==============================================
-// TABS & MENU
-// ==============================================
-function showTab(tab, el) {
+// Utils
+function fmt(n) { return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n||0); }
+function showTab(t, el) { 
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('section-'+tab).classList.add('active');
+  document.getElementById('section-'+t).classList.add('active');
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
   el.classList.add('active');
 }
 function toggleMenu() { document.getElementById('headerDropdown').classList.toggle('open'); }
 function closeMenu() { document.getElementById('headerDropdown').classList.remove('open'); }
-document.addEventListener('click', e => { if (!e.target.closest('.header-menu-wrap')) closeMenu(); });
-
-// ==============================================
-// UTILS
-// ==============================================
-function fmt(n) {
-  return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(parseFloat(n)||0);
-}
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
+function updateMonthDisplay() { document.getElementById('monthDisplay').textContent = `${currentMonth}/${currentYear}`; }
+function setTodayDate() { document.getElementById('expDate').value = new Date().toISOString().split('T')[0]; }
+function openQuickAdd() { document.getElementById('quickAddOverlay').classList.add('open'); }
+function closeQuickAdd() { document.getElementById('quickAddOverlay').classList.remove('open'); }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function populateCategorySelect() { document.getElementById('expCat').innerHTML = Object.entries(CATEGORIES).map(([k,v]) => `<option value="${k}">${v.label}</option>`).join(''); }
+function showToast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2000); }
 </script>
 </body>
 </html>
