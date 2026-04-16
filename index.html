@@ -719,9 +719,12 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       <label>Note (optionnel)</label>
       <input type="text" id="savAdjustNote" placeholder="Correction, erreur de saisie…" maxlength="80">
     </div>
-    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
-      <button class="btn btn-secondary" onclick="closeSavingsAdjustModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="submitSavingsAdjust()">Enregistrer</button>
+    <div style="display:flex;gap:10px;margin-top:16px;align-items:center;justify-content:space-between">
+      <button class="btn" style="background:var(--red-light);color:var(--red);font-size:0.8rem;padding:9px 14px" onclick="resetSavingsToZero()">🗑 Remettre à zéro</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-secondary" onclick="closeSavingsAdjustModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="submitSavingsAdjust()">Enregistrer</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1719,6 +1722,27 @@ function closeSavingsAdjustModal() {
   document.getElementById('savingsAdjustOverlay').classList.remove('open');
 }
 
+function resetSavingsToZero() {
+  closeSavingsAdjustModal();
+  showModal('Remettre à zéro',
+    '<p>Remettre le solde d\'épargne à <strong>0 €</strong> ?<br><br><small style="color:var(--ink-faint)">L\'historique et l\'objectif sont conservés.</small></p>',
+    () => {
+      const savings = getSavings();
+      const entry = {
+        id: Date.now() + Math.floor(Math.random() * 1000),
+        date: todayISO(),
+        amount: savings.balance,
+        type: 'withdraw',
+        source: 'adjustment',
+        note: 'Remise à zéro manuelle'
+      };
+      const newHistory = savings.balance > 0 ? [...savings.history, entry] : savings.history;
+      saveSavings({ ...savings, balance: 0, history: newHistory });
+      showToast('✓ Solde remis à zéro');
+    }
+  );
+}
+
 function submitSavingsAdjust() {
   const newBalance = parseFloat(document.getElementById('savAdjustAmount').value);
   const note = document.getElementById('savAdjustNote').value.trim();
@@ -2230,7 +2254,7 @@ function closeMenu() { document.getElementById('headerDropdown').classList.remov
 // ============================================================
 document.addEventListener('click', e => { if (!e.target.closest('.header-menu-wrap')) closeMenu(); });
 
-['modalOverlay', 'quickAddOverlay', 'savingsMovementOverlay', 'savingsGoalOverlay', 'savingsDepositOverlay', 'creditAccountOverlay'].forEach(id => {
+['modalOverlay', 'quickAddOverlay', 'savingsMovementOverlay', 'savingsGoalOverlay', 'savingsDepositOverlay', 'creditAccountOverlay', 'savingsAdjustOverlay'].forEach(id => {
   const el = document.getElementById(id);
   if (!el) return;
   el.addEventListener('click', function(e) {
@@ -2241,6 +2265,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.header-menu-wr
       else if (id === 'savingsGoalOverlay') closeSavingsGoalModal();
       else if (id === 'savingsDepositOverlay') closeSavingsDepositModal();
       else if (id === 'creditAccountOverlay') closeCreditModal();
+      else if (id === 'savingsAdjustOverlay') closeSavingsAdjustModal();
     }
   });
 });
@@ -2254,6 +2279,7 @@ document.addEventListener('keydown', e => {
     closeSavingsGoalModal();
     closeSavingsDepositModal();
     closeCreditModal();
+    closeSavingsAdjustModal();
   }
 });
 
