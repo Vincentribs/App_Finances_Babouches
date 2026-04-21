@@ -22,7 +22,7 @@
    3. Header & tabs
    4. Main layout
    5. Cards & components
-   6. Savings (épargne)
+   6. Budget progress bars
    7. Forms & buttons
    8. Modals, toasts, FAB
    9. Responsive
@@ -83,7 +83,8 @@ header { background: var(--ink); color: var(--sand); padding: 14px 16px; padding
 .user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--terracotta); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.02em; border: 1.5px solid rgba(255,255,255,0.15); cursor: default; }
 
 .month-nav { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.08); border-radius: 40px; padding: 5px 5px 5px 12px; }
-.month-nav span { font-size: 0.76rem; font-weight: 500; min-width: 90px; text-align: center; letter-spacing: 0.04em; text-transform: uppercase; }
+.month-nav span { font-size: 0.76rem; font-weight: 500; min-width: 90px; text-align: center; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; border-radius: 20px; padding: 3px 8px; transition: background 0.2s, color 0.2s; }
+.month-nav span:hover { background: rgba(255,255,255,0.14); color: var(--gold); }
 .month-nav button { background: rgba(255,255,255,0.12); border: none; color: var(--sand); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; flex-shrink: 0; }
 .month-nav button:hover { background: var(--terracotta); }
 
@@ -115,69 +116,6 @@ main { max-width: 860px; margin: 0 auto; padding: 20px 14px; padding-bottom: cal
 .card-title { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin-bottom: 14px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
 .card-title .icon { width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
 
-/* ===== 6. SAVINGS (ÉPARGNE) ===== */
-.cagnotte-card { background: var(--ink); border-color: transparent; overflow: hidden; position: relative; }
-.cagnotte-card::before { content: ''; position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; border-radius: 50%; background: var(--terracotta); opacity: 0.12; }
-.cagnotte-label { font-size: 0.68rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: rgba(245,240,232,0.45); margin-bottom: 4px; }
-.cagnotte-value { font-family: 'DM Serif Display', serif; font-size: 2.1rem; color: var(--sand); line-height: 1; margin-bottom: 4px; }
-.cagnotte-sub { font-size: 0.73rem; color: rgba(245,240,232,0.4); }
-
-.savings-goal-bar { margin-top: 14px; position: relative; z-index: 1; }
-.savings-goal-label { font-size: 0.72rem; color: rgba(245,240,232,0.6); margin-bottom: 6px; display: flex; justify-content: space-between; }
-.savings-goal-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
-.savings-goal-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--terracotta)); border-radius: 4px; transition: width 0.5s ease; }
-.savings-goal-pct { font-size: 0.7rem; color: var(--gold); margin-top: 4px; text-align: right; }
-
-.savings-actions { display: flex; gap: 8px; margin-top: 14px; position: relative; z-index: 1; flex-wrap: wrap; }
-.btn-transfer { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border: none; border-radius: 40px; background: var(--gold); color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-.btn-transfer:hover { background: #c49530; transform: translateY(-1px); }
-.btn-savings-action { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.2); border-radius: 40px; background: rgba(255,255,255,0.06); color: var(--sand); font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-.btn-savings-action:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
-
-.savings-history-item { display: flex; align-items: center; gap: 10px; padding: 10px 13px; background: var(--sand); border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 6px; }
-.savings-history-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem; }
-.savings-history-icon.deposit { background: var(--sage-light); color: var(--sage); }
-.savings-history-icon.withdraw { background: var(--red-light); color: var(--red); }
-.savings-history-main { flex: 1; min-width: 0; }
-.savings-history-note { font-weight: 500; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.savings-history-date { font-size: 0.7rem; color: var(--ink-faint); }
-.savings-history-amount { font-family: 'DM Serif Display', serif; font-size: 1.05rem; white-space: nowrap; }
-.savings-history-amount.deposit { color: var(--sage); }
-.savings-history-amount.withdraw { color: var(--red); }
-.savings-history-delete { background: none; border: none; color: var(--ink-faint); cursor: pointer; padding: 8px 10px; font-size: 0.9rem; border-radius: 6px; transition: all 0.2s; min-width: 36px; min-height: 36px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.savings-history-delete:hover { background: var(--red-light); color: var(--red); }
-
-.savings-chart-wrap { position: relative; height: 220px; margin-top: 12px; }
-
-/* SUMMARY GRID */
-.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
-.stat-card { background: var(--white); border-radius: var(--radius); padding: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-.stat-card .label { font-size: 0.68rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 5px; }
-.stat-card .value { font-family: 'DM Serif Display', serif; font-size: 1.65rem; line-height: 1; color: var(--ink); margin-bottom: 3px; }
-.stat-card .sub { font-size: 0.72rem; color: var(--ink-light); }
-.stat-card.positive .value { color: var(--sage); }
-.stat-card.negative .value { color: var(--red); }
-.stat-card.accent { background: var(--ink); }
-.stat-card.accent .label { color: rgba(245,240,232,0.5); }
-.stat-card.accent .value { color: var(--sand); }
-.stat-card.accent .sub { color: rgba(245,240,232,0.6); }
-.stat-card.accent.positive { background: var(--sage); }
-.stat-card.accent.negative { background: var(--red); }
-
-/* REIMBURSEMENTS */
-.reimbursement-list { display: flex; flex-direction: column; gap: 8px; }
-.reimb-item { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 0.88rem; flex-wrap: wrap; }
-.reimb-item.owed { background: var(--terracotta-light); }
-.reimb-item.balanced { background: var(--sage-light); }
-.reimb-item.settled { background: var(--sage-light); }
-.reimb-amount { font-family: 'DM Serif Display', serif; font-size: 1.25rem; margin-left: auto; color: var(--terracotta); }
-.reimb-item.balanced .reimb-amount,
-.reimb-item.settled .reimb-amount { color: var(--sage); }
-
-.btn-settle { width: 100%; margin-top: 10px; padding: 10px 16px; background: none; border: 1.5px solid var(--terracotta); border-radius: 40px; color: var(--terracotta); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.02em; }
-.btn-settle:hover { background: var(--terracotta); color: white; }
-.btn-undo-settle { background: none; border: none; font-size: 0.75rem; color: var(--ink-faint); cursor: pointer; text-decoration: underline; margin-top: 6px; display: block; font-family: 'DM Sans', sans-serif; padding: 4px; }
-.btn-undo-settle:hover { color: var(--ink); }
 
 /* ===== 7. FORMS & BUTTONS ===== */
 .form-group { margin-bottom: 12px; }
@@ -228,16 +166,22 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 @media (hover: none) { .action-btn { opacity: 1; } }
 
 /* BUDGET */
-.budget-item { margin-bottom: 14px; }
-.budget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-.budget-name { font-size: 0.84rem; font-weight: 500; display: flex; align-items: center; gap: 7px; }
-.budget-amounts { font-size: 0.78rem; color: var(--ink-light); }
-.budget-amounts strong { color: var(--ink); font-weight: 600; }
-.progress-bar { height: 5px; background: var(--sand-dark); border-radius: 3px; overflow: hidden; }
-.progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-.progress-ok { background: var(--sage); }
-.progress-warn { background: var(--gold); }
-.progress-over { background: var(--red); }
+.budget-item { margin-bottom: 20px; }
+.budget-item:last-child { margin-bottom: 0; }
+.budget-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; gap: 8px; }
+.budget-name { font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--ink); }
+.budget-cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.budget-amounts { font-size: 0.78rem; color: var(--ink-faint); text-align: right; white-space: nowrap; }
+.budget-amounts strong { color: var(--ink); font-weight: 700; font-size: 0.9rem; }
+.budget-reste { display: block; font-size: 0.72rem; font-weight: 600; margin-top: 1px; }
+.budget-reste.ok { color: var(--sage); }
+.budget-reste.warn { color: var(--gold); }
+.budget-reste.over { color: var(--red); }
+.progress-bar { height: 12px; background: var(--sand-dark); border-radius: 8px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s cubic-bezier(.4,0,.2,1); }
+.progress-ok { background: linear-gradient(90deg, var(--sage) 0%, #5d9e8e 100%); }
+.progress-warn { background: linear-gradient(90deg, var(--gold) 0%, #e8bc5a 100%); }
+.progress-over { background: linear-gradient(90deg, var(--red) 0%, #e05a52 100%); }
 
 /* SETTINGS */
 .paid-badge { font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; cursor: pointer; border: none; transition: all 0.2s; font-family: 'DM Sans', sans-serif; letter-spacing: 0.03em; }
@@ -266,9 +210,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .history-bar-label { font-size: 0.62rem; color: var(--ink-faint); text-align: center; }
 .history-bar-amount { font-size: 0.6rem; color: var(--ink-light); font-weight: 600; text-align: center; }
 
-/* CARRY ALERT */
-.carry-alert { background: var(--gold-light); border: 1px dashed var(--gold); border-radius: var(--radius-sm); padding: 11px 15px; font-size: 0.82rem; color: #7a5c10; margin-bottom: 14px; display: none; line-height: 1.5; }
-.carry-alert.visible { display: block; }
 
 .fixed-charges-card { transition: all 0.2s ease; margin-bottom: 14px; }
 
@@ -312,17 +253,10 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .fab-action-btn { width: 44px; height: 44px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; box-shadow: 0 3px 12px rgba(0,0,0,0.2); transition: all 0.2s; flex-shrink: 0; }
 .fab-action-btn:hover { transform: scale(1.1); }
 .fab-action-btn.act-expense { background: var(--white); color: var(--ink); border: 1px solid var(--border); }
-.fab-action-btn.act-savings { background: var(--gold); color: var(--ink); }
-.fab-action-btn.act-credit { background: var(--sage); color: white; }
 .fab { width: 56px; height: 56px; border-radius: 50%; background: var(--terracotta); color: white; border: none; font-size: 1.6rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(201,108,58,0.45); cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
 .fab:hover { background: #b55c2e; }
 .fab:active { transform: scale(0.95); }
 .fab.open { background: #b55c2e; transform: rotate(45deg); }
-/* SOURCE SELECTOR */
-.source-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
-.source-btn { padding: 8px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: var(--sand); color: var(--ink-light); transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
-.source-btn.active { background: var(--ink); color: var(--sand); border-color: var(--ink); }
-.source-btn:hover:not(.active) { border-color: var(--terracotta); color: var(--ink); }
 
 /* ===== 9. RESPONSIVE ===== */
 @media (max-width: 500px) {
@@ -330,6 +264,30 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   .contrib-grid { grid-template-columns: 1fr; }
   .summary-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ===== 10. SUMMARY DONUT ===== */
+.donut-canvas-wrap { position: relative; height: 220px; margin-bottom: 6px; }
+.donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+.donut-center-value { font-family: 'DM Serif Display', serif; font-size: 1.7rem; color: var(--ink); line-height: 1.1; }
+.donut-center-label { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-faint); margin-top: 3px; }
+.donut-center-sub { font-size: 0.78rem; font-weight: 600; margin-top: 3px; }
+
+.donut-empty { display: none; flex-direction: column; align-items: center; padding: 30px 20px; color: var(--ink-faint); gap: 8px; text-align: center; }
+.donut-empty.visible { display: flex; }
+.donut-empty .emoji { font-size: 2.2rem; }
+
+/* ===== 11. MONTH PICKER ===== */
+.mpicker-year-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.mpicker-year-btn { background: var(--sand-dark); border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.mpicker-year-btn:hover { background: var(--terracotta); color: white; }
+.mpicker-year-display { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: var(--ink); }
+.mpicker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mpicker-btn { background: var(--sand); border: 1.5px solid var(--border); color: var(--ink); padding: 12px 4px; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500; transition: all 0.2s; text-align: center; }
+.mpicker-btn:hover { border-color: var(--terracotta); color: var(--terracotta); background: var(--terracotta-light); }
+.mpicker-btn.active { background: var(--terracotta); border-color: var(--terracotta); color: white; font-weight: 700; }
+.mpicker-btn.today-marker { border-color: var(--gold); }
+.mpicker-btn.has-data:not(.active) { border-color: var(--sage); background: var(--sage-light); }
+
 </style>
 </head>
 <body>
@@ -364,7 +322,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   <div class="header-left"><h1>Bab<span>ouches</span></h1></div>
   <div class="month-nav">
     <button onclick="changeMonth(-1)" aria-label="Mois précédent">‹</button>
-    <span id="monthDisplay"></span>
+    <span id="monthDisplay" onclick="openMonthPicker()" title="Choisir un mois"></span>
     <button onclick="changeMonth(1)" aria-label="Mois suivant">›</button>
   </div>
   <div class="header-right">
@@ -387,7 +345,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   <div class="tab active" onclick="showTab('summary',this)">Résumé</div>
   <div class="tab" onclick="showTab('expenses',this)">Dépenses</div>
   <div class="tab" onclick="showTab('budgets',this)">Budgets</div>
-  <div class="tab" onclick="showTab('savings',this)">Épargne</div>
   <div class="tab" onclick="showTab('settings',this)">Paramètres</div>
 </div>
 
@@ -395,37 +352,35 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 
   <!-- ========== SUMMARY ========== -->
   <div class="section active" id="section-summary">
-    <div id="carryAlert" class="carry-alert"></div>
 
-    <div class="summary-grid" id="summaryCards"></div>
-
-    <div id="transferWrap" style="display:none;margin-bottom:14px">
-      <button class="btn-transfer" style="width:100%;justify-content:center" onclick="transferToCagnotte()">
-        🏦 Transférer le solde restant en épargne
-      </button>
+    <!-- Grand graphique Budget vs Dépensé -->
+    <div class="card" id="summaryDonutCard">
+      <div class="donut-canvas-wrap">
+        <canvas id="summaryDonut"></canvas>
+        <div id="donutCenter" class="donut-center" style="display:none">
+          <div id="donutCenterSub" class="donut-center-sub"></div>
+          <div id="donutCenterValue" class="donut-center-value"></div>
+          <div id="donutCenterLabel" class="donut-center-label"></div>
+        </div>
+      </div>
+      <div id="donutEmpty" class="donut-empty">
+        <div class="emoji">🎯</div>
+        <p style="font-size:0.86rem">Configurez vos budgets dans Paramètres</p>
+      </div>
     </div>
+
+    <!-- Budgets par catégorie -->
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--sage-light)">📊</div>Budgets par catégorie</div>
+      <div class="card-title"><div class="icon" style="background:var(--sage-light)">📊</div>Détail par catégorie</div>
       <div id="summaryBudgets"></div>
     </div>
 
+    <!-- Historique 6 mois -->
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">📈</div>Historique 6 mois</div>
       <div id="historyChart"></div>
     </div>
 
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--gold-light)">↔</div>Remboursements</div>
-      <div id="reimbursements"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <div class="icon" style="background:var(--sage-light)">↑</div>
-        Fonds ajoutés au compte
-      </div>
-      <div id="summaryCredits"></div>
-    </div>
   </div>
 
   <!-- ========== EXPENSES ========== -->
@@ -465,37 +420,6 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
     <div class="card">
       <div class="card-title"><div class="icon" style="background:var(--gold-light)">📈</div>Suivi des budgets</div>
       <div id="budgetTracking"></div>
-    </div>
-  </div>
-
-  <!-- ========== SAVINGS ========== -->
-  <div class="section" id="section-savings">
-    <div class="card cagnotte-card">
-      <div id="savingsMainDisplay"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--gold-light)">🎯</div>Objectif d'épargne</div>
-      <div id="savingsGoalEditor"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:var(--terracotta-light)">📈</div>Évolution de l'épargne</div>
-      <div class="savings-chart-wrap">
-        <canvas id="savingsChart"></canvas>
-      </div>
-      <div id="savingsChartEmpty" style="display:none" class="empty">
-        <div class="emoji">📊</div>
-        <p>Aucun mouvement pour le moment</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <div class="icon" style="background:var(--sage-light)">↕</div>
-        Mouvements
-      </div>
-      <div id="savingsHistoryList"></div>
     </div>
   </div>
 
@@ -562,23 +486,8 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   </div>
 </main>
 
-<div class="fab-backdrop" id="fabBackdrop" onclick="closeFabMenu()"></div>
 <div class="fab-container">
-  <div class="fab-actions" id="fabActions">
-    <div class="fab-action-item">
-      <span class="fab-action-label">Dépense</span>
-      <button class="fab-action-btn act-expense" onclick="closeFabMenu();openQuickAdd()">💳</button>
-    </div>
-    <div class="fab-action-item">
-      <span class="fab-action-label">Épargner</span>
-      <button class="fab-action-btn act-savings" onclick="closeFabMenu();openSavingsDepositModal()">💰</button>
-    </div>
-    <div class="fab-action-item">
-      <span class="fab-action-label">Ajouter au compte</span>
-      <button class="fab-action-btn act-credit" onclick="closeFabMenu();openCreditModal()">➕</button>
-    </div>
-  </div>
-  <button class="fab" id="fabMain" onclick="toggleFabMenu()" title="Actions">+</button>
+  <button class="fab" id="fabMain" onclick="openQuickAdd()" title="Ajouter une dépense">+</button>
 </div>
 
 <!-- ========== MODALS ========== -->
@@ -628,126 +537,19 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   </div>
 </div>
 
-<!-- Savings withdrawal modal -->
-<div class="modal-overlay" id="savingsMovementOverlay">
-  <div class="modal">
+<!-- Month picker modal -->
+<div class="modal-overlay" id="monthPickerOverlay">
+  <div class="modal" style="border-radius:var(--radius);max-width:320px">
     <div class="modal-header">
-      <div class="modal-title">Retrait d'épargne</div>
-      <button class="modal-close" onclick="closeSavingsMovementModal()">✕</button>
+      <div class="modal-title">Choisir un mois</div>
+      <button class="modal-close" onclick="closeMonthPicker()">✕</button>
     </div>
-    <p class="text-sm" style="margin-bottom:14px;color:var(--sage);background:var(--sage-light);padding:9px 13px;border-radius:var(--radius-sm)">↑ Le montant retiré est automatiquement crédité au compte commun.</p>
-    <div class="form-row">
-      <div class="form-group"><label>Montant (€)</label><input type="number" id="savMovAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal"></div>
-      <div class="form-group"><label>Date</label><input type="date" id="savMovDate"></div>
+    <div class="mpicker-year-nav">
+      <button class="mpicker-year-btn" onclick="changePickerYear(-1)">‹</button>
+      <span class="mpicker-year-display" id="pickerYearDisplay"></span>
+      <button class="mpicker-year-btn" onclick="changePickerYear(1)">›</button>
     </div>
-    <div class="form-group">
-      <label>Note (optionnel)</label>
-      <input type="text" id="savMovNote" placeholder="Retrait vacances, urgence…" maxlength="80">
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
-      <button class="btn btn-secondary" onclick="closeSavingsMovementModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="submitSavingsWithdraw()">Retirer</button>
-    </div>
-  </div>
-</div>
-
-<!-- Savings deposit modal -->
-<div class="modal-overlay" id="savingsDepositOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Épargner</div>
-      <button class="modal-close" onclick="closeSavingsDepositModal()">✕</button>
-    </div>
-    <div class="form-group">
-      <label>Source des fonds</label>
-      <div class="source-selector">
-        <button class="source-btn active" id="srcCommun" onclick="setSavSource('commun')">🏦 Compte commun</button>
-        <button class="source-btn" id="srcVincent" onclick="setSavSource('vincent')">👤 Vincent</button>
-        <button class="source-btn" id="srcMargaux" onclick="setSavSource('margaux')">👤 Margaux</button>
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Montant (€)</label><input type="number" id="savDepAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal"></div>
-      <div class="form-group"><label>Date</label><input type="date" id="savDepDate"></div>
-    </div>
-    <div class="form-group">
-      <label>Note (optionnel)</label>
-      <input type="text" id="savDepNote" placeholder="Versement mensuel, projet vacances…" maxlength="80">
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
-      <button class="btn btn-secondary" onclick="closeSavingsDepositModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="submitSavingsDeposit()">Épargner</button>
-    </div>
-  </div>
-</div>
-
-<!-- Savings goal modal -->
-<div class="modal-overlay" id="savingsGoalOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Objectif d'épargne</div>
-      <button class="modal-close" onclick="closeSavingsGoalModal()">✕</button>
-    </div>
-    <div class="form-group">
-      <label>Libellé</label>
-      <input type="text" id="savGoalLabel" placeholder="Vacances 2026, Travaux…" maxlength="60">
-    </div>
-    <div class="form-group">
-      <label>Montant objectif (€)</label>
-      <input type="number" id="savGoalAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal">
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
-      <button class="btn btn-secondary" onclick="closeSavingsGoalModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="submitSavingsGoal()">Enregistrer</button>
-    </div>
-  </div>
-</div>
-
-<!-- Savings balance adjust modal -->
-<div class="modal-overlay" id="savingsAdjustOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Ajuster le solde</div>
-      <button class="modal-close" onclick="closeSavingsAdjustModal()">✕</button>
-    </div>
-    <p class="text-sm" style="margin-bottom:14px;color:var(--ink-faint)">Correction manuelle du solde d'épargne. Un mouvement d'ajustement sera ajouté à l'historique.</p>
-    <div class="form-group">
-      <label>Nouveau solde (€)</label>
-      <input type="number" id="savAdjustAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal">
-    </div>
-    <div class="form-group">
-      <label>Note (optionnel)</label>
-      <input type="text" id="savAdjustNote" placeholder="Correction, erreur de saisie…" maxlength="80">
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px;align-items:center;justify-content:space-between">
-      <button class="btn" style="background:var(--red-light);color:var(--red);font-size:0.8rem;padding:9px 14px" onclick="resetSavingsToZero()">🗑 Remettre à zéro</button>
-      <div style="display:flex;gap:10px">
-        <button class="btn btn-secondary" onclick="closeSavingsAdjustModal()">Annuler</button>
-        <button class="btn btn-primary" onclick="submitSavingsAdjust()">Enregistrer</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Credit account modal -->
-<div class="modal-overlay" id="creditAccountOverlay">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">Ajouter des fonds au compte</div>
-      <button class="modal-close" onclick="closeCreditModal()">✕</button>
-    </div>
-    <div class="form-row">
-      <div class="form-group"><label>Montant (€)</label><input type="number" id="creditAmount" step="0.01" min="0" placeholder="0,00" inputmode="decimal"></div>
-      <div class="form-group"><label>Date</label><input type="date" id="creditDate"></div>
-    </div>
-    <div class="form-group">
-      <label>Note (optionnel)</label>
-      <input type="text" id="creditNote" placeholder="Remboursement, virement extérieur…" maxlength="80">
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">
-      <button class="btn btn-secondary" onclick="closeCreditModal()">Annuler</button>
-      <button class="btn btn-sage" onclick="submitCredit()">Ajouter</button>
-    </div>
+    <div class="mpicker-grid" id="pickerMonthGrid"></div>
   </div>
 </div>
 
@@ -772,7 +574,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
    4.  AUTH
    5.  DATA (Firestore + debounce + migration)
    6.  CALC (contributions, summary)
-   7.  SAVINGS (épargne, objectif, historique)
+   7.  CHARTS (Chart.js)
    8.  CHARTS (Chart.js)
    9.  RENDER (dispatcher + screens)
    10. EXPENSES (CRUD + filter)
@@ -830,9 +632,9 @@ let unsubscribeFirestore = null;
 let currentYear, currentMonth;
 let activeFilter = 'all';
 let editingId = null;
-let savingsChartInstance = null;  // instance Chart.js pour pouvoir la détruire
+let summaryDonutInstance = null;  // instance Chart.js du donut Résumé
 let isBypassMode = false;
-let currentSavSource = 'commun';  // source sélectionnée dans la modal dépôt épargne
+let pickerYear = null;            // année affichée dans le sélecteur de mois
 
 const DOC_REF = () => db.collection('couples').doc('vincent_margaux');
 
@@ -952,12 +754,10 @@ async function signInWithGoogle() {
 
 function bypassAuth() {
   if (!DEV_MODE) { showAuthError('Bypass désactivé en production'); return; }
-  console.warn("Bypass de l'authentification activé pour le test.");
   isBypassMode = true;
   const fakeUser = { email: 'ribesse.vincent@gmail.com', displayName: 'Testeur Vincent' };
   currentUser = fakeUser;
-  // Init in-memory doc for full offline testing
-  firestoreDoc = { months: {}, savings: { balance: 0, goal: 0, goalLabel: '', history: [] } };
+  firestoreDoc = { months: {} };
   onSignedIn(fakeUser);
   renderAll();
 }
@@ -980,14 +780,8 @@ function getDefaultData() {
     rent: { total: DEFAULT_RENT_TOTAL, vincent: DEFAULT_RENT_PART, margaux: DEFAULT_RENT_PART, paid: false },
     budgets: { nourriture: 0, energie: 0, internet: 0 },
     chargesRatio: DEFAULT_RATIO,
-    expenses: [],
-    credits: [],
-    reimbSettled: false
+    expenses: []
   };
-}
-
-function getDefaultSavings() {
-  return { balance: 0, goal: 0, goalLabel: '', history: [] };
 }
 
 function applyGlobalSettings(data) {
@@ -1005,13 +799,11 @@ function loadData() {
   if (!firestoreDoc || !firestoreDoc.months) return applyGlobalSettings(getDefaultData());
   const d = firestoreDoc.months[getKey()];
   if (!d) return applyGlobalSettings(getDefaultData());
-  // Defaults pour champs manquants (lecture seule — pas de persist)
   const safe = { ...getDefaultData(), ...d };
   safe.contributions = { ...getDefaultData().contributions, ...(d.contributions || {}) };
   safe.rent = { ...getDefaultData().rent, ...(d.rent || {}) };
   safe.budgets = { ...(d.budgets || {}) };
   safe.expenses = Array.isArray(d.expenses) ? d.expenses : [];
-  safe.credits = Array.isArray(d.credits) ? d.credits : [];
   return safe;
 }
 
@@ -1033,7 +825,7 @@ const _flushSaves = debounce(() => {
 
 function saveData(data) {
   if (!currentUser) return;
-  if (!firestoreDoc) firestoreDoc = { months: {}, savings: getDefaultSavings() };
+  if (!firestoreDoc) firestoreDoc = { months: {} };
   if (!firestoreDoc.months) firestoreDoc.months = {};
   const key = getKey();
   firestoreDoc.months[key] = data;
@@ -1053,57 +845,15 @@ const _flushGlobalSettings = debounce(() => {
 
 function saveGlobalSettings(patch) {
   if (!currentUser) return;
-  if (!firestoreDoc) firestoreDoc = { months: {}, savings: getDefaultSavings() };
+  if (!firestoreDoc) firestoreDoc = { months: {} };
   firestoreDoc.settings = { ...(firestoreDoc.settings || {}), ...patch };
   _flushGlobalSettings();
-}
-
-function saveSavings(savings) {
-  if (!currentUser) return;
-  if (!firestoreDoc) firestoreDoc = { months: {}, savings: getDefaultSavings() };
-  firestoreDoc.savings = savings;
-  renderAll();
-  if (isBypassMode) return;
-  DOC_REF().update({
-    savings,
-    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }).catch(() => DOC_REF().set({ savings }, { merge: true })
-    .catch(err => console.error('Savings save failed:', err)));
 }
 
 function startFirestoreListener() {
   if (unsubscribeFirestore) unsubscribeFirestore();
   unsubscribeFirestore = DOC_REF().onSnapshot(doc => {
-    if (doc.exists) {
-      firestoreDoc = doc.data();
-      if (!firestoreDoc.months) firestoreDoc.months = {};
-
-      // ===== MIGRATION : cagnotte → savings =====
-      if (firestoreDoc.cagnotte !== undefined && !firestoreDoc.savings) {
-        const initialBalance = parseFloat(firestoreDoc.cagnotte) || 0;
-        firestoreDoc.savings = {
-          balance: initialBalance,
-          goal: 0,
-          goalLabel: '',
-          history: initialBalance > 0 ? [{
-            id: Date.now(),
-            date: todayISO(),
-            amount: initialBalance,
-            type: 'deposit',
-            source: 'migration',
-            note: 'Solde initial migré'
-          }] : []
-        };
-        // Persist migration
-        DOC_REF().update({
-          savings: firestoreDoc.savings,
-          cagnotte: firebase.firestore.FieldValue.delete()
-        }).catch(err => console.warn('Migration partielle:', err));
-      }
-      if (!firestoreDoc.savings) firestoreDoc.savings = getDefaultSavings();
-    } else {
-      firestoreDoc = { months: {}, savings: getDefaultSavings() };
-    }
+    firestoreDoc = doc.exists ? { ...doc.data(), months: doc.data().months || {} } : { months: {} };
     renderAll();
   }, err => console.error('Firestore listener:', err));
 }
@@ -1123,196 +873,80 @@ function calcContributions(data) {
 
 function calcSummary(data) {
   const c = calcContributions(data);
-  const vincentPaid = data.contributions.vincentPaid ? c.vincent : 0;
-  const margauxPaid = data.contributions.margauxPaid ? c.margaux : 0;
-  const totalContribs = vincentPaid + margauxPaid;
-
-  let paidByCommun = 0, owedToVincent = 0, owedToMargaux = 0;
+  const totalExpenses = (data.expenses || []).reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
   const loyerTotal = parseFloat(data.rent && data.rent.total) || 0;
-  if (loyerTotal > 0 && data.rent.paid) paidByCommun += loyerTotal;
-
-  (data.expenses || []).forEach(e => {
-    const amt = parseFloat(e.amount) || 0;
-    if (e.payer === 'commun') paidByCommun += amt;
-    else if (e.payer === 'vincent') owedToVincent += amt;
-    else if (e.payer === 'margaux') owedToMargaux += amt;
-  });
-
-  const manualCredits = (data.credits || []).reduce((s, c) => s + (parseFloat(c.amount) || 0), 0);
-  const totalExpenses = paidByCommun + owedToVincent + owedToMargaux;
-  const balance = totalContribs + manualCredits - paidByCommun - owedToVincent - owedToMargaux;
-  return { totalContribs, manualCredits, paidByCommun, owedToVincent, owedToMargaux, totalExpenses, balance, c };
+  const totalBudget = Object.values(data.budgets || {}).reduce((s, v) => s + (parseFloat(v) || 0), 0) + loyerTotal;
+  const reste = totalBudget - totalExpenses - (loyerTotal > 0 && data.rent.paid ? 0 : 0);
+  return { totalExpenses, totalBudget, reste: totalBudget - totalExpenses, c };
 }
 
-function getPrevCarry() {
-  let pm = currentMonth - 1, py = currentYear;
-  if (pm < 1) { pm = 12; py--; }
-  const prevKey = getKey(py, pm);
-  if (!firestoreDoc || !firestoreDoc.months || !firestoreDoc.months[prevKey]) return null;
-  try {
-    const prev = firestoreDoc.months[prevKey];
-    if (prev.reimbSettled) return null;
-    const s = calcSummary(prev);
-    return (s.owedToVincent > EPSILON || s.owedToMargaux > EPSILON) ? s : null;
-  } catch(e) { return null; }
-}
 
-// ============================================================
-// 7. SAVINGS — épargne, objectif, mouvements
-// ============================================================
-function getSavings() {
-  if (!firestoreDoc || !firestoreDoc.savings) return getDefaultSavings();
-  const s = firestoreDoc.savings;
-  return {
-    balance: parseFloat(s.balance) || 0,
-    goal: parseFloat(s.goal) || 0,
-    goalLabel: s.goalLabel || '',
-    history: Array.isArray(s.history) ? s.history : []
-  };
-}
-
-function addSavingsMovement({ amount, type, source = 'manual', note = '', date = null }) {
-  const savings = getSavings();
-  const amt = Math.abs(parseFloat(amount) || 0);
-  if (amt <= 0) return null;
-
-  const entry = {
-    id: Date.now() + Math.floor(Math.random() * 1000),
-    date: date || todayISO(),
-    amount: amt,
-    type,              // 'deposit' | 'withdraw'
-    source,            // 'manual' | 'transfer' | 'migration'
-    note: String(note).slice(0, 200)
-  };
-
-  const newHistory = [...savings.history, entry];
-  const delta = type === 'deposit' ? amt : -amt;
-  const newBalance = Math.max(0, savings.balance + delta);
-
-  saveSavings({ ...savings, balance: newBalance, history: newHistory });
-  return entry;
-}
-
-function deleteSavingsMovement(id) {
-  const nid = String(id);
-  const savings = getSavings();
-  const entry = savings.history.find(h => String(h.id) === nid);
-  if (!entry) { showToast('⚠ Mouvement introuvable'); return; }
-  const newHistory = savings.history.filter(h => String(h.id) !== nid);
-  const delta = entry.type === 'deposit' ? -entry.amount : entry.amount;
-  const newBalance = Math.max(0, savings.balance + delta);
-  saveSavings({ ...savings, balance: newBalance, history: newHistory });
-  showToast('✓ Mouvement supprimé');
-}
-
-function setSavingsGoal(goal, label) {
-  const savings = getSavings();
-  saveSavings({ ...savings, goal: parseFloat(goal) || 0, goalLabel: String(label || '').slice(0, 100) });
-}
-
-// ============================================================
-// 8. CHARTS — Chart.js
-// ============================================================
-function renderSavingsChart() {
-  const canvas = document.getElementById('savingsChart');
-  const emptyEl = document.getElementById('savingsChartEmpty');
+function renderSummaryDonut(data) {
+  const canvas = document.getElementById('summaryDonut');
+  const emptyEl = document.getElementById('donutEmpty');
+  const centerEl = document.getElementById('donutCenter');
   if (!canvas) return;
 
-  const savings = getSavings();
-  const history = [...savings.history].sort((a, b) => new Date(a.date) - new Date(b.date));
+  const s = calcSummary(data);
+  const totalBudget = s.totalBudget;
+  const depenses = (data.expenses || []).reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+  const loyerPaye = data.rent && data.rent.paid ? (parseFloat(data.rent.total) || 0) : 0;
+  const spent = depenses + loyerPaye;
+  const reste = Math.max(0, totalBudget - spent);
+  const overBudget = spent > totalBudget && totalBudget > 0;
 
-  if (history.length === 0) {
+  if (summaryDonutInstance) { summaryDonutInstance.destroy(); summaryDonutInstance = null; }
+
+  if (totalBudget <= 0) {
     canvas.style.display = 'none';
-    if (emptyEl) emptyEl.style.display = 'block';
-    if (savingsChartInstance) { savingsChartInstance.destroy(); savingsChartInstance = null; }
+    if (emptyEl) emptyEl.classList.add('visible');
+    if (centerEl) centerEl.style.display = 'none';
     return;
   }
 
   canvas.style.display = 'block';
-  if (emptyEl) emptyEl.style.display = 'none';
+  if (emptyEl) emptyEl.classList.remove('visible');
+  if (centerEl) centerEl.style.display = 'block';
 
-  // Construit la courbe cumulative
-  let cum = 0;
-  const points = history.map(h => {
-    cum += h.type === 'deposit' ? h.amount : -h.amount;
-    return { x: h.date, y: Math.max(0, cum) };
-  });
+  const spentColor = overBudget ? '#c9423a' : spent / totalBudget >= 0.8 ? '#d4a843' : '#4a7c6e';
+  const remainColor = overBudget ? '#f5d0ce' : '#e8f0ed';
+  const spentCapped = Math.min(spent, totalBudget);
 
-  const labels = points.map(p => new Date(p.x + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: '2-digit' }));
-  const data = points.map(p => p.y);
-
-  // Ligne d'objectif si défini
-  const goal = savings.goal;
-  const goalLine = goal > 0 ? Array(data.length).fill(goal) : null;
-
-  if (savingsChartInstance) savingsChartInstance.destroy();
-
-  const datasets = [{
-    label: 'Épargne',
-    data,
-    borderColor: '#d4a843',
-    backgroundColor: 'rgba(212, 168, 67, 0.15)',
-    fill: true,
-    tension: 0.35,
-    pointRadius: 3,
-    pointHoverRadius: 6,
-    pointBackgroundColor: '#d4a843',
-    borderWidth: 2.5
-  }];
-
-  if (goalLine) {
-    datasets.push({
-      label: 'Objectif',
-      data: goalLine,
-      borderColor: '#c96c3a',
-      borderDash: [6, 4],
-      borderWidth: 2,
-      fill: false,
-      pointRadius: 0,
-      tension: 0
-    });
-  }
-
-  savingsChartInstance = new Chart(canvas, {
-    type: 'line',
-    data: { labels, datasets },
+  summaryDonutInstance = new Chart(canvas, {
+    type: 'doughnut',
+    data: {
+      labels: ['Dépensé', 'Restant'],
+      datasets: [{
+        data: overBudget ? [totalBudget, 0] : [spentCapped, reste],
+        backgroundColor: [spentColor, remainColor],
+        borderWidth: 0,
+        hoverOffset: 4
+      }]
+    },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
+      cutout: '74%',
       plugins: {
-        legend: {
-          display: !!goalLine,
-          position: 'bottom',
-          labels: { boxWidth: 12, boxHeight: 12, padding: 12, font: { size: 11 } }
-        },
+        legend: { display: false },
         tooltip: {
           backgroundColor: '#1a1612',
-          titleFont: { size: 12 },
-          bodyFont: { size: 13 },
           padding: 10,
           callbacks: {
-            label: (ctx) => `${ctx.dataset.label}: ${fmt(ctx.parsed.y)}`
+            label: (ctx) => ` ${ctx.label} : ${fmt(ctx.parsed)}`
           }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: (v) => fmt(v).replace(/\s?€/, '€'),
-            font: { size: 10 },
-            color: '#9a8e82'
-          },
-          grid: { color: 'rgba(26,22,18,0.06)' }
-        },
-        x: {
-          ticks: { font: { size: 10 }, color: '#9a8e82', maxRotation: 0, autoSkip: true, maxTicksLimit: 7 },
-          grid: { display: false }
         }
       }
     }
   });
+
+  // Texte central : Reste à vivre en grand
+  const pct = Math.round((spent / totalBudget) * 100);
+  document.getElementById('donutCenterSub').textContent = overBudget ? '⚠ Dépassement' : `${pct}% utilisé`;
+  document.getElementById('donutCenterSub').style.color = overBudget ? 'var(--red)' : pct >= 80 ? 'var(--gold)' : 'var(--sage)';
+  document.getElementById('donutCenterValue').textContent = overBudget ? `−${fmt(spent - totalBudget)}` : fmt(reste);
+  document.getElementById('donutCenterValue').style.color = overBudget ? 'var(--red)' : 'var(--ink)';
+  document.getElementById('donutCenterLabel').textContent = overBudget ? 'de dépassement' : 'reste à vivre';
 }
 
 // ============================================================
@@ -1328,7 +962,6 @@ function renderAll() {
   renderSettings(data);
   renderBudgets(data);
   renderHistoryChart();
-  renderSavingsScreen();
 }
 
 function setTodayDate() {
@@ -1352,149 +985,8 @@ function changeMonth(dir) {
 
 // ---------- SUMMARY ----------
 function renderSummary(data) {
-  const s = calcSummary(data);
-  const c = s.c;
-  const savings = getSavings();
-
-  // Cagnotte mini-card dans Résumé
-  const goalPct = savings.goal > 0 ? Math.min((savings.balance / savings.goal) * 100, 100) : 0;
-  const goalBlock = savings.goal > 0 ? `
-    <div class="savings-goal-bar">
-      <div class="savings-goal-label">
-        <span>${escapeHtml(savings.goalLabel || 'Objectif')}</span>
-        <span>${fmt(savings.balance)} / ${fmt(savings.goal)}</span>
-      </div>
-      <div class="savings-goal-track"><div class="savings-goal-fill" style="width:${goalPct}%"></div></div>
-      <div class="savings-goal-pct">${goalPct.toFixed(0)}%</div>
-    </div>` : '';
-
-  // Bouton transfert
-  const transferWrap = document.getElementById('transferWrap');
-  if (s.balance > EPSILON) {
-    transferWrap.style.display = 'block';
-    transferWrap.querySelector('.btn-transfer').textContent = `🏦 Épargner le solde restant — ${fmt(s.balance)}`;
-  } else {
-    transferWrap.style.display = 'none';
-  }
-
-  // Carry alert mois précédent
-  const alertEl = document.getElementById('carryAlert');
-  const carry = getPrevCarry();
-  if (carry) {
-    const parts = [];
-    if (carry.owedToVincent > EPSILON) parts.push(`rembourser <strong>Vincent ${fmt(carry.owedToVincent)}</strong>`);
-    if (carry.owedToMargaux > EPSILON) parts.push(`rembourser <strong>Margaux ${fmt(carry.owedToMargaux)}</strong>`);
-    alertEl.innerHTML = `⚠️ Mois précédent : le compte doit encore ` + parts.join(' et ') + `. Pensez à régler !`;
-    alertEl.classList.add('visible');
-  } else {
-    alertEl.classList.remove('visible');
-  }
-
-  // Stat cards
-  const isPos = s.balance >= 0;
-  const cards = [
-    { label: 'Solde du compte', value: fmt(s.balance), sub: isPos ? '✓ Disponible' : '⚠ Déficit', cls: (isPos ? 'positive' : 'negative') + ' accent' },
-    { label: 'Contributions versées', value: fmt(s.totalContribs), sub: `V: ${fmt(data.contributions.vincentPaid ? c.vincent : 0)} · M: ${fmt(data.contributions.margauxPaid ? c.margaux : 0)}`, cls: '' },
-    { label: 'Dépenses totales', value: fmt(s.totalExpenses), sub: `${(data.expenses || []).length} opération(s)`, cls: '' },
-    { label: 'Payé sur compte', value: fmt(s.paidByCommun), sub: 'Débit direct', cls: '' }
-  ];
-  document.getElementById('summaryCards').innerHTML = cards.map(cd =>
-    `<div class="stat-card ${cd.cls}"><div class="label">${escapeHtml(cd.label)}</div><div class="value">${cd.value}</div><div class="sub">${cd.sub}</div></div>`
-  ).join('');
-
-  // Remboursements
-  let reimbs = '';
-  const hasOwed = s.owedToVincent > EPSILON || s.owedToMargaux > EPSILON;
-  if (hasOwed) {
-    if (data.reimbSettled) {
-      const parts2 = [];
-      if (s.owedToVincent > EPSILON) parts2.push(`Vincent (${fmt(s.owedToVincent)})`);
-      if (s.owedToMargaux > EPSILON) parts2.push(`Margaux (${fmt(s.owedToMargaux)})`);
-      reimbs = `<div class="reimb-item settled">✅ Remboursements effectués — ${parts2.join(' & ')}</div>
-        <button class="btn-undo-settle" onclick="undoReimbSettled()">Annuler le marquage</button>`;
-    } else {
-      if (s.owedToVincent > EPSILON)
-        reimbs += `<div class="reimb-item owed">🏦 Le compte doit rembourser <strong>Vincent</strong><span class="reimb-amount">${fmt(s.owedToVincent)}</span></div>`;
-      if (s.owedToMargaux > EPSILON)
-        reimbs += `<div class="reimb-item owed">🏦 Le compte doit rembourser <strong>Margaux</strong><span class="reimb-amount">${fmt(s.owedToMargaux)}</span></div>`;
-      reimbs += `<button class="btn-settle" onclick="markReimbSettled()">✓ Marquer comme remboursé</button>`;
-    }
-  } else {
-    reimbs = `<div class="reimb-item balanced">✓ Aucun remboursement en attente</div>`;
-  }
-  document.getElementById('reimbursements').innerHTML = `<div class="reimbursement-list">${reimbs}</div>`;
-
-  // Fonds manuels ajoutés au compte
-  const credits = data.credits || [];
-  let creditsHtml = '';
-  if (credits.length > 0) {
-    creditsHtml = credits.map(cr => {
-      const dateStr = cr.date ? new Date(cr.date + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '';
-      return `<div class="savings-history-item" style="margin-bottom:6px">
-        <div class="savings-history-icon deposit">↑</div>
-        <div class="savings-history-main">
-          <div class="savings-history-note">${escapeHtml(cr.note || 'Fond ajouté')}</div>
-          <div class="savings-history-date">${escapeHtml(dateStr)}</div>
-        </div>
-        <div class="savings-history-amount deposit">+${fmt(cr.amount)}</div>
-        <button class="savings-history-delete" onclick="deleteCredit(${cr.id})" title="Supprimer">✕</button>
-      </div>`;
-    }).join('');
-  } else {
-    creditsHtml = `<p class="text-sm" style="color:var(--ink-faint);text-align:center;padding:10px 0">Aucun fond ajouté ce mois</p>`;
-  }
-  document.getElementById('summaryCredits').innerHTML = creditsHtml;
-
+  renderSummaryDonut(data);
   renderBudgetProgress(data, 'summaryBudgets');
-}
-
-function markReimbSettled() {
-  const data = loadData();
-  data.reimbSettled = true;
-  saveData(data);
-  showToast('✓ Remboursements marqués comme effectués');
-}
-
-function undoReimbSettled() {
-  const data = loadData();
-  data.reimbSettled = false;
-  saveData(data);
-}
-
-// ---------- TRANSFERT SOLDE → ÉPARGNE ----------
-function transferToCagnotte() {
-  const data = loadData();
-  const s = calcSummary(data);
-  if (s.balance <= EPSILON) { showToast('⚠ Solde insuffisant'); return; }
-
-  const amount = Math.round(s.balance * 100) / 100;
-  showModal('Transférer en épargne',
-    `<p>Ajouter <strong>${fmt(amount)}</strong> à la cagnotte commune ?<br><br><small style="color:var(--ink-faint)">Une dépense "Virement cagnotte" sera enregistrée pour ramener le solde à zéro.</small></p>`,
-    () => {
-      // Dépense symbolique pour neutraliser le solde
-      data.expenses.push({
-        id: Date.now(),
-        amount,
-        date: todayISO(),
-        cat: 'epargne',
-        payer: 'commun',
-        comment: 'Virement vers la cagnotte'
-      });
-      data.expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
-      saveData(data);
-      // Ajoute au module épargne
-      addSavingsMovement({
-        amount,
-        type: 'deposit',
-        source: 'transfer',
-        note: `Virement depuis ${getMonthLabel()}`
-      });
-      showToast(`✓ ${fmt(amount)} ajoutés à la cagnotte ! 🎉`);
-    });
-}
-
-function getMonthLabel() {
-  return new Date(currentYear, currentMonth - 1, 1).toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
 }
 
 // ---------- HISTORY CHART (dépenses 6 mois) ----------
@@ -1526,6 +1018,50 @@ function renderHistoryChart() {
     }).join('') + `</div>`;
 }
 
+// ---------- MONTH PICKER ----------
+const MONTHS_FR_SHORT = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
+
+function openMonthPicker() {
+  pickerYear = currentYear;
+  document.getElementById('pickerYearDisplay').textContent = pickerYear;
+  renderPickerGrid();
+  document.getElementById('monthPickerOverlay').classList.add('open');
+}
+
+function closeMonthPicker() {
+  document.getElementById('monthPickerOverlay').classList.remove('open');
+}
+
+function changePickerYear(dir) {
+  pickerYear += dir;
+  document.getElementById('pickerYearDisplay').textContent = pickerYear;
+  renderPickerGrid();
+}
+
+function renderPickerGrid() {
+  const today = new Date();
+  const todayY = today.getFullYear(), todayM = today.getMonth() + 1;
+  const grid = document.getElementById('pickerMonthGrid');
+  grid.innerHTML = MONTHS_FR_SHORT.map((label, i) => {
+    const m = i + 1;
+    const isActive = pickerYear === currentYear && m === currentMonth;
+    const isToday = pickerYear === todayY && m === todayM;
+    const hasData = firestoreDoc && firestoreDoc.months && !!firestoreDoc.months[getKey(pickerYear, m)];
+    let cls = 'mpicker-btn';
+    if (isActive) cls += ' active';
+    else if (hasData) cls += ' has-data';
+    if (isToday && !isActive) cls += ' today-marker';
+    return `<button class="${cls}" onclick="selectPickerMonth(${m})">${label}</button>`;
+  }).join('');
+}
+
+function selectPickerMonth(m) {
+  currentMonth = m;
+  currentYear = pickerYear;
+  closeMonthPicker();
+  renderAll();
+}
+
 // ---------- BUDGET PROGRESS ----------
 function renderBudgetProgress(data, containerId) {
   const container = document.getElementById(containerId);
@@ -1541,12 +1077,14 @@ function renderBudgetProgress(data, containerId) {
     const catInfo = CATEGORIES['loyer'];
     const spentLoyer = lPaid ? loyerTotal : 0;
     const pctLoyer = lPaid ? 100 : 0;
+    const resteLabel = lPaid ? '✓ Payé' : `${fmt(loyerTotal)} restant`;
+    const resteCls = lPaid ? 'ok' : 'warn';
     html += `<div class="budget-item">
       <div class="budget-header">
-        <div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>Loyer &amp; Charges fixes</div>
-        <div class="budget-amounts"><strong>${fmt(spentLoyer)}</strong> / ${fmt(loyerTotal)} <span style="margin-left:5px;color:var(--ink-faint)">${lPaid ? '✓ Payé' : fmt(loyerTotal) + ' restant'}</span></div>
+        <div class="budget-name"><span class="budget-cat-dot" style="background:${catInfo.color}"></span>Loyer &amp; Charges fixes</div>
+        <div class="budget-amounts"><strong>${fmt(spentLoyer)}</strong> / ${fmt(loyerTotal)}<span class="budget-reste ${resteCls}">${resteLabel}</span></div>
       </div>
-      <div class="progress-bar"><div class="progress-fill ${lPaid ? 'progress-ok' : ''}" style="width:${pctLoyer}%"></div></div>
+      <div class="progress-bar"><div class="progress-fill ${lPaid ? 'progress-ok' : 'progress-warn'}" style="width:${pctLoyer}%"></div></div>
     </div>`;
     delete budgets['loyer'];
   }
@@ -1559,10 +1097,12 @@ function renderBudgetProgress(data, containerId) {
     const catInfo = CATEGORIES[cat] || { label: cat.charAt(0).toUpperCase() + cat.slice(1), color: '#9a8e82' };
     const pct = bgt > 0 ? Math.min((spent / bgt) * 100, 100) : 0;
     const cls = pct < 70 ? 'progress-ok' : pct < 90 ? 'progress-warn' : 'progress-over';
+    const resteCls = spent > bgt ? 'over' : pct >= 90 ? 'warn' : 'ok';
+    const resteText = bgt > 0 ? (spent > bgt ? `⚠ +${fmt(spent - bgt)} dépassé` : `${fmt(bgt - spent)} restant`) : '';
     html += `<div class="budget-item">
       <div class="budget-header">
-        <div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>${escapeHtml(catInfo.label)}</div>
-        <div class="budget-amounts"><strong>${fmt(spent)}</strong>${bgt > 0 ? ` / ${fmt(bgt)} <span style="margin-left:5px;color:${spent > bgt ? 'var(--red)' : 'var(--ink-faint)'}">${spent > bgt ? '⚠ dépassé' : fmt(bgt - spent) + ' restant'}</span>` : ''}</div>
+        <div class="budget-name"><span class="budget-cat-dot" style="background:${catInfo.color}"></span>${escapeHtml(catInfo.label)}</div>
+        <div class="budget-amounts"><strong>${fmt(spent)}</strong>${bgt > 0 ? ` / ${fmt(bgt)}<span class="budget-reste ${resteCls}">${resteText}</span>` : ''}</div>
       </div>
       ${bgt > 0 ? `<div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%"></div></div>` : ''}
     </div>`;
@@ -1572,301 +1112,12 @@ function renderBudgetProgress(data, containerId) {
     const spent = catSpend[cat];
     if (!spent) return;
     const catInfo = CATEGORIES[cat] || { label: cat.charAt(0).toUpperCase() + cat.slice(1), color: '#9a8e82' };
-    html += `<div class="budget-item"><div class="budget-header"><div class="budget-name"><span style="width:9px;height:9px;border-radius:50%;background:${catInfo.color};display:inline-block"></span>${escapeHtml(catInfo.label)}</div><div class="budget-amounts"><strong>${fmt(spent)}</strong></div></div></div>`;
+    html += `<div class="budget-item"><div class="budget-header"><div class="budget-name"><span class="budget-cat-dot" style="background:${catInfo.color}"></span>${escapeHtml(catInfo.label)}</div><div class="budget-amounts"><strong>${fmt(spent)}</strong><span class="budget-reste ok">non budgété</span></div></div></div>`;
   });
 
   container.innerHTML = html || '<p class="text-sm" style="color:var(--ink-faint);text-align:center;padding:16px 0">Aucune donnée disponible</p>';
 }
 
-// ---------- SAVINGS SCREEN ----------
-function renderSavingsScreen() {
-  const savings = getSavings();
-
-  // Card principale
-  const goalPct = savings.goal > 0 ? Math.min((savings.balance / savings.goal) * 100, 100) : 0;
-  const goalRemain = Math.max(0, savings.goal - savings.balance);
-  const goalBlock = savings.goal > 0 ? `
-    <div class="savings-goal-bar">
-      <div class="savings-goal-label">
-        <span>🎯 ${escapeHtml(savings.goalLabel || 'Objectif')}</span>
-        <span>${fmt(savings.balance)} / ${fmt(savings.goal)}</span>
-      </div>
-      <div class="savings-goal-track"><div class="savings-goal-fill" style="width:${goalPct}%"></div></div>
-      <div class="savings-goal-pct">${goalPct.toFixed(1)}% · ${goalRemain > 0 ? 'reste ' + fmt(goalRemain) : '🎉 Objectif atteint !'}</div>
-    </div>` : '';
-
-  document.getElementById('savingsMainDisplay').innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-      <div style="flex:1;min-width:0">
-        <div class="cagnotte-label">Solde d'épargne</div>
-        <div style="display:flex;align-items:baseline;gap:10px">
-          <div class="cagnotte-value">${fmt(savings.balance)}</div>
-          <button onclick="openSavingsAdjustModal()" title="Ajuster le solde" style="background:rgba(255,255,255,0.12);border:none;color:rgba(245,240,232,0.55);cursor:pointer;border-radius:6px;padding:3px 7px;font-size:0.72rem;font-family:'DM Sans',sans-serif;transition:all 0.2s" onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">✏️ ajuster</button>
-        </div>
-        <div class="cagnotte-sub">${savings.history.length} mouvement(s)</div>
-      </div>
-      <div style="font-size:2.2rem;opacity:0.6;flex-shrink:0">💰</div>
-    </div>
-    ${goalBlock}
-    <div class="savings-actions">
-      <button class="btn-savings-action" onclick="openSavingsMovementModal()">− Retrait</button>
-    </div>`;
-
-  // Éditeur d'objectif
-  const goalEditor = document.getElementById('savingsGoalEditor');
-  if (savings.goal > 0) {
-    goalEditor.innerHTML = `
-      <p class="text-sm" style="margin-bottom:10px">
-        <strong>${escapeHtml(savings.goalLabel || 'Objectif sans nom')}</strong> : ${fmt(savings.goal)}
-      </p>
-      <button class="btn btn-secondary" onclick="openSavingsGoalModal()">Modifier l'objectif</button>
-      <button class="btn btn-secondary" style="margin-left:8px" onclick="clearSavingsGoal()">Supprimer</button>`;
-  } else {
-    goalEditor.innerHTML = `
-      <p class="text-sm" style="margin-bottom:10px">Aucun objectif défini. Fixez-en un pour suivre votre progression.</p>
-      <button class="btn btn-primary" onclick="openSavingsGoalModal()">Définir un objectif</button>`;
-  }
-
-  // Historique
-  const listEl = document.getElementById('savingsHistoryList');
-  const sorted = [...savings.history].sort((a, b) => new Date(b.date) - new Date(a.date));
-  if (sorted.length === 0) {
-    listEl.innerHTML = `<div class="empty"><div class="emoji">💸</div><p>Aucun mouvement pour le moment</p></div>`;
-  } else {
-    listEl.innerHTML = sorted.map(h => {
-      const icon = h.type === 'deposit' ? '↑' : '↓';
-      const sign = h.type === 'deposit' ? '+' : '−';
-      const sourceLabel = { manual: 'Manuel', transfer: 'Virement mensuel', migration: 'Migration' }[h.source] || h.source || '';
-      const dateStr = h.date ? new Date(h.date + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-      return `<div class="savings-history-item">
-        <div class="savings-history-icon ${h.type}">${icon}</div>
-        <div class="savings-history-main">
-          <div class="savings-history-note">${escapeHtml(h.note || sourceLabel || 'Mouvement')}</div>
-          <div class="savings-history-date">${escapeHtml(dateStr)} · ${escapeHtml(sourceLabel)}</div>
-        </div>
-        <div class="savings-history-amount ${h.type}">${sign}${fmt(h.amount)}</div>
-        <button class="savings-history-delete" onclick="confirmDeleteSavingsMovement(${h.id})" title="Supprimer">✕</button>
-      </div>`;
-    }).join('');
-  }
-
-  // Graphique
-  renderSavingsChart();
-}
-
-function confirmDeleteSavingsMovement(id) {
-  showModal('Supprimer le mouvement', '<p>Supprimer ce mouvement d\'épargne ? Le solde sera ajusté en conséquence.</p>',
-    () => deleteSavingsMovement(id));
-}
-
-function clearSavingsGoal() {
-  showModal('Supprimer l\'objectif', '<p>Supprimer l\'objectif d\'épargne actuel ? Le solde n\'est pas affecté.</p>', () => {
-    setSavingsGoal(0, '');
-    showToast('✓ Objectif supprimé');
-  });
-}
-
-// ---------- SAVINGS MODALS ----------
-function openSavingsMovementModal() {
-  document.getElementById('savMovAmount').value = '';
-  document.getElementById('savMovDate').value = todayISO();
-  document.getElementById('savMovNote').value = '';
-  document.getElementById('savingsMovementOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('savMovAmount').focus(), 300);
-}
-
-function closeSavingsMovementModal() {
-  document.getElementById('savingsMovementOverlay').classList.remove('open');
-}
-
-function submitSavingsWithdraw() {
-  const amount = parseFloat(document.getElementById('savMovAmount').value);
-  const date = document.getElementById('savMovDate').value;
-  const note = document.getElementById('savMovNote').value.trim();
-  if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
-  if (!date) { showToast('⚠ Date manquante'); return; }
-  const savings = getSavings();
-  if (amount > savings.balance + EPSILON) { showToast('⚠ Solde insuffisant pour ce retrait'); return; }
-  addSavingsMovement({ amount, type: 'withdraw', source: 'manual', note, date });
-  // Crédit automatique du compte commun
-  const data = loadData();
-  data.credits.push({ id: Date.now() + 1, amount, date, note: note || 'Retrait d\'épargne' });
-  data.credits.sort((a, b) => new Date(b.date) - new Date(a.date));
-  saveData(data);
-  closeSavingsMovementModal();
-  showToast(`✓ ${fmt(amount)} retirés · compte commun crédité`);
-}
-
-function openSavingsGoalModal() {
-  const savings = getSavings();
-  document.getElementById('savGoalLabel').value = savings.goalLabel || '';
-  document.getElementById('savGoalAmount').value = savings.goal || '';
-  document.getElementById('savingsGoalOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('savGoalLabel').focus(), 300);
-}
-
-function closeSavingsGoalModal() {
-  document.getElementById('savingsGoalOverlay').classList.remove('open');
-}
-
-// ---- ÉPARGNE — AJUSTEMENT MANUEL DU SOLDE ----
-function openSavingsAdjustModal() {
-  const savings = getSavings();
-  document.getElementById('savAdjustAmount').value = savings.balance || '';
-  document.getElementById('savAdjustNote').value = '';
-  document.getElementById('savingsAdjustOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('savAdjustAmount').focus(), 300);
-}
-
-function closeSavingsAdjustModal() {
-  document.getElementById('savingsAdjustOverlay').classList.remove('open');
-}
-
-function resetSavingsToZero() {
-  closeSavingsAdjustModal();
-  showModal('Remettre à zéro',
-    '<p>Remettre le solde d\'épargne à <strong>0 €</strong> ?<br><br><small style="color:var(--ink-faint)">L\'historique et l\'objectif sont conservés.</small></p>',
-    () => {
-      const savings = getSavings();
-      const entry = {
-        id: Date.now() + Math.floor(Math.random() * 1000),
-        date: todayISO(),
-        amount: savings.balance,
-        type: 'withdraw',
-        source: 'adjustment',
-        note: 'Remise à zéro manuelle'
-      };
-      const newHistory = savings.balance > 0 ? [...savings.history, entry] : savings.history;
-      saveSavings({ ...savings, balance: 0, history: newHistory });
-      showToast('✓ Solde remis à zéro');
-    }
-  );
-}
-
-function submitSavingsAdjust() {
-  const newBalance = parseFloat(document.getElementById('savAdjustAmount').value);
-  const note = document.getElementById('savAdjustNote').value.trim();
-  if (isNaN(newBalance) || newBalance < 0) { showToast('⚠ Montant invalide'); return; }
-  const savings = getSavings();
-  const diff = Math.round((newBalance - savings.balance) * 100) / 100;
-  if (Math.abs(diff) < 0.01) { closeSavingsAdjustModal(); return; }
-  const entry = {
-    id: Date.now() + Math.floor(Math.random() * 1000),
-    date: todayISO(),
-    amount: Math.abs(diff),
-    type: diff > 0 ? 'deposit' : 'withdraw',
-    source: 'adjustment',
-    note: note || `Ajustement manuel (${diff > 0 ? '+' : ''}${fmt(diff)})`
-  };
-  saveSavings({ ...savings, balance: newBalance, history: [...savings.history, entry] });
-  closeSavingsAdjustModal();
-  showToast(`✓ Solde ajusté à ${fmt(newBalance)}`);
-}
-
-// ---- ÉPARGNE — DÉPÔT ----
-function setSavSource(source) {
-  currentSavSource = source;
-  ['commun', 'vincent', 'margaux'].forEach(s => {
-    const el = document.getElementById('src' + s.charAt(0).toUpperCase() + s.slice(1));
-    if (el) el.classList.toggle('active', s === source);
-  });
-}
-
-function openSavingsDepositModal() {
-  currentSavSource = 'commun';
-  setSavSource('commun');
-  document.getElementById('savDepAmount').value = '';
-  document.getElementById('savDepDate').value = todayISO();
-  document.getElementById('savDepNote').value = '';
-  document.getElementById('savingsDepositOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('savDepAmount').focus(), 300);
-}
-
-function closeSavingsDepositModal() {
-  document.getElementById('savingsDepositOverlay').classList.remove('open');
-}
-
-function submitSavingsDeposit() {
-  const amount = parseFloat(document.getElementById('savDepAmount').value);
-  const date = document.getElementById('savDepDate').value;
-  const note = document.getElementById('savDepNote').value.trim();
-  if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
-  if (!date) { showToast('⚠ Date manquante'); return; }
-  const source = currentSavSource;
-  addSavingsMovement({ amount, type: 'deposit', source: source === 'commun' ? 'transfer' : source, note, date });
-  if (source === 'commun') {
-    const data = loadData();
-    data.expenses.push({ id: Date.now() + 1, amount, date, cat: 'epargne', payer: 'commun', comment: note || 'Virement vers la cagnotte' });
-    data.expenses.sort((a, b) => new Date(b.date) - new Date(a.date));
-    saveData(data);
-  }
-  closeSavingsDepositModal();
-  const who = source === 'commun' ? 'depuis le compte' : `par ${source.charAt(0).toUpperCase() + source.slice(1)}`;
-  showToast(`✓ ${fmt(amount)} épargnés ${who} 💰`);
-}
-
-// ---- FAB MENU ----
-function toggleFabMenu() {
-  const isOpen = document.getElementById('fabActions').classList.contains('open');
-  if (isOpen) closeFabMenu(); else openFabMenu();
-}
-
-function openFabMenu() {
-  document.getElementById('fabActions').classList.add('open');
-  document.getElementById('fabMain').classList.add('open');
-  document.getElementById('fabBackdrop').classList.add('open');
-}
-
-function closeFabMenu() {
-  document.getElementById('fabActions').classList.remove('open');
-  document.getElementById('fabMain').classList.remove('open');
-  document.getElementById('fabBackdrop').classList.remove('open');
-}
-
-// ---- CRÉDITS MANUELS DU COMPTE ----
-function openCreditModal() {
-  document.getElementById('creditAmount').value = '';
-  document.getElementById('creditDate').value = todayISO();
-  document.getElementById('creditNote').value = '';
-  document.getElementById('creditAccountOverlay').classList.add('open');
-  setTimeout(() => document.getElementById('creditAmount').focus(), 300);
-}
-
-function closeCreditModal() {
-  document.getElementById('creditAccountOverlay').classList.remove('open');
-}
-
-function submitCredit() {
-  const amount = parseFloat(document.getElementById('creditAmount').value);
-  const date = document.getElementById('creditDate').value;
-  const note = document.getElementById('creditNote').value.trim();
-  if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
-  if (!date) { showToast('⚠ Date manquante'); return; }
-  const data = loadData();
-  data.credits.push({ id: Date.now(), amount, date, note });
-  data.credits.sort((a, b) => new Date(b.date) - new Date(a.date));
-  saveData(data);
-  closeCreditModal();
-  showToast(`✓ ${fmt(amount)} ajoutés au compte`);
-}
-
-function deleteCredit(id) {
-  showModal('Supprimer le fond', '<p>Supprimer ce fond manuel ? Le solde du compte sera ajusté.</p>', () => {
-    const data = loadData();
-    data.credits = data.credits.filter(c => c.id != id);
-    saveData(data);
-    showToast('✓ Fond supprimé');
-  });
-}
-
-function submitSavingsGoal() {
-  const label = document.getElementById('savGoalLabel').value.trim();
-  const amount = parseFloat(document.getElementById('savGoalAmount').value);
-  if (!amount || amount <= 0) { showToast('⚠ Montant invalide'); return; }
-  setSavingsGoal(amount, label);
-  closeSavingsGoalModal();
-  showToast('✓ Objectif enregistré');
-}
 
 // ============================================================
 // 10. EXPENSES
@@ -2193,7 +1444,6 @@ function duplicatePrevMonth() {
       curr.chargesRatio = prev.chargesRatio !== undefined ? prev.chargesRatio : DEFAULT_RATIO;
       curr.contributions = { vincentPaid: false, margauxPaid: false };
       curr.expenses = [];
-      curr.reimbSettled = false;
       saveData(curr);
       showToast('✓ Paramètres dupliqués');
     });
@@ -2242,8 +1492,7 @@ function showTab(tab, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('section-' + tab).classList.add('active');
   el.classList.add('active');
-  // Re-render le chart quand on arrive sur l'onglet (Chart.js a besoin d'une taille)
-  if (tab === 'savings') setTimeout(() => renderSavingsChart(), 50);
+  if (tab === 'summary') setTimeout(() => { if (firestoreDoc) renderSummaryDonut(loadData()); }, 50);
 }
 
 function toggleMenu() { document.getElementById('headerDropdown').classList.toggle('open'); }
@@ -2254,18 +1503,20 @@ function closeMenu() { document.getElementById('headerDropdown').classList.remov
 // ============================================================
 document.addEventListener('click', e => { if (!e.target.closest('.header-menu-wrap')) closeMenu(); });
 
-['modalOverlay', 'quickAddOverlay', 'savingsMovementOverlay', 'savingsGoalOverlay', 'savingsDepositOverlay', 'creditAccountOverlay', 'savingsAdjustOverlay'].forEach(id => {
+// Délégation pour les boutons de remboursement individuels
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.reimb-settle-btn');
+  if (btn) markExpenseReimbursed(btn.dataset.expenseId);
+});
+
+['modalOverlay', 'quickAddOverlay', 'monthPickerOverlay'].forEach(id => {
   const el = document.getElementById(id);
   if (!el) return;
   el.addEventListener('click', function(e) {
     if (e.target === this) {
       if (id === 'modalOverlay') closeModal();
       else if (id === 'quickAddOverlay') closeQuickAdd();
-      else if (id === 'savingsMovementOverlay') closeSavingsMovementModal();
-      else if (id === 'savingsGoalOverlay') closeSavingsGoalModal();
-      else if (id === 'savingsDepositOverlay') closeSavingsDepositModal();
-      else if (id === 'creditAccountOverlay') closeCreditModal();
-      else if (id === 'savingsAdjustOverlay') closeSavingsAdjustModal();
+      else if (id === 'monthPickerOverlay') closeMonthPicker();
     }
   });
 });
@@ -2275,11 +1526,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     closeModal();
     closeQuickAdd();
-    closeSavingsMovementModal();
-    closeSavingsGoalModal();
-    closeSavingsDepositModal();
-    closeCreditModal();
-    closeSavingsAdjustModal();
+    closeMonthPicker();
   }
 });
 
